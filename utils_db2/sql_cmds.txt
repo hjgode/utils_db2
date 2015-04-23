@@ -1,0 +1,88 @@
+﻿USE [SupportStaff]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+BEGIN TRY
+    DROP TABLE [dbo].[utilities];
+END TRY
+BEGIN CATCH
+END CATCH
+
+BEGIN TRY
+    DROP TABLE [dbo].[devices];
+END TRY
+BEGIN CATCH
+END CATCH
+
+BEGIN TRY
+    DROP TABLE [dbo].[device];
+END TRY
+BEGIN CATCH
+END CATCH
+
+BEGIN TRY
+    DROP TABLE [dbo].[operating_systems];
+END TRY
+BEGIN CATCH
+END CATCH
+
+GO
+
+CREATE TABLE [dbo].[device](
+	[device_id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nchar](80) NOT NULL)
+GO
+
+CREATE TABLE [dbo].[devices](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[devices_id] [int] NOT NULL DEFAULT 1,
+	[device_id] [int] NOT NULL DEFAULT 1
+	)
+GO
+
+CREATE TABLE [dbo].[utilities](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nchar](80) NOT NULL,
+	[devices_id] [int] DEFAULT 1 NOT NULL,
+	[operating_id] [int] DEFAULT 1 NOT NULL,
+	[description] [text] DEFAULT '' NOT NULL,
+	[author] [nchar](80) DEFAULT '' NOT NULL,
+	[file_link] [nchar] (254) DEFAULT '' NOT NULL
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[operating_systems](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[operating_id] [int] NOT NULL,
+	[name] [nchar](80) NOT NULL
+) ON [PRIMARY]
+
+declare @crlf char(2)
+select @crlf = char(13)+char(10)
+
+Insert into dbo.operating_systems (operating_id,name) VALUES (1,'not defined'),(2,'Windows Mobile'),(3,'Windows Desktop'),(4,'Android');
+
+Insert into dbo.device (name) values ('not defined'),('Intermec Windows Embedded Handheld 6.5'),('Honeywell Windows Embedded Handheld 6.5');
+
+Insert into dbo.devices (devices_id,device_id) values (1,1),(2,2),(2,3);
+
+Insert into dbo.utilities (name, devices_id, operating_id) values ('Microsoft DevHealth',2,2), ( 'cpumon',1,2), ( 'PhoneStateChangeLogger',1,2), ( 'BatteryLog',1,2), 
+( 'WWANCollector',1,2), ( 'DebugLog',1,2), ( 'NetValidate',1,2), ( 'RILLogger',1,2), ( 'BatteryLog',1,2), ( 'BTmon',1,2), ( 'memuse',1,2), ( 'connMgrLog',1,2), 
+( 'deviceMon',1,2), ( 'PowerMsgLog',1,2), ( 'rb_logger',1,2), ( 'Intermec DevHealth',1,2);
+
+GO
+
+/*
+SELECT     dbo.utilities.name, dbo.device.name AS device, dbo.operating_systems.name AS OS, dbo.utilities.description, dbo.utilities.author, dbo.utilities.file_link
+FROM         dbo.utilities LEFT OUTER JOIN
+                      dbo.operating_systems ON dbo.utilities.operating_id = dbo.operating_systems.operating_id LEFT OUTER JOIN
+                      dbo.devices ON dbo.utilities.devices_id = dbo.devices.devices_id LEFT OUTER JOIN
+                      dbo.device ON dbo.devices.device_id = dbo.device.device_id
+
+*/
