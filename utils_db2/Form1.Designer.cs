@@ -32,15 +32,23 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.listBoxAllDevices = new System.Windows.Forms.ListBox();
             this.listBoxDevicesFor = new System.Windows.Forms.ListBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtOperatingSystem = new System.Windows.Forms.TextBox();
+            this.listBoxOperatingSystems = new System.Windows.Forms.ListBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtDescription = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 37);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(242, 170);
+            this.dataGridView1.Size = new System.Drawing.Size(242, 145);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
@@ -52,30 +60,109 @@
             this.btnSave.TabIndex = 1;
             this.btnSave.Text = "SAVE";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.button1_Click);
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // listBoxAllDevices
             // 
             this.listBoxAllDevices.FormattingEnabled = true;
-            this.listBoxAllDevices.Location = new System.Drawing.Point(533, 12);
+            this.listBoxAllDevices.Location = new System.Drawing.Point(531, 37);
             this.listBoxAllDevices.Name = "listBoxAllDevices";
-            this.listBoxAllDevices.Size = new System.Drawing.Size(172, 95);
+            this.listBoxAllDevices.Size = new System.Drawing.Size(172, 56);
             this.listBoxAllDevices.TabIndex = 2;
             // 
             // listBoxDevicesFor
             // 
             this.listBoxDevicesFor.FormattingEnabled = true;
-            this.listBoxDevicesFor.Location = new System.Drawing.Point(271, 12);
+            this.listBoxDevicesFor.Location = new System.Drawing.Point(279, 37);
             this.listBoxDevicesFor.Name = "listBoxDevicesFor";
-            this.listBoxDevicesFor.Size = new System.Drawing.Size(180, 95);
+            this.listBoxDevicesFor.Size = new System.Drawing.Size(180, 56);
             this.listBoxDevicesFor.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Utility Name:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(276, 21);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Device(s):";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(528, 21);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(90, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Available Device:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(276, 110);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(93, 13);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "Operating System:";
+            // 
+            // txtOperatingSystem
+            // 
+            this.txtOperatingSystem.Location = new System.Drawing.Point(279, 126);
+            this.txtOperatingSystem.Name = "txtOperatingSystem";
+            this.txtOperatingSystem.Size = new System.Drawing.Size(179, 20);
+            this.txtOperatingSystem.TabIndex = 6;
+            // 
+            // listBoxOperatingSystems
+            // 
+            this.listBoxOperatingSystems.FormattingEnabled = true;
+            this.listBoxOperatingSystems.Location = new System.Drawing.Point(531, 126);
+            this.listBoxOperatingSystems.Name = "listBoxOperatingSystems";
+            this.listBoxOperatingSystems.Size = new System.Drawing.Size(172, 56);
+            this.listBoxOperatingSystems.TabIndex = 2;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(528, 110);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(144, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Available Operating Systems:";
+            // 
+            // txtDescription
+            // 
+            this.txtDescription.AcceptsReturn = true;
+            this.txtDescription.AcceptsTab = true;
+            this.txtDescription.Location = new System.Drawing.Point(278, 207);
+            this.txtDescription.Multiline = true;
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtDescription.Size = new System.Drawing.Size(424, 123);
+            this.txtDescription.TabIndex = 7;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(795, 348);
+            this.Controls.Add(this.txtDescription);
+            this.Controls.Add(this.txtOperatingSystem);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.listBoxDevicesFor);
+            this.Controls.Add(this.listBoxOperatingSystems);
             this.Controls.Add(this.listBoxAllDevices);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dataGridView1);
@@ -84,6 +171,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -93,6 +181,14 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ListBox listBoxAllDevices;
         private System.Windows.Forms.ListBox listBoxDevicesFor;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtOperatingSystem;
+        private System.Windows.Forms.ListBox listBoxOperatingSystems;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtDescription;
     }
 }
 

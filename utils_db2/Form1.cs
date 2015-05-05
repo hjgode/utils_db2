@@ -21,8 +21,18 @@ namespace utils_db2
             if (_database._bConnected)
             {
                 dataGridView1.DataSource = _database._bsUtils;
+                formatColumns();
                 listBoxAllDevices.DataSource = _database.readDeviceNameList();
+                listBoxOperatingSystems.DataSource = _database._lstOSNames;
             }
+        }
+
+        void formatColumns()
+        {
+            dataGridView1.Columns["id"].Visible = false;
+            dataGridView1.Columns["devices_id"].Visible = false;
+            dataGridView1.Columns["operating_id"].Visible = false;
+            dataGridView1.Columns["description"].Visible = false;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -31,7 +41,7 @@ namespace utils_db2
             _logger.log("FormClosing");
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
             BindingSource bs = (BindingSource)dataGridView1.DataSource;
             bs.EndEdit();
@@ -64,6 +74,11 @@ namespace utils_db2
             listBoxDevicesFor.DataSource = null;
             listBoxDevicesFor.Items.Clear();
             listBoxDevicesFor.DataSource = listDevice;
+
+            txtDescription.Text = _database._description.getDescriptionforID(util_id);
+
+            int operating_id = (int)row.Cells["operating_id"].Value;
+            txtOperatingSystem.Text = _database._osname.getOSforID(operating_id);
         }
     }
 }

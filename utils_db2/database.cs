@@ -26,10 +26,18 @@ namespace utils_db2
         public SqlDataAdapter _daUtils = null;
         public System.Windows.Forms.BindingSource _bsUtils = null;
 
+        //device names and link list
         DataTable _dtDevicesNames = null;
         DataTable _dtDevicesLinkTable = null;
-
         List<Device> _ListDevices;
+
+        //os names
+        public List<OS_name> _lstOSNames = null;
+        public OS_name _osname = new OS_name();
+
+        //descriptions
+        public List<descriptionText> _descriptions = null;
+        public descriptionText _description = new descriptionText();
 
         public database(){
             _logger.log("init database");
@@ -58,6 +66,11 @@ namespace utils_db2
             readDeviceNameList();
 
             readDeviceLinkList();
+
+            _lstOSNames = _osname.readList(_sqlConnection);
+
+            _descriptions = _description.readList(_sqlConnection);
+
         }
 
         /// <summary>
