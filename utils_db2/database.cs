@@ -141,6 +141,13 @@ namespace utils_db2
             return dt;
         }
 
+        public int executeSQLnoQuery(string s)
+        {
+            SqlCommand cmd = new SqlCommand(s, _sqlConnection);
+            int iRes =cmd.ExecuteNonQuery();
+            return iRes;
+        }
+
         /*
         private static void ReadOrderData(string connectionString)
         {

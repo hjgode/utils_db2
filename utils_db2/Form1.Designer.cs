@@ -40,6 +40,8 @@
             this.listBoxOperatingSystems = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
+            this.btnDeviceAdd = new System.Windows.Forms.Button();
+            this.btnDeviceRemove = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,16 +69,18 @@
             this.listBoxAllDevices.FormattingEnabled = true;
             this.listBoxAllDevices.Location = new System.Drawing.Point(531, 37);
             this.listBoxAllDevices.Name = "listBoxAllDevices";
-            this.listBoxAllDevices.Size = new System.Drawing.Size(172, 56);
+            this.listBoxAllDevices.Size = new System.Drawing.Size(226, 56);
             this.listBoxAllDevices.TabIndex = 2;
+            this.listBoxAllDevices.DoubleClick += new System.EventHandler(this.listBoxAllDevices_DoubleClick);
             // 
             // listBoxDevicesFor
             // 
             this.listBoxDevicesFor.FormattingEnabled = true;
             this.listBoxDevicesFor.Location = new System.Drawing.Point(279, 37);
             this.listBoxDevicesFor.Name = "listBoxDevicesFor";
-            this.listBoxDevicesFor.Size = new System.Drawing.Size(180, 56);
+            this.listBoxDevicesFor.Size = new System.Drawing.Size(218, 56);
             this.listBoxDevicesFor.TabIndex = 3;
+            this.listBoxDevicesFor.DoubleClick += new System.EventHandler(this.listBoxDevicesFor_DoubleClick);
             // 
             // label1
             // 
@@ -118,7 +122,7 @@
             // 
             this.txtOperatingSystem.Location = new System.Drawing.Point(279, 126);
             this.txtOperatingSystem.Name = "txtOperatingSystem";
-            this.txtOperatingSystem.Size = new System.Drawing.Size(179, 20);
+            this.txtOperatingSystem.Size = new System.Drawing.Size(218, 20);
             this.txtOperatingSystem.TabIndex = 6;
             // 
             // listBoxOperatingSystems
@@ -126,8 +130,9 @@
             this.listBoxOperatingSystems.FormattingEnabled = true;
             this.listBoxOperatingSystems.Location = new System.Drawing.Point(531, 126);
             this.listBoxOperatingSystems.Name = "listBoxOperatingSystems";
-            this.listBoxOperatingSystems.Size = new System.Drawing.Size(172, 56);
+            this.listBoxOperatingSystems.Size = new System.Drawing.Size(226, 56);
             this.listBoxOperatingSystems.TabIndex = 2;
+            this.listBoxOperatingSystems.DoubleClick += new System.EventHandler(this.listBoxOperatingSystems_DoubleClick);
             // 
             // label5
             // 
@@ -146,14 +151,36 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtDescription.Size = new System.Drawing.Size(424, 123);
+            this.txtDescription.Size = new System.Drawing.Size(479, 123);
             this.txtDescription.TabIndex = 7;
+            // 
+            // btnDeviceAdd
+            // 
+            this.btnDeviceAdd.Location = new System.Drawing.Point(503, 37);
+            this.btnDeviceAdd.Name = "btnDeviceAdd";
+            this.btnDeviceAdd.Size = new System.Drawing.Size(22, 21);
+            this.btnDeviceAdd.TabIndex = 8;
+            this.btnDeviceAdd.Text = "<";
+            this.btnDeviceAdd.UseVisualStyleBackColor = true;
+            this.btnDeviceAdd.Click += new System.EventHandler(this.btnDeviceAdd_Click);
+            // 
+            // btnDeviceRemove
+            // 
+            this.btnDeviceRemove.Location = new System.Drawing.Point(503, 64);
+            this.btnDeviceRemove.Name = "btnDeviceRemove";
+            this.btnDeviceRemove.Size = new System.Drawing.Size(22, 21);
+            this.btnDeviceRemove.TabIndex = 8;
+            this.btnDeviceRemove.Text = "-";
+            this.btnDeviceRemove.UseVisualStyleBackColor = true;
+            this.btnDeviceRemove.Click += new System.EventHandler(this.btnDeviceRemove_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(795, 348);
+            this.Controls.Add(this.btnDeviceRemove);
+            this.Controls.Add(this.btnDeviceAdd);
             this.Controls.Add(this.txtDescription);
             this.Controls.Add(this.txtOperatingSystem);
             this.Controls.Add(this.label4);
@@ -189,6 +216,8 @@
         private System.Windows.Forms.ListBox listBoxOperatingSystems;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtDescription;
+        private System.Windows.Forms.Button btnDeviceAdd;
+        private System.Windows.Forms.Button btnDeviceRemove;
     }
 }
 
