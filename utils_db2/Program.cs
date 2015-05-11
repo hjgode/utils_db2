@@ -17,7 +17,7 @@ namespace utils_db2
             _logger = new logger(logger.logLevel.info);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Form2());
         }
     }
 }

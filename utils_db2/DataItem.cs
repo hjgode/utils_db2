@@ -19,15 +19,6 @@ namespace utils_db2
         public byte[] file_link;
     }
 
-    /// <summary>
-    /// Windows CE 5
-    /// Windows Mobile 6
-    /// Windows Embedded Handheld 6.5
-    /// </summary>
-    class Operating_System{
-        public int id {get;set;}
-        public string name{get;set;}
-    }
 
     /// <summary>
     /// to store a generic category like

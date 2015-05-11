@@ -13,6 +13,10 @@ namespace utils_db2
     {
         logger _logger = Program._logger;
         database _database;
+
+        Device _device = new Device();
+        Devices _devices = new Devices();
+
         public Form1()
         {
             _logger.log("InitializeComponent()");
@@ -23,7 +27,9 @@ namespace utils_db2
                 dataGridView1.DataSource = _database._bsUtils;
                 formatColumns();
 
-                listBoxAllDevices.DataSource = _database.readDeviceNameList();
+                listBoxAllDevices.DataSource = _device.readList(database._sqlConnection);
+
+                //listBoxAllDevices.DataSource = _database.readDeviceNameList();
 
                 listBoxOperatingSystems.DataSource = _database._lstOSNames;
             }
@@ -32,8 +38,6 @@ namespace utils_db2
         void formatColumns()
         {
             dataGridView1.Columns["id"].Visible = false;
-            dataGridView1.Columns["devices_id"].Visible = false;
-            dataGridView1.Columns["operating_id"].Visible = false;
             dataGridView1.Columns["description"].Visible = false;
         }
 
@@ -45,6 +49,12 @@ namespace utils_db2
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            List<Device> lstDevices = new List<Device>();
+            for (int i = 0; i < listBoxDevicesFor.Items.Count; i++)
+                lstDevices.Add((Device)listBoxDevicesFor.Items[i]);
+            int iCnt = _database.updateDeviceListForUtil(_current_UtilID, lstDevices.ToArray());
+
+            /*
             BindingSource bs = (BindingSource)dataGridView1.DataSource;
             bs.EndEdit();
             DataTable dt = (DataTable)bs.DataSource;
@@ -55,6 +65,7 @@ namespace utils_db2
 
             int rowsUpdated = _database._daUtils.Update(dt);
             _logger.log("updated " + rowsUpdated.ToString() + " rows");
+            */
         }
 
         int _current_UtilID=-1;
@@ -87,8 +98,8 @@ namespace utils_db2
 
             txtDescription.Text = _database._description.getDescriptionforID(util_id);
 
-            int operating_id = (int)row.Cells["operating_id"].Value;
-            txtOperatingSystem.Text = _database._osname.getOSforID(operating_id);
+            int utils_id = (int)row.Cells["id"].Value;
+            txtOperatingSystem.Text = _database._osname.getOSforID(utils_id);
         }
 
         void addDevice()
@@ -131,7 +142,7 @@ namespace utils_db2
                 return;
             //change OS entry for util_id
             OS_name os = (OS_name)listBoxOperatingSystems.SelectedItem;
-            int iRes = _database.executeSQLnoQuery("update utils set operating_id=" + os.operating_id.ToString() + " where id=" + _current_UtilID.ToString() + ";");
+            int iRes = _database.executeSQLnoQuery("update utils set operating_id=" + os.utils_id.ToString() + " where id=" + _current_UtilID.ToString() + ";");
             dataGridView1.Refresh();
         }
     }
