@@ -26,7 +26,7 @@ namespace utils_db2
         /// </summary>
         public int device_id = 0;
         /// <summary>
-        /// link to utilities devices_id
+        /// link to utils devices_id
         /// </summary>
         public int devices_id = 0;
         public Devices(int device_device_id, int util_devices_id)

@@ -25,7 +25,7 @@ namespace utils_db2
         List<OS_name> _OS_names = new List<OS_name>();
         public List<OS_name> readList(SqlConnection conn)
         {
-            SqlCommand cmd = new SqlCommand("select operating_id,name from [operating_systems];", conn);
+            SqlCommand cmd = new SqlCommand("select operating_id,name from [utils_operating_systems];", conn);
             SqlDataReader rdr = cmd.ExecuteReader();
             _OS_names.Clear();
             while (rdr.Read())

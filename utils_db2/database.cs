@@ -5,15 +5,51 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 
+/*
+ * database
+ *      supportstaff-rw
+ * tables
+ *      dbo.utils
+                CREATE TABLE [dbo].[utils](
+	                [id] [int] IDENTITY(1,1) NOT NULL,
+	                [name] [nchar](80) NOT NULL,
+	                [devices_id] [int] NOT NULL,            ==> pointer into utils_devices->devices_id
+	                [operating_id] [int] NOT NULL,          ==> pointer into utils_operating_systems->operating_id
+	                [description] [text] NOT NULL,
+	                [author] [nchar](80) NOT NULL,
+	                [file_link] [nchar](254) NOT NULL
+                ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+ * 
+ *      dbo.utils_operating_systems
+                CREATE TABLE [dbo].[utils_operating_systems](
+	                [id] [int] IDENTITY(1,1) NOT NULL,
+	                [operating_id] [int] NOT NULL,
+	                [name] [nchar](80) NOT NULL
+                ) ON [PRIMARY]
+ *      dbo.utils_devices
+ *          many-to-many junction table
+                CREATE TABLE [dbo].[utils_devices](
+	                [id] [int] IDENTITY(1,1) NOT NULL,
+	                [devices_id] [int] NOT NULL,            <== utils.devices_id
+	                [device_id] [int] NOT NULL              ==> pointer into utils_device->device_id
+                ) ON [PRIMARY]
+ *      dbo.utils_device
+                CREATE TABLE [dbo].[utils_device](
+	                [device_id] [int] IDENTITY(1,1) NOT NULL,   <== utils.operating_id
+	                [name] [nchar](80) NOT NULL
+                ) ON [PRIMARY]
+ * constraints
+ * */
+
 namespace utils_db2
 {
     class database:IDisposable
     {
-        string sqlALL = "SELECT dbo.utilities.name, dbo.device.name AS device, dbo.operating_systems.name AS OS, dbo.utilities.description, dbo.utilities.author, dbo.utilities.file_link " +
-                        "FROM dbo.utilities LEFT OUTER JOIN " +
-                        "dbo.operating_systems ON dbo.utilities.operating_id = dbo.operating_systems.operating_id LEFT OUTER JOIN " +
-                        "dbo.devices ON dbo.utilities.devices_id = dbo.devices.devices_id LEFT OUTER JOIN " +
-                        "dbo.device ON dbo.devices.device_id = dbo.device.device_id ";
+        string sqlALL = "SELECT dbo.utils.name, dbo.utils_device.name AS utils_device, dbo.utils_operating_systems.name AS OS, dbo.utils.description, dbo.utils.author, dbo.utils.file_link " +
+                        "FROM dbo.utils LEFT OUTER JOIN " +
+                        "dbo.utils_operating_systems ON dbo.utils.operating_id = dbo.utils_operating_systems.operating_id LEFT OUTER JOIN " +
+                        "dbo.utils_devices ON dbo.utils.devices_id = dbo.utils_devices.devices_id LEFT OUTER JOIN " +
+                        "dbo.utils_device ON dbo.utils_devices.device_id = dbo.utils_device.device_id ";
 
         logger _logger = Program._logger;
         string _u = "supportstaff-rw";
@@ -57,7 +93,7 @@ namespace utils_db2
             _dtUtils = new DataTable();
             //SqlCommand sqlCmd = new SqlCommand("select * from utilities_view", sqlConnection);
             //dt.Load(sqlCmd.ExecuteReader());
-            _daUtils = new SqlDataAdapter("select * from utilities", _sqlConnection);// (sqlALL, sqlConnection);// ("select * from utilities", sqlConnection);
+            _daUtils = new SqlDataAdapter("select * from utils", _sqlConnection);// (sqlALL, sqlConnection);// ("select * from utils", sqlConnection);
             SqlCommandBuilder sqlBuilder = new SqlCommandBuilder(_daUtils);
             _daUtils.Fill(_dtUtils);
             _bsUtils = new System.Windows.Forms.BindingSource();
@@ -81,7 +117,7 @@ namespace utils_db2
         {
             _ListDevices = new List<Device>(); ;
             _dtDevicesNames = new DataTable();
-            SqlCommand cmdReadDevices = new SqlCommand("select * from device", _sqlConnection);
+            SqlCommand cmdReadDevices = new SqlCommand("select * from utils_device", _sqlConnection);
             _dtDevicesNames.Load(cmdReadDevices.ExecuteReader());
             foreach (DataRow dr in _dtDevicesNames.Rows)
             {
@@ -94,7 +130,7 @@ namespace utils_db2
         {
             _ListDevices = new List<Device>(); ;
             _dtDevicesLinkTable = new DataTable();
-            SqlCommand cmdReadDevices = new SqlCommand("select * from devices", _sqlConnection);
+            SqlCommand cmdReadDevices = new SqlCommand("select * from utils_devices", _sqlConnection);
             _dtDevicesLinkTable.Load(cmdReadDevices.ExecuteReader());
             return _dtDevicesLinkTable;
         }
@@ -102,7 +138,7 @@ namespace utils_db2
         public List<Device> getDevices(int util_id)
         {
             List<Device> devicesList = new List<Device>();
-            //look thru utilities
+            //look thru utils
             foreach (DataRow dr in _dtUtils.Rows)
             {
                 if ((int)dr["id"] == util_id)// find utils record for ID
@@ -206,7 +242,7 @@ namespace utils_db2
     }
 }
 /*
- * Insert into dbo.utilities (name) values ('Microsoft DevHealth'), ( 'cpumon'), ( 'PhoneStateChangeLogger'), ( 'BatteryLog'), ( 'WWANCollector'), ( 'DebugLog'), ( 'NetValidate'), ( 'RILLogger'), ( 'BatteryLog'), ( 'BTmon'), ( 'memuse'), ( 'connMgrLog'), ( 'deviceMon'), ( 'PowerMsgLog'), ( 'rb_logger'), ( 'Intermec DevHealth');
+ * Insert into dbo.utils (name) values ('Microsoft DevHealth'), ( 'cpumon'), ( 'PhoneStateChangeLogger'), ( 'BatteryLog'), ( 'WWANCollector'), ( 'DebugLog'), ( 'NetValidate'), ( 'RILLogger'), ( 'BatteryLog'), ( 'BTmon'), ( 'memuse'), ( 'connMgrLog'), ( 'deviceMon'), ( 'PowerMsgLog'), ( 'rb_logger'), ( 'Intermec DevHealth');
 USE [SupportStaff]
 GO
 
@@ -217,14 +253,14 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 BEGIN TRY
-    DROP TABLE [dbo].[utilities];
+    DROP TABLE [dbo].[utils];
 END TRY
 BEGIN CATCH
 END CATCH
 
 GO
 
-CREATE TABLE [dbo].[utilities](
+CREATE TABLE [dbo].[utils](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[name] [nchar](32) NOT NULL
 ) ON [PRIMARY]
@@ -234,7 +270,7 @@ GO
 declare @crlf char(2)
 select @crlf = char(13)+char(10)
 
-Insert into dbo.utilities (name) values ('Microsoft DevHealth'), ( 'cpumon'), ( 'PhoneStateChangeLogger'), ( 'BatteryLog'), ( 'WWANCollector'), ( 'DebugLog'), ( 'NetValidate'), ( 'RILLogger'), ( 'BatteryLog'), ( 'BTmon'), ( 'memuse'), ( 'connMgrLog'), ( 'deviceMon'), ( 'PowerMsgLog'), ( 'rb_logger'), ( 'Intermec DevHealth');
+Insert into dbo.utils (name) values ('Microsoft DevHealth'), ( 'cpumon'), ( 'PhoneStateChangeLogger'), ( 'BatteryLog'), ( 'WWANCollector'), ( 'DebugLog'), ( 'NetValidate'), ( 'RILLogger'), ( 'BatteryLog'), ( 'BTmon'), ( 'memuse'), ( 'connMgrLog'), ( 'deviceMon'), ( 'PowerMsgLog'), ( 'rb_logger'), ( 'Intermec DevHealth');
 GO
 
 */

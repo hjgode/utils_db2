@@ -30,7 +30,7 @@ namespace utils_db2
 
         public List<descriptionText> readList(SqlConnection conn)
         {
-            SqlCommand cmd = new SqlCommand("select id, description from [utilities];", conn);
+            SqlCommand cmd = new SqlCommand("select id, description from [utils];", conn);
             SqlDataReader rdr = cmd.ExecuteReader();
             _descriptions.Clear();
             while (rdr.Read())

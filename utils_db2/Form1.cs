@@ -70,11 +70,11 @@ namespace utils_db2
             int util_id = (int)row.Cells["id"].Value;
             _current_UtilID = util_id;
             //which devices_id?
-            //DataTable dtUtils = _database.executeSQL("SELECT devices_id from utilities WHERE id=" + util_id);
+            //DataTable dtUtils = _database.executeSQL("SELECT devices_id from utils WHERE id=" + util_id);
             //DataRow drUtils = dtUtils.Rows[0];
             //int devices_id = (int)drUtils["devices_id"];
             ////which device are linked?
-            //DataTable dtDevices = _database.executeSQL("Select device_id from devices WHERE devices_id="+devices_id);
+            //DataTable dtDevices = _database.executeSQL("Select device_id from utils_devices WHERE devices_id="+devices_id);
             List<Device> listDevice = _database.getDevices(util_id);
             listBoxDevicesFor.Items.Clear();
             foreach (Device d in listDevice)
@@ -131,7 +131,7 @@ namespace utils_db2
                 return;
             //change OS entry for util_id
             OS_name os = (OS_name)listBoxOperatingSystems.SelectedItem;
-            int iRes = _database.executeSQLnoQuery("update utilities set operating_id=" + os.operating_id.ToString() + " where id=" + _current_UtilID.ToString() + ";");
+            int iRes = _database.executeSQLnoQuery("update utils set operating_id=" + os.operating_id.ToString() + " where id=" + _current_UtilID.ToString() + ";");
             dataGridView1.Refresh();
         }
     }
