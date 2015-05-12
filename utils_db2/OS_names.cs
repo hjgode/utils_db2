@@ -32,7 +32,7 @@ namespace utils_db2
             _OS_names.Clear();
             while (rdr.Read())
             {
-                _OS_names.Add(new OS_name(rdr.GetInt32(0), rdr.GetString(1)));
+                _OS_names.Add(new OS_name(rdr.GetInt32(0), rdr.GetString(1).Trim()));
             }
             rdr.Close();            
             return _OS_names;
@@ -93,7 +93,7 @@ namespace utils_db2
             _operatingSystemsList.Clear();
             while (rdr.Read())
             {
-                _operatingSystemsList.Add(new Operating_System(rdr.GetInt32(0), rdr.GetString(1)));
+                _operatingSystemsList.Add(new Operating_System(rdr.GetInt32(0), rdr.GetString(1).Trim()));
             }
             rdr.Close();
             return _operatingSystemsList;

@@ -1,6 +1,6 @@
 ﻿namespace utils_db2
 {
-    partial class Form2
+    partial class mainForm
     {
         /// <summary>
         /// Required designer variable.

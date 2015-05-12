@@ -4,13 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data;
+using System.Xml.Serialization;
 
 namespace utils_db2
 {
     public class Device
     {
-        public int device_id = -1;
-        public string name = "undefined";
+        [XmlElement("device_id")]
+        public int device_id { get; set; }
+        [XmlElement("name")]
+        public string name { get; set; }
+
         public Device(int i, string n)
         {
             device_id = i;
@@ -18,6 +22,8 @@ namespace utils_db2
         }
         public Device()
         {
+            name = "undefined";
+            device_id = -1;
         }
         public override string ToString()
         {
@@ -37,7 +43,7 @@ namespace utils_db2
             _lstDevices.Clear();
             while (rdr.Read())
             {
-                _lstDevices.Add(new Device(rdr.GetInt32(0), rdr.GetString(1)));
+                _lstDevices.Add(new Device(rdr.GetInt32(0), rdr.GetString(1).Trim()));
             }
             rdr.Close();
             return _lstDevices;
@@ -60,14 +66,18 @@ namespace utils_db2
 
     public class Devices
     {
+        [XmlElement("utils_id")]
         /// <summary>
         /// link to utils.id
         /// </summary>
-        public int utils_id = 0;
+        public int utils_id { get; set; }
+
+        [XmlElement("device_id")]
         /// <summary>
         /// link to Device->device_id
         /// </summary>
-        public int device_id = 0;
+        public int device_id { get; set; }
+
         public Devices(int device_device_id, int util_devices_id)
         {
             device_id= device_device_id;
@@ -75,6 +85,8 @@ namespace utils_db2
         }
         public Devices()
         {
+            device_id = 0;
+            utils_id = 0;
         }
 
         List<Devices> _lstDevices = new List<Devices>();
@@ -114,5 +126,7 @@ namespace utils_db2
             }
             return devs.ToArray();
         }
+
+
     }
 }
