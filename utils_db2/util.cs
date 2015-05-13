@@ -42,7 +42,7 @@ namespace utils_db2
             Operating_System _os_Class = new Operating_System();
             _os_Class.readList(conn);
 
-            SqlDataReader rdr = cmd.ExecuteReader();
+            SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess); // CommandBehavior.SequentialAccess: read columns in order and every column only once!
             Devices[] uDevices;
             while (rdr.Read())
             {
