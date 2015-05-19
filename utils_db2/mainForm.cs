@@ -31,5 +31,39 @@ namespace utils_db2
             //test
             byte[] buf = _utilities.getFileData(2);
         }
+
+        int _current_UtilID = -1;
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1)
+                return;
+            DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+            int util_id = (int)row.Cells["id"].Value;
+            _current_UtilID = util_id;
+
+            int iColumn = e.ColumnIndex;
+            //open Details Form
+            if (row.Cells[iColumn].OwningColumn.HeaderText == "description")
+            {
+                frmDescription frm = new frmDescription(_utilities.getUtilityByID(util_id));
+                if (frm.ShowDialog() == DialogResult.OK){
+                    _utilities.updateDescription(frm._utility, database._sqlConnection);
+                    dataGridView1.Refresh();
+                }
+                frm.Dispose();
+            }
+
+            if (row.Cells[iColumn].OwningColumn.HeaderText == "author")
+            {
+                frmAuthor frm = new frmAuthor(_utilities.getUtilityByID(util_id));
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    _utilities.updateAuthor(frm._utility, database._sqlConnection);
+                    dataGridView1.Refresh();
+                }
+                frm.Dispose();
+            }
+        }
+
     }
 }

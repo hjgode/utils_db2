@@ -86,3 +86,13 @@ FROM         dbo.utils LEFT OUTER JOIN
                       dbo.utils_device ON dbo.utils_devices.device_id = dbo.utils_device.device_id
 
 */
+
+/*
+SELECT     dbo.utils.id, dbo.utils.name, dbo.utils_device.name AS Devices, dbo.utils.description, dbo.utils.author, dbo.utils_operating_systems.name AS OS, dbo.utils.file_link, 
+                      dbo.utils.file_data
+FROM         dbo.utils_operating_systems RIGHT OUTER JOIN
+                      dbo.utils ON dbo.utils_operating_systems.utils_id = dbo.utils.id LEFT OUTER JOIN
+                      dbo.utils_device INNER JOIN
+                      dbo.utils_devices ON dbo.utils_device.device_id = dbo.utils_devices.device_id ON dbo.utils.id = dbo.utils_devices.utils_id
+*/
+                      

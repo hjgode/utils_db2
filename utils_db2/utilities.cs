@@ -36,12 +36,15 @@ namespace utils_db2
             string sql = "Select id, name, description, author, file_link, file_data from utils";
             SqlCommand cmd = new SqlCommand(sql, conn);
 
+            //load the util_id<->device_id table
             Devices _devicesClass = new Devices();
             _devicesClass.readList(conn);
 
+            //load the util_id<->OS Names table
             Operating_System _os_Class = new Operating_System();
             _os_Class.readList(conn);
 
+            //read util_db
             SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess); // CommandBehavior.SequentialAccess: read columns in order and every column only once!
             Devices[] uDevices;
             while (rdr.Read())
@@ -53,11 +56,12 @@ namespace utils_db2
                 string filelink = rdr.GetString(4).Trim();
                 byte[] filedata = null;
 
+                //find devices attached to this util
                 uDevices = _devicesClass.getDevicesForID(utilID);
                 if (uDevices == null || uDevices.Length == 0)
                     uDevices = new Devices[] { new Devices(0, utilID) };
 
-
+                //load the binary data
                 if (rdr.IsDBNull(5)) //is there any binary data?
                     filedata = null;
                 else
@@ -86,23 +90,13 @@ namespace utils_db2
                     filedata = ms.ToArray();
                     ms.Close();
                 }
+
+                //add a new utility to our class
                 utilitiesList.Add(new utility(utilID,name,desc,author,filelink,
                     uDevices,
                     _os_Class.getOsForId(utilID),
                     filedata
                     ));
-                /*
-                utilitiesList.Add(new utility(
-                    rdr.GetInt32(0),//id
-                    rdr.GetString(1).Trim(),//name
-                    rdr.GetString(2).Trim(),//description
-                    rdr.GetString(3).Trim(),//author
-                    rdr.GetString(4).Trim(),//file_link
-                    uDevices,               //extern table devices
-                    _os_Class.getOsForId(rdr.GetInt32(0)),//extern table operating system
-                    getImageBytes(ref rdr, 5)
-                    ));
-                */
                 iRet++;
             }
             rdr.Close();
@@ -147,80 +141,39 @@ namespace utils_db2
             return null;
         }
 
-        static public void Serialize(utilities _utils)
+        public utility getUtilityByID(int id)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(utilities));
-            using (TextWriter writer = new StreamWriter(helper.getAppPath+ @"utils.xml"))
-            {
-                serializer.Serialize(writer, _utils);
-            }
+            foreach (utility utl in _utilities)
+                if (utl.id == id)
+                    return utl;
+            return null;
         }
 
-        static public utilities Deserialize(string fileName)
+        public int updateDescription(utility utl, SqlConnection conn)
         {
-            XmlSerializer deserializer = new XmlSerializer(typeof(utilities));
-            TextReader reader = new StreamReader(fileName);
-            object obj = deserializer.Deserialize(reader);
-            utilities XmlData = (utilities)obj;
-            reader.Close();
-            return XmlData;
+            string sql = "UPDATE utils set description=@parm1 WHERE id=" + utl.id.ToString() + ";";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.Add("parm1", SqlDbType.Text, utl.description.Length).Value = utl.description;
+            int iRes = cmd.ExecuteNonQuery();
+            foreach (utility u in _utilities)
+                if (u.id == utl.id)
+                    u.description = utl.description;
+
+            return iRes;
+        }
+
+        public int updateAuthor(utility utl, SqlConnection conn)
+        {
+            string sql = "UPDATE utils set author=@parm1 WHERE id=" + utl.id.ToString() + ";";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.Add("parm1", SqlDbType.Char, utl.author.Length).Value = utl.author;
+            int iRes = cmd.ExecuteNonQuery();
+            foreach (utility u in _utilities)
+                if (u.id == utl.id)
+                    u.author = utl.author;
+
+            return iRes;
         }
     }
 
-    public class utility
-    {
-        [XmlElement("id")]
-        public int id { get; set; }
-        [XmlElement("name")]
-        public string name { get; set; }
-        [XmlElement("description")]
-        public string description { get; set; }
-        [XmlElement("author")]
-        public string author { get; set; }
-        [XmlElement("file_link")]
-        public string file_link { get; set; }
-        [XmlElement("devices")]
-        public Devices[] devices { get; set; }
-        [XmlElement("operating_system")]
-        public Operating_System operating_system { get; set; }
-        
-        [XmlElement("file_data")]
-        public byte[] file_data { get; set; }
-
-        public utility()
-        {
-            id = -1;
-            name = "undefined";
-            description = "undefined";
-            author = "undefined";
-            file_link = "undefined";
-            devices = new Devices[]{new Devices()};
-            operating_system = new Operating_System();
-            file_data = null;
-        }
-        public utility(int i, string n, string desc, string a, string f, Devices[] devs, Operating_System os, byte[] bData)
-        {
-            id = i;
-            name = n;
-            description=desc;
-            author = a;
-            file_link = f;
-            devices = devs;
-            operating_system = os;
-            file_data = bData;
-        }
-        public utility(int i, string n, string desc, string a, string f)
-        {
-            id = i;
-            name = n;
-            description=desc;
-            author = a;
-            file_link = f;
-        }
-
-        public byte[] getFileData()
-        {
-            return this.file_data;
-        }
-    }    
 }

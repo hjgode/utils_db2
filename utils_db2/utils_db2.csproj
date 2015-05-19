@@ -57,6 +57,18 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmAuthor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAuthor.Designer.cs">
+      <DependentUpon>frmAuthor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDescription.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDescription.Designer.cs">
+      <DependentUpon>frmDescription.cs</DependentUpon>
+    </Compile>
     <Compile Include="helper.cs" />
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
@@ -70,6 +82,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAuthor.resx">
+      <DependentUpon>frmAuthor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDescription.resx">
+      <DependentUpon>frmDescription.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
@@ -96,7 +114,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="util.cs" />
+    <Compile Include="utilities.cs" />
+    <Compile Include="utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="sql_cmds.txt" />

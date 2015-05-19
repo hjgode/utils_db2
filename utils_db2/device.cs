@@ -29,7 +29,8 @@ namespace utils_db2
         {
             return name;
         }
-        List<Device> _lstDevices = new List<Device>();
+        
+        static List<Device> _lstDevices = new List<Device>();
 
         /// <summary>
         /// read utils->devices link table
@@ -64,6 +65,9 @@ namespace utils_db2
         }
     }
 
+    /// <summary>
+    /// maintain all devices in linking database
+    /// </summary>
     public class Devices
     {
         [XmlElement("utils_id")]
@@ -89,7 +93,7 @@ namespace utils_db2
             utils_id = 0;
         }
 
-        List<Devices> _lstDevices = new List<Devices>();
+        static List<Devices> _lstDevices = new List<Devices>();
 
         /// <summary>
         /// read utils->devices link table
