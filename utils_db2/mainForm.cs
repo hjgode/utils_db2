@@ -63,6 +63,18 @@ namespace utils_db2
                 }
                 frm.Dispose();
             }
+
+            if (row.Cells[iColumn].OwningColumn.HeaderText == "file_link")
+            {
+                frmFile frm = new frmFile(_utilities.getUtilityByID(util_id));
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    _utilities.setImageData(util_id, frm._utility.file_data, database._sqlConnection);
+                    _utilities.setFile_Link(util_id, frm._utility.file_link, database._sqlConnection);
+                    dataGridView1.Refresh();
+                }
+                frm.Dispose();
+            }
         }
 
     }

@@ -66,6 +66,11 @@ namespace utils_db2
             return this.file_data;
         }
 
+        public void setFileData(Byte[] bData)
+        {
+            this.file_data = bData;
+        }
+
         static public void Serialize(utilities _utils)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(utilities));

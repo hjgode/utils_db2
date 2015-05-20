@@ -120,7 +120,34 @@ namespace utils_db2
             }
         }
 
-        static byte[] GetByteData(string filePath)
+        public void setImageData(int uID, byte[] bData, SqlConnection conn)
+        {
+            byte[] byteData = bData;
+            string sql = "UPDATE utils set file_data=@parm1 WHERE id=" + uID.ToString()+";";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.Add("parm1", SqlDbType.Image, byteData.Length).Value = byteData;
+            int iRes = cmd.ExecuteNonQuery();
+
+            foreach(utility u in _utilities){
+                if (u.id == uID)
+                    u.file_data = byteData;
+            }
+        }
+
+        public void setFile_Link(int uID, string sName, SqlConnection conn)
+        {            
+            string sql = "UPDATE utils set file_link=@parm1 WHERE id=" + uID.ToString()+";";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.Add("parm1", SqlDbType.Text, sName.Length).Value = sName;
+            int iRes = cmd.ExecuteNonQuery();
+
+            foreach(utility u in _utilities){
+                if (u.id == uID)
+                    u.file_link = sName;
+            }
+        }
+
+        public static byte[] GetByteData(string filePath)
         {
             FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             BinaryReader br = new BinaryReader(fs);
