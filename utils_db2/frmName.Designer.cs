@@ -1,6 +1,6 @@
 ﻿namespace utils_db2
 {
-    partial class frmFile
+    partial class frmName
     {
         /// <summary>
         /// Required designer variable.
@@ -29,89 +29,81 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.txtFile = new System.Windows.Forms.TextBox();
-            this.btnSelectFile = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtUtilName = new System.Windows.Forms.TextBox();
+            this.lblID = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.txtFileLink = new System.Windows.Forms.TextBox();
-            this.txtFileDetails = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(432, 17);
-            this.label1.TabIndex = 1;
+            this.label1.Size = new System.Drawing.Size(431, 17);
+            this.label1.TabIndex = 2;
             this.label1.Text = "label1";
             // 
-            // txtFile
+            // label2
             // 
-            this.txtFile.Location = new System.Drawing.Point(12, 29);
-            this.txtFile.Name = "txtFile";
-            this.txtFile.Size = new System.Drawing.Size(432, 20);
-            this.txtFile.TabIndex = 2;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 39);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(38, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Name:";
             // 
-            // btnSelectFile
+            // txtUtilName
             // 
-            this.btnSelectFile.Location = new System.Drawing.Point(461, 20);
-            this.btnSelectFile.Name = "btnSelectFile";
-            this.btnSelectFile.Size = new System.Drawing.Size(100, 29);
-            this.btnSelectFile.TabIndex = 3;
-            this.btnSelectFile.Text = "select file";
-            this.btnSelectFile.UseVisualStyleBackColor = true;
-            this.btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
+            this.txtUtilName.Location = new System.Drawing.Point(70, 35);
+            this.txtUtilName.Name = "txtUtilName";
+            this.txtUtilName.Size = new System.Drawing.Size(373, 20);
+            this.txtUtilName.TabIndex = 4;
+            // 
+            // lblID
+            // 
+            this.lblID.AutoSize = true;
+            this.lblID.Location = new System.Drawing.Point(449, 9);
+            this.lblID.Name = "lblID";
+            this.lblID.Size = new System.Drawing.Size(15, 13);
+            this.lblID.TabIndex = 5;
+            this.lblID.Text = "id";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(363, 119);
+            this.btnCancel.Location = new System.Drawing.Point(266, 109);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(96, 27);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(465, 119);
+            this.btnSave.Location = new System.Drawing.Point(368, 109);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(96, 27);
-            this.btnSave.TabIndex = 4;
+            this.btnSave.TabIndex = 6;
             this.btnSave.Text = "SAVE";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // txtFileLink
-            // 
-            this.txtFileLink.Location = new System.Drawing.Point(12, 55);
-            this.txtFileLink.Name = "txtFileLink";
-            this.txtFileLink.ReadOnly = true;
-            this.txtFileLink.Size = new System.Drawing.Size(164, 20);
-            this.txtFileLink.TabIndex = 2;
-            // 
-            // txtFileDetails
-            // 
-            this.txtFileDetails.Location = new System.Drawing.Point(182, 55);
-            this.txtFileDetails.Name = "txtFileDetails";
-            this.txtFileDetails.ReadOnly = true;
-            this.txtFileDetails.Size = new System.Drawing.Size(164, 20);
-            this.txtFileDetails.TabIndex = 6;
-            // 
-            // frmFile
+            // frmName
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(571, 169);
-            this.Controls.Add(this.txtFileDetails);
+            this.ClientSize = new System.Drawing.Size(473, 151);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.btnSelectFile);
-            this.Controls.Add(this.txtFileLink);
-            this.Controls.Add(this.txtFile);
+            this.Controls.Add(this.lblID);
+            this.Controls.Add(this.txtUtilName);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "frmFile";
-            this.Text = "frmFile";
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "frmName";
+            this.Text = "frmName";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -120,11 +112,10 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtFile;
-        private System.Windows.Forms.Button btnSelectFile;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtUtilName;
+        private System.Windows.Forms.Label lblID;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.TextBox txtFileLink;
-        private System.Windows.Forms.TextBox txtFileDetails;
     }
 }

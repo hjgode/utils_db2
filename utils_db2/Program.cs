@@ -7,6 +7,7 @@ namespace utils_db2
 {
     static class Program
     {
+        public static frmSplash frm;
         public static logger _logger;// = new logger(logger.logLevel.info);
         /// <summary>
         /// The main entry point for the application.
@@ -17,6 +18,11 @@ namespace utils_db2
             _logger = new logger(logger.logLevel.info);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            
+            frm = new frmSplash();
+            frm.lblStatus.Text = "please wait...";
+            frm.Show();
+
             Application.Run(new mainForm());
         }
     }

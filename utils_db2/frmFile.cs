@@ -64,6 +64,7 @@ namespace utils_db2
                 {
                     filedata = utilities.GetByteData(ofd.FileName);
                     filename = System.IO.Path.GetFileName(ofd.FileName);
+                    txtFile.Text = ofd.FileName;
                     txtFileLink.Text = filename;
                     txtFileDetails.Text = filedata.Length.ToString();
                 }

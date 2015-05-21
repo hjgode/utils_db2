@@ -125,7 +125,10 @@ namespace utils_db2
             if (_bConnected)
                 readDataUtils();
             else
+            {
                 _logger.log("read data failed");
+                throw new Exception("database init() failed");
+            }
         }
 
         void readDataUtils()

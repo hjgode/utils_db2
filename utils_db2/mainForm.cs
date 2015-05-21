@@ -11,25 +11,54 @@ namespace utils_db2
 {
     public partial class mainForm : Form
     {
-        database _database = new database();
-        utilities _utilities=new utilities();
+        database _database=null;
+        utilities _utilities=null;
+        logger _logger = Program._logger;
 
         public mainForm()
         {
+
+            Application.DoEvents();
+
             InitializeComponent();
-            _utilities.readUtilsDB(database._sqlConnection);
 
-            dataGridView1.DataSource = _utilities.utilitiesList;
-            dataGridView1.Columns["id"].Visible = false;
-            dataGridView1.Columns["file_data"].Visible = false; //we can not show binary data as image
+            int iRes = openDB();
+            
+            Program.frm.Close();
 
-            dataGridView1.Refresh();
+            if (iRes != 0)
+                MessageBox.Show("Database did not load. Check network connection.");
+        }
 
-            //utilities.Serialize(_utilities);
-            _utilities.setImageData(2, helper.getAppPath + @"\cpumon.zip", database._sqlConnection);
+        int openDB()
+        {
+            int iRes = 0;
+            try
+            {
+                _logger.log("Open database...");
+                _database = new database();
+                _utilities = new utilities();
+                _utilities.readUtilsDB(database._sqlConnection);
 
-            //test
-            byte[] buf = _utilities.getFileData(2);
+                dataGridView1.DataSource = _utilities.utilitiesList;
+                dataGridView1.Columns["id"].Visible = false;
+                dataGridView1.Columns["file_data"].Visible = false; //we can not show binary data as image
+
+                dataGridView1.Refresh();
+
+                //utilities.Serialize(_utilities);
+                //_utilities.setImageData(2, helper.getAppPath + @"\cpumon.zip", database._sqlConnection);
+
+                //test
+                //byte[] buf = _utilities.getFileData(2);
+                _logger.log("database loaded and ready");
+            }
+            catch (Exception ex)
+            {
+                _logger.log("Exception in mainForm init: " + ex.Message);
+                iRes = -1;
+            }
+            return iRes;
         }
 
         int _current_UtilID = -1;
@@ -75,6 +104,88 @@ namespace utils_db2
                 }
                 frm.Dispose();
             }
+
+            if (row.Cells[iColumn].OwningColumn.HeaderText == "operating_system")
+            {
+                frmOperatingSystems frm = new frmOperatingSystems(_utilities.getUtilityByID(util_id));
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    _utilities.setOperatingsystem(util_id, frm._utility.operating_system, database._sqlConnection);
+                    dataGridView1.Refresh();
+                }
+                frm.Dispose();
+            }
+
+            if (row.Cells[iColumn].OwningColumn.HeaderText == "name")
+            {
+                frmName frm = new frmName(_utilities.getUtilityByID(util_id));
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    _utilities.setName(util_id, frm._utility.name , database._sqlConnection);
+                    dataGridView1.Refresh();
+                }
+                frm.Dispose();
+            }
+        }
+
+        private void mnuSaveXML_Click(object sender, EventArgs e)
+        {
+            if (_utilities == null || _utilities.utilitiesList.Count==0)
+            {
+                MessageBox.Show("no utilities to save");
+                return;
+            }
+            SaveFileDialog ofd = new SaveFileDialog();
+            ofd.RestoreDirectory = true;
+            ofd.CheckPathExists = true;
+            ofd.OverwritePrompt=true;
+            ofd.Filter = "xml files|*.xml|all files|*.*";
+            ofd.FilterIndex = 0;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    utilities.Serialize(_utilities, ofd.FileName);
+                }
+                catch (Exception ex) {
+                    MessageBox.Show("Exception reading file: " + ex.Message);
+                }
+            }
+            ofd.Dispose();
+        }
+
+        private void mnuFileExit_Click(object sender, EventArgs e)
+        {
+            _database.Dispose();
+            Application.Exit();
+        }
+
+        private void mnuLoadXML_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Multiselect = false;
+            ofd.RestoreDirectory = true;
+            ofd.CheckPathExists = true;
+            ofd.CheckFileExists = true;
+            ofd.Filter = "xml files|*.xml|all files|*.*";
+            ofd.FilterIndex = 0;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    _utilities = utilities.Deserialize(ofd.FileName);
+                    dataGridView1.DataSource = _utilities.utilitiesList;
+                    dataGridView1.Columns["id"].Visible = false;
+                    dataGridView1.Columns["file_data"].Visible = false; //we can not show binary data as image
+
+                    dataGridView1.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Exception reading file: " + ex.Message);
+                }
+            }
+            ofd.Dispose();
         }
 
     }

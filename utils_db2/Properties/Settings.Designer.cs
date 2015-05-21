@@ -25,7 +25,8 @@ namespace utils_db2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=10.192.43.91;Initial Catalog=SupportStaff;User ID={0}; password={1}")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=10.192.43.91;Initial Catalog=SupportStaff;User ID={0}; password={1};C" +
+            "onnect Timeout=10")]
         public string connectstring {
             get {
                 return ((string)(this["connectstring"]));

@@ -147,6 +147,53 @@ namespace utils_db2
             }
         }
 
+        public int setName(int uID, string sName, SqlConnection conn)
+        {
+            int iRes = 0;
+            string sql = "UPDATE utils set description=@parm1 WHERE id=" + uID.ToString() + ";";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.Add("parm1", SqlDbType.Text, sName.Length).Value = sName;
+            iRes = cmd.ExecuteNonQuery();
+            
+            foreach (utility u in _utilities)
+                if (u.id == uID)
+                    u.name = sName;
+
+            return iRes;
+            cmd.Dispose();
+        }
+
+        public void setOperatingsystem(int uID, Operating_System os, SqlConnection conn)
+        {            
+            //is util_id already listed?
+            int iRes = 0;
+            string sql = "Select * from utils_operating_systems WHERE utils_id=" + uID.ToString()+";";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            SqlDataReader rdr = cmd.ExecuteReader();
+            if (rdr.HasRows)
+            {
+
+                sql = "UPDATE utils_operating_systems set name=\"@parm1\" WHERE utils_id=" + uID.ToString() + ";";
+                cmd.Parameters.Add("parm1", SqlDbType.Text, os.name.Length).Value = os.name;
+                rdr.Close();
+                iRes = cmd.ExecuteNonQuery();
+            }
+            else
+            {
+                sql = "INSERT INTO utils_operating_systems (utils_id, name) VALUES (@parm1, \"@parm2\")" + ";";
+                cmd.Parameters.Add("parm1", SqlDbType.Int, sizeof(int)).Value = os.id;
+                cmd.Parameters.Add("parm2", SqlDbType.Text, os.name.Length).Value = os.name;
+                rdr.Close();
+                iRes = cmd.ExecuteNonQuery();
+            }
+            cmd.Dispose();
+
+            foreach(utility u in _utilities){
+                if (u.id == uID)
+                    u.operating_system = os;
+            }
+        }
+
         public static byte[] GetByteData(string filePath)
         {
             FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -200,6 +247,25 @@ namespace utils_db2
                     u.author = utl.author;
 
             return iRes;
+        }
+
+        static public void Serialize(utilities _utils, string sFile)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(utilities));
+            using (TextWriter writer = new StreamWriter(sFile))
+            {
+                serializer.Serialize(writer, _utils);
+            }
+        }
+
+        static public utilities Deserialize(string fileName)
+        {
+            XmlSerializer deserializer = new XmlSerializer(typeof(utilities));
+            TextReader reader = new StreamReader(fileName);
+            object obj = deserializer.Deserialize(reader);
+            utilities XmlData = (utilities)obj;
+            reader.Close();
+            return XmlData;
         }
     }
 

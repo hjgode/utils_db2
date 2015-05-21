@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="connectstring" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Data Source=10.192.43.91;Initial Catalog=SupportStaff;User ID={0}; password={1}</Value>
+      <Value Profile="(Default)">Data Source=10.192.43.91;Initial Catalog=SupportStaff;User ID={0}; password={1};Connect Timeout=10</Value>
     </Setting>
   </Settings>
 </SettingsFile>

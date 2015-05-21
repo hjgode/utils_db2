@@ -71,23 +71,6 @@ namespace utils_db2
             this.file_data = bData;
         }
 
-        static public void Serialize(utilities _utils)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(utilities));
-            using (TextWriter writer = new StreamWriter(helper.getAppPath + @"utils.xml"))
-            {
-                serializer.Serialize(writer, _utils);
-            }
-        }
 
-        static public utilities Deserialize(string fileName)
-        {
-            XmlSerializer deserializer = new XmlSerializer(typeof(utilities));
-            TextReader reader = new StreamReader(fileName);
-            object obj = deserializer.Deserialize(reader);
-            utilities XmlData = (utilities)obj;
-            reader.Close();
-            return XmlData;
-        }
     }
 }
