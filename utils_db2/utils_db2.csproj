@@ -51,12 +51,6 @@
     <Compile Include="database.cs" />
     <Compile Include="descriptionText.cs" />
     <Compile Include="device.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmAuthor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,9 +104,6 @@
     <Compile Include="OS_names.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmAuthor.resx">
       <DependentUpon>frmAuthor.cs</DependentUpon>
     </EmbeddedResource>

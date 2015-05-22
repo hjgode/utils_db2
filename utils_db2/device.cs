@@ -14,23 +14,28 @@ namespace utils_db2
         public int device_id { get; set; }
         [XmlElement("name")]
         public string name { get; set; }
+        [XmlElement("util_id")]
+        public int util_id { get; set; }
 
-        public Device(int i, string n)
+        public Device(int utilID, int devID, string n)
         {
-            device_id = i;
+            util_id = utilID;
+            device_id = devID;
             name = n;
         }
         public Device()
         {
             name = "undefined";
             device_id = -1;
+            util_id = -1;
         }
+
         public override string ToString()
         {
             return name;
         }
         
-        static List<Device> _lstDevices = new List<Device>();
+        public static List<Device> _lstDevices = new List<Device>();
 
         /// <summary>
         /// read utils->devices link table
@@ -39,12 +44,15 @@ namespace utils_db2
         /// <returns></returns>
         public List<Device> readList(SqlConnection conn)
         {
-            SqlCommand cmd = new SqlCommand("select device_id,name from [utils_device];", conn);
+            if (_lstDevices.Count > 0)
+                return _lstDevices;
+
+            SqlCommand cmd = new SqlCommand("select util_id, device_id, name from [utils_device];", conn);
             SqlDataReader rdr = cmd.ExecuteReader();
             _lstDevices.Clear();
             while (rdr.Read())
             {
-                _lstDevices.Add(new Device(rdr.GetInt32(0), rdr.GetString(1).Trim()));
+                _lstDevices.Add(new Device(rdr.GetInt32(0), rdr.GetInt32(1), rdr.GetString(2).Trim()));
             }
             rdr.Close();
             return _lstDevices;
@@ -52,7 +60,7 @@ namespace utils_db2
 
         public Device deviceName(int id)
         {
-            Device _dev = new Device(-1,"undefined");
+            Device _dev = new Device(-1,-1,"undefined");
             if (_lstDevices.Count > 0)
             {
                 foreach (Device d in _lstDevices)
@@ -63,80 +71,87 @@ namespace utils_db2
             }
             return _dev;
         }
+
+        public Device[] getDevicesForID(int uID)
+        {
+            List<Device> lst = new List<Device>();
+            foreach (Device d in _lstDevices)
+            {
+                if (d.util_id == uID)
+                    lst.Add(d);
+            }
+            return lst.ToArray();
+        }
     }
 
     /// <summary>
     /// maintain all devices in linking database
     /// </summary>
-    public class Devices
-    {
-        [XmlElement("utils_id")]
-        /// <summary>
-        /// link to utils.id
-        /// </summary>
-        public int utils_id { get; set; }
+    //public class Devices
+    //{
+    //    SqlConnection _conn { get; set; }
 
-        [XmlElement("device_id")]
-        /// <summary>
-        /// link to Device->device_id
-        /// </summary>
-        public int device_id { get; set; }
+    //    public Devices(SqlConnection conn)
+    //    {
+    //        _conn = conn;
+    //        readList(_conn);
+    //    }
 
-        public Devices(int device_device_id, int util_devices_id)
-        {
-            device_id= device_device_id;
-            utils_id = util_devices_id;
-        }
-        public Devices()
-        {
-            device_id = 0;
-            utils_id = 0;
-        }
+    //    public List<Device> _lstDevices = new List<Device>();
 
-        static List<Devices> _lstDevices = new List<Devices>();
+    //    /// <summary>
+    //    /// read utils->devices link table
+    //    /// </summary>
+    //    /// <param name="conn"></param>
+    //    /// <returns></returns>
+    //    List<Device> readList(SqlConnection conn)
+    //    {
+    //        //read list of id and name
+    //        //Device _dev= new Device();
+    //        //List<Device> lstDeviceNames = _dev.readList(conn);
 
-        /// <summary>
-        /// read utils->devices link table
-        /// </summary>
-        /// <param name="conn"></param>
-        /// <returns></returns>
-        public List<Devices> readList(SqlConnection conn)
-        {
-            //read list of id and name
-            Device _dev= new Device();
-            List<Device> lstDeviceNames = _dev.readList(conn);
+    //        SqlCommand cmd = new SqlCommand("select util_id, device_id, name from [utils_device];", conn);
+    //        SqlDataReader rdr = cmd.ExecuteReader();
+    //        _lstDevices.Clear();
+    //        while (rdr.Read())
+    //        {
+    //            int uID = -1, devID = -1; string n = "undef";
+    //            try { uID = rdr.GetInt32(0); }
+    //            catch (Exception) { }
+    //            try { devID = rdr.GetInt32(1); }
+    //            catch (Exception) { }
+    //            try { n = rdr.GetString(2).Trim(); }
+    //            catch (Exception) { }
 
-            SqlCommand cmd = new SqlCommand("select utils_id,device_id from [utils_devices];", conn);
-            SqlDataReader rdr = cmd.ExecuteReader();
-            _lstDevices.Clear();
-            while (rdr.Read())
-            {
-                _lstDevices.Add(new Devices(rdr.GetInt32(0), rdr.GetInt32(1)));
-            }
-            rdr.Close();
-            return _lstDevices;
-        }
+    //            _lstDevices.Add(new Device(uID, devID, n));
+    //        }
+    //        rdr.Close();
+    //        return _lstDevices;
+    //    }
 
-        public Devices[] getDevicesForID(int utilID)
-        {
-            List<Devices> devs = new List<Devices>();
-            if (_lstDevices.Count > 0)
-            {
-                foreach (Devices d in _lstDevices)
-                {
-                    if (d.utils_id == utilID)
-                        devs.Add(new Devices(d.device_id, d.utils_id));
-                }
-            }
-            return devs.ToArray();
-        }
-        public override string ToString()
-        {
-            string s = "";
-            foreach (Devices d in _lstDevices)
-                s += "Devices";
-            return s;
-        }
+    //    public Device[] getDevicesForID(int utilID)
+    //    {
+    //        List<Device> devs = new List<Device>();
+    //        if (_lstDevices.Count == 0)
+    //            _lstDevices = readList(_conn);
 
-    }
+    //        if (_lstDevices.Count > 0)
+    //        {
+    //            foreach (Device d in _lstDevices)
+    //            {
+    //                if (d.util_id == utilID)
+    //                    devs.Add(new Device(d.util_id, d.device_id, d.name));
+    //            }
+    //        }
+    //        return devs.ToArray();
+    //    }
+    //    public override string ToString()
+    //    {
+    //        string s = "";
+    //        foreach (Device d in _lstDevices)
+    //            s += d.name+" ";
+    //        return s.Trim();
+    //    }
+
+    //}
 }

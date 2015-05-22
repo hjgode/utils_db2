@@ -54,6 +54,7 @@
             this.dataGridView1.Size = new System.Drawing.Size(645, 228);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
+            this.dataGridView1.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
             // 
             // pictureBox1
             // 
@@ -87,21 +88,21 @@
             // mnuSaveXML
             // 
             this.mnuSaveXML.Name = "mnuSaveXML";
-            this.mnuSaveXML.Size = new System.Drawing.Size(152, 22);
+            this.mnuSaveXML.Size = new System.Drawing.Size(127, 22);
             this.mnuSaveXML.Text = "Save XML";
             this.mnuSaveXML.Click += new System.EventHandler(this.mnuSaveXML_Click);
             // 
             // mnuLoadXML
             // 
             this.mnuLoadXML.Name = "mnuLoadXML";
-            this.mnuLoadXML.Size = new System.Drawing.Size(152, 22);
+            this.mnuLoadXML.Size = new System.Drawing.Size(127, 22);
             this.mnuLoadXML.Text = "Load XML";
             this.mnuLoadXML.Click += new System.EventHandler(this.mnuLoadXML_Click);
             // 
             // mnuFileExit
             // 
             this.mnuFileExit.Name = "mnuFileExit";
-            this.mnuFileExit.Size = new System.Drawing.Size(152, 22);
+            this.mnuFileExit.Size = new System.Drawing.Size(127, 22);
             this.mnuFileExit.Text = "Exit";
             this.mnuFileExit.Click += new System.EventHandler(this.mnuFileExit_Click);
             // 

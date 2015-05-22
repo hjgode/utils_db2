@@ -18,10 +18,15 @@ namespace utils_db2
 
         [XmlIgnore]
         List<utility> _utilities=new List<utility>();
+
+        [XmlIgnore]
+        public List<Device> _devicesList = new List<Device>();
+
         public utilities()
         {
             _utilities = new List<utility>();
         }
+
         public int addUtil(utility ut)
         {
             int iRet = 0;
@@ -34,19 +39,24 @@ namespace utils_db2
             utilitiesList.Clear();
             int iRet = 0;
             string sql = "Select id, name, description, author, file_link, file_data from utils";
+            //sql = "SELECT     dbo.utils.id, dbo.utils.name, dbo.utils.description, dbo.utils.author, dbo.utils.file_link, dbo.utils.file_data, dbo.utils_device.name AS Device "+
+            //      "FROM         dbo.utils LEFT OUTER JOIN "+
+            //      "dbo.utils_device ON dbo.utils.id = dbo.utils_device.util_id";
+
             SqlCommand cmd = new SqlCommand(sql, conn);
 
             //load the util_id<->device_id table
-            Devices _devicesClass = new Devices();
-            _devicesClass.readList(conn);
-
+            _devicesList.Clear();
+            Device devTemp = new Device();
+            _devicesList = devTemp.readList(conn);
+            
             //load the util_id<->OS Names table
             Operating_System _os_Class = new Operating_System();
             _os_Class.readList(conn);
 
             //read util_db
             SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess); // CommandBehavior.SequentialAccess: read columns in order and every column only once!
-            Devices[] uDevices;
+            Device[] uDevices;
             while (rdr.Read())
             {
                 int utilID = rdr.GetInt32(0);
@@ -57,9 +67,9 @@ namespace utils_db2
                 byte[] filedata = null;
 
                 //find devices attached to this util
-                uDevices = _devicesClass.getDevicesForID(utilID);
+                uDevices = devTemp.getDevicesForID(utilID);
                 if (uDevices == null || uDevices.Length == 0)
-                    uDevices = new Devices[] { new Devices(0, utilID) };
+                    uDevices = new Device[] { new Device(utilID, 0, "undefined") };
 
                 //load the binary data
                 if (rdr.IsDBNull(5)) //is there any binary data?
@@ -163,6 +173,26 @@ namespace utils_db2
             cmd.Dispose();
         }
 
+        public int setDevices(int uID, Device[] devs, SqlConnection conn)
+        {
+            int iRes = 0;
+            //drop all from utils_device with uID
+            SqlCommand cmd = new SqlCommand("DELETE from utils_device WHERE util_id=" + uID.ToString(), conn);
+            iRes = cmd.ExecuteNonQuery();
+            //add all devs with uID
+            iRes = 0;
+            foreach (Device d in devs)
+            {
+                cmd.CommandText = "INSERT INTO utils_device util_id, device_id, name VALUES (" +
+                    d.util_id.ToString() + ", " +
+                    d.device_id.ToString() + ", " +
+                    d.name + ");";
+                iRes += cmd.ExecuteNonQuery();
+            }
+            cmd.Dispose();
+            return iRes;
+        }
+
         public void setOperatingsystem(int uID, Operating_System os, SqlConnection conn)
         {            
             //is util_id already listed?
@@ -173,14 +203,14 @@ namespace utils_db2
             if (rdr.HasRows)
             {
 
-                sql = "UPDATE utils_operating_systems set name=\"@parm1\" WHERE utils_id=" + uID.ToString() + ";";
+                cmd.CommandText = "UPDATE utils_operating_systems set name=@parm1 WHERE utils_id=" + uID.ToString() + ";";
                 cmd.Parameters.Add("parm1", SqlDbType.Text, os.name.Length).Value = os.name;
                 rdr.Close();
                 iRes = cmd.ExecuteNonQuery();
             }
             else
             {
-                sql = "INSERT INTO utils_operating_systems (utils_id, name) VALUES (@parm1, \"@parm2\")" + ";";
+                cmd.CommandText = "INSERT INTO utils_operating_systems (utils_id, name) VALUES (@parm1, @parm2)" + ";";
                 cmd.Parameters.Add("parm1", SqlDbType.Int, sizeof(int)).Value = os.id;
                 cmd.Parameters.Add("parm2", SqlDbType.Text, os.name.Length).Value = os.name;
                 rdr.Close();

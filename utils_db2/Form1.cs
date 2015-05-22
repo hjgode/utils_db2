@@ -15,7 +15,7 @@ namespace utils_db2
         database _database;
 
         Device _device = new Device();
-        Devices _devices = new Devices();
+        List<Device> _deviceList = new List<Device>();
 
         public Form1()
         {
@@ -32,6 +32,9 @@ namespace utils_db2
                 //listBoxAllDevices.DataSource = _database.readDeviceNameList();
 
                 listBoxOperatingSystems.DataSource = _database._lstOSNames;
+
+                _deviceList = _database.
+
             }
         }
 

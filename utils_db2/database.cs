@@ -6,11 +6,6 @@ using System.Data.SqlClient;
 using System.Data;
 
 /*
-SELECT     dbo.utils.name, dbo.utils.description, dbo.utils.author, dbo.utils.file_link, dbo.utils_device.name AS Devices, dbo.utils_operating_systems.name AS Systems
-FROM         dbo.utils_operating_systems INNER JOIN
-                      dbo.utils ON dbo.utils_operating_systems.utils_id = dbo.utils.id LEFT OUTER JOIN
-                      dbo.utils_device INNER JOIN
-                      dbo.utils_devices ON dbo.utils_device.device_id = dbo.utils_devices.device_id ON dbo.utils.id = dbo.utils_devices.utils_id
 */
 /*
 CREATE TABLE [dbo].[utils](
@@ -20,24 +15,16 @@ CREATE TABLE [dbo].[utils](
 	[author] [nchar](80) NOT NULL,
 	[file_link] [nchar](254) NOT NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-*/
-/*
-CREATE TABLE [dbo].[utils_devices](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[utils_id] [int] NOT NULL,
-	[device_id] [int] NOT NULL
-) ON [PRIMARY]
-*/
-/*
+
 CREATE TABLE [dbo].[utils_device](
 	[device_id] [int] IDENTITY(1,1) NOT NULL,
 	[name] [nchar](80) NOT NULL
+	[util_id] [int] NOT NULL,                   //link to [dbo].[utils].id
 ) ON [PRIMARY]
-*/
-/*
+
 CREATE TABLE [dbo].[utils_operating_systems](
 	[id] [int] IDENTITY(1,1) NOT NULL,
-	[utils_id] [int] NOT NULL,
+	[utils_id] [int] NOT NULL,                  //link to [dbo].[utils].id
 	[name] [nchar](80) NOT NULL
 ) ON [PRIMARY]
 */
@@ -144,7 +131,7 @@ namespace utils_db2
 
             readDeviceNameList();
 
-            readDeviceLinkList();
+            //readDeviceLinkList();
 
             _lstOSNames = _osname.readList(_sqlConnection);
 
@@ -160,23 +147,29 @@ namespace utils_db2
         {
             _ListDevices = new List<Device>();
             _dtDevicesNames = new DataTable();
-            SqlCommand cmdReadDevices = new SqlCommand("select * from utils_device", _sqlConnection);
+            SqlCommand cmdReadDevices = new SqlCommand("select util_id, device_id, name from utils_device", _sqlConnection);
             _dtDevicesNames.Load(cmdReadDevices.ExecuteReader());
             foreach (DataRow dr in _dtDevicesNames.Rows)
             {
-                _ListDevices.Add(new Device(int.Parse(dr["device_id"].ToString()),dr["name"].ToString()));
+                int uID = -1, devID = -1; string n = "undef";
+                if (int.TryParse(dr["util_id"].ToString(), out uID))
+                    uID=int.Parse(dr["util_id"].ToString());
+                if (int.TryParse(dr["device_id"].ToString(), out devID))
+                    devID = int.Parse(dr["device_id"].ToString());
+
+                _ListDevices.Add(new Device(uID, devID, dr["name"].ToString()));
             }
             return _ListDevices;
         }
 
-        public DataTable readDeviceLinkList()
-        {
-            _ListDevices = new List<Device>(); ;
-            _dtDevicesLinkTable = new DataTable();
-            SqlCommand cmdReadDevices = new SqlCommand("select * from utils_devices", _sqlConnection);
-            _dtDevicesLinkTable.Load(cmdReadDevices.ExecuteReader());
-            return _dtDevicesLinkTable;
-        }
+        //public DataTable readDeviceLinkList()
+        //{
+        //    _ListDevices = new List<Device>(); ;
+        //    _dtDevicesLinkTable = new DataTable();
+        //    SqlCommand cmdReadDevices = new SqlCommand("select * from utils_devices", _sqlConnection);
+        //    _dtDevicesLinkTable.Load(cmdReadDevices.ExecuteReader());
+        //    return _dtDevicesLinkTable;
+        //}
 
         public List<Device> getDevices(int util_id)
         {
@@ -244,7 +237,7 @@ namespace utils_db2
 
         Device getDevice(int device_id)
         {
-            Device dev= new Device(0,"");
+            Device dev= new Device();
             foreach (Device d in _ListDevices)
             {
                 if (d.device_id == device_id)

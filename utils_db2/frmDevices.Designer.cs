@@ -40,9 +40,9 @@
             // listBoxAvailableDevices
             // 
             this.listBoxAvailableDevices.FormattingEnabled = true;
-            this.listBoxAvailableDevices.Location = new System.Drawing.Point(374, 39);
+            this.listBoxAvailableDevices.Location = new System.Drawing.Point(121, 131);
             this.listBoxAvailableDevices.Name = "listBoxAvailableDevices";
-            this.listBoxAvailableDevices.Size = new System.Drawing.Size(155, 134);
+            this.listBoxAvailableDevices.Size = new System.Drawing.Size(323, 69);
             this.listBoxAvailableDevices.TabIndex = 18;
             // 
             // label2
@@ -71,6 +71,7 @@
             this.btnSave.TabIndex = 15;
             this.btnSave.Text = "SAVE";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // txtOSname
             // 
@@ -92,7 +93,7 @@
             this.listBoxDevices.FormattingEnabled = true;
             this.listBoxDevices.Location = new System.Drawing.Point(121, 39);
             this.listBoxDevices.Name = "listBoxDevices";
-            this.listBoxDevices.Size = new System.Drawing.Size(155, 134);
+            this.listBoxDevices.Size = new System.Drawing.Size(323, 69);
             this.listBoxDevices.TabIndex = 18;
             // 
             // frmDevices

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using System.Reflection;
+
 namespace utils_db2
 {
     public partial class mainForm : Form
@@ -43,6 +45,9 @@ namespace utils_db2
                 dataGridView1.DataSource = _utilities.utilitiesList;
                 dataGridView1.Columns["id"].Visible = false;
                 dataGridView1.Columns["file_data"].Visible = false; //we can not show binary data as image
+                dataGridView1.Columns.Add("devices", "devices");
+                
+                dataGridView1.Columns["devices"].DataPropertyName = "devices";
 
                 dataGridView1.Refresh();
 
@@ -126,6 +131,17 @@ namespace utils_db2
                 }
                 frm.Dispose();
             }
+
+            if (row.Cells[iColumn].OwningColumn.HeaderText == "devices")
+            {
+                frmDevices frm = new frmDevices(_utilities.getUtilityByID(util_id), ref _utilities);
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    _utilities.setDevices(util_id, frm._devices, database._sqlConnection);
+                    dataGridView1.Refresh();
+                }
+                frm.Dispose();
+            }
         }
 
         private void mnuSaveXML_Click(object sender, EventArgs e)
@@ -186,6 +202,24 @@ namespace utils_db2
                 }
             }
             ofd.Dispose();
+        }
+
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            DataGridView grid = (DataGridView)sender;
+            DataGridViewRow row = grid.Rows[e.RowIndex];
+            DataGridViewColumn col = grid.Columns[e.ColumnIndex];
+            if (row.DataBoundItem != null && col.DataPropertyName=="devices")// .Contains("."))
+            {
+                string[] props = col.DataPropertyName.Split('.');
+                PropertyInfo propInfo = row.DataBoundItem.GetType().GetProperty("devices");
+                object val = propInfo.GetValue(row.DataBoundItem, null);
+                Device[] d = (Device[])val;
+                string s = "";
+                foreach (Device dev in d)
+                    s += dev.name.Trim() + "+";
+                e.Value = s.Trim(new char[]{'+'});
+            }
         }
 
     }

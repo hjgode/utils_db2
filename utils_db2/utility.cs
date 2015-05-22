@@ -21,7 +21,7 @@ namespace utils_db2
         [XmlElement("file_link")]
         public string file_link { get; set; }
         [XmlElement("devices")]
-        public Devices[] devices { get; set; }
+        public Device[] devices { get; set; }
         [XmlElement("operating_system")]
         public Operating_System operating_system { get; set; }
 
@@ -36,12 +36,13 @@ namespace utils_db2
             author = "undefined";
             file_link = "undefined";
             //build table of device_id and utils_id
-            devices = new Devices[] { new Devices() };
+            devices = new Device[] { new Device() };
 
             operating_system = new Operating_System();
             file_data = null;
         }
-        public utility(int i, string n, string desc, string a, string f, Devices[] devs, Operating_System os, byte[] bData)
+
+        public utility(int i, string n, string desc, string a, string f, Device[] devs, Operating_System os, byte[] bData)
         {
             id = i;
             name = n;
@@ -52,6 +53,7 @@ namespace utils_db2
             operating_system = os;
             file_data = bData;
         }
+
         public utility(int i, string n, string desc, string a, string f)
         {
             id = i;
