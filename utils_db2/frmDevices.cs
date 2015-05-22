@@ -12,12 +12,31 @@ namespace utils_db2
     public partial class frmDevices : Form
     {
         public utility _utility;
-        public frmDevices(utility utl)
+        utilities _utilities;
+        public frmDevices(utility utl, ref utilities utls)
         {
             InitializeComponent();
             _utility = utl;
-            label1.Text = _utility.name;
+            _utilities = utls;
 
+            label1.Text = _utility.name;
+            
+            fillUtlitiesListbox();
+
+            readDevsForUtil();
+        }
+
+        void fillUtlitiesListbox()
+        {
+            listBoxAvailableDevices.Items.Clear();
+            foreach (utility u in _utilities.utilitiesList)
+                listBoxAvailableDevices.Items.Add(u);
+        }
+        void readDevsForUtil()
+        {
+            listBoxDevices.Items.Clear();
+            foreach (Devices d in _utility.devices)
+                listBoxDevices.Items.Add(d);
         }
     }
 }

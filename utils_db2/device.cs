@@ -130,7 +130,13 @@ namespace utils_db2
             }
             return devs.ToArray();
         }
-
+        public override string ToString()
+        {
+            string s = "";
+            foreach (Devices d in _lstDevices)
+                s += "Devices";
+            return s;
+        }
 
     }
 }
