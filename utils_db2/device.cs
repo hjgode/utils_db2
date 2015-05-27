@@ -29,12 +29,47 @@ namespace utils_db2
             device_id = -1;
             util_id = -1;
         }
+        public Device(string devName)
+        {
+            name = devName;
+            device_id = -1;
+            util_id = -1;
+        }
 
         public override string ToString()
         {
-            return name;
+            return device_id.ToString()+":"+util_id.ToString()+ ":" + name;
         }
-        
+
+        public static Device addNewDevice2DB(string name, SqlConnection conn)
+        {
+            Device dev = new Device(name);
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO [utils_device] (name, util_id, device_id) VALUES (@PARM1, -1, -1) "+
+                " SELECT SCOPE_IDENTITY() As TheId;", conn);
+            cmd.Parameters.Add("PARM1", SqlDbType.Text, name.Length).Value = name;
+            cmd.Connection = conn;
+            object o = cmd.ExecuteScalar();
+
+            if (o != null)
+            {
+                int iRet = Convert.ToInt32(o);
+                dev.device_id = iRet;
+                cmd.CommandText = "UPDATE utils_device set device_id=@did WHERE name=@name;";
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add("did", SqlDbType.Int).Value = iRet;
+                cmd.Parameters.Add("name", SqlDbType.Text).Value = name;
+                iRet = cmd.ExecuteNonQuery();
+            }
+            else
+                dev.device_id = -1;
+
+            Program._logger.log("addNewDevice2DB: " + dev.ToString());
+
+            _lstDevices.Add(dev);
+            return dev;
+        }
+
         public static List<Device> _lstDevices = new List<Device>();
 
         /// <summary>
@@ -56,6 +91,24 @@ namespace utils_db2
             }
             rdr.Close();
             return _lstDevices;
+        }
+
+        /// <summary>
+        /// read utils->devices link table
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        public static List<Device> readListUnique(SqlConnection conn)
+        {
+            SqlCommand cmd = new SqlCommand("select DISTINCT name from [utils_device];", conn);
+            SqlDataReader rdr = cmd.ExecuteReader();
+            List<Device> devs = new List<Device>();
+            while (rdr.Read())
+            {
+                devs.Add(new Device(rdr.GetString(0).Trim()));
+            }
+            rdr.Close();
+            return devs;
         }
 
         public Device deviceName(int id)
@@ -83,75 +136,4 @@ namespace utils_db2
             return lst.ToArray();
         }
     }
-
-    /// <summary>
-    /// maintain all devices in linking database
-    /// </summary>
-    //public class Devices
-    //{
-    //    SqlConnection _conn { get; set; }
-
-    //    public Devices(SqlConnection conn)
-    //    {
-    //        _conn = conn;
-    //        readList(_conn);
-    //    }
-
-    //    public List<Device> _lstDevices = new List<Device>();
-
-    //    /// <summary>
-    //    /// read utils->devices link table
-    //    /// </summary>
-    //    /// <param name="conn"></param>
-    //    /// <returns></returns>
-    //    List<Device> readList(SqlConnection conn)
-    //    {
-    //        //read list of id and name
-    //        //Device _dev= new Device();
-    //        //List<Device> lstDeviceNames = _dev.readList(conn);
-
-    //        SqlCommand cmd = new SqlCommand("select util_id, device_id, name from [utils_device];", conn);
-    //        SqlDataReader rdr = cmd.ExecuteReader();
-    //        _lstDevices.Clear();
-    //        while (rdr.Read())
-    //        {
-    //            int uID = -1, devID = -1; string n = "undef";
-    //            try { uID = rdr.GetInt32(0); }
-    //            catch (Exception) { }
-    //            try { devID = rdr.GetInt32(1); }
-    //            catch (Exception) { }
-    //            try { n = rdr.GetString(2).Trim(); }
-    //            catch (Exception) { }
-
-    //            _lstDevices.Add(new Device(uID, devID, n));
-    //        }
-    //        rdr.Close();
-    //        return _lstDevices;
-    //    }
-
-    //    public Device[] getDevicesForID(int utilID)
-    //    {
-    //        List<Device> devs = new List<Device>();
-    //        if (_lstDevices.Count == 0)
-    //            _lstDevices = readList(_conn);
-
-    //        if (_lstDevices.Count > 0)
-    //        {
-    //            foreach (Device d in _lstDevices)
-    //            {
-    //                if (d.util_id == utilID)
-    //                    devs.Add(new Device(d.util_id, d.device_id, d.name));
-    //            }
-    //        }
-    //        return devs.ToArray();
-    //    }
-    //    public override string ToString()
-    //    {
-    //        string s = "";
-    //        foreach (Device d in _lstDevices)
-    //            s += d.name+" ";
-    //        return s.Trim();
-    //    }
-
-    //}
 }

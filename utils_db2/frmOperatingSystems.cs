@@ -33,7 +33,7 @@ namespace utils_db2
             Operating_System osclass = new Operating_System();
             List<Operating_System> osList=new List<Operating_System>();
 
-            osList = osclass.readList(database._sqlConnection);
+            osList = osclass.readListUnique(database._sqlConnection);
             foreach (Operating_System os in osList)
                 listBox1.Items.Add(os);
         }

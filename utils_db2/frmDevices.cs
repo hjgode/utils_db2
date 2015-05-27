@@ -32,7 +32,7 @@ namespace utils_db2
         void fillDevicesListbox()
         {
             listBoxAvailableDevices.Items.Clear();
-            foreach (Device d in _utilities._devicesList)
+            foreach (Device d in Device.readListUnique(database._sqlConnection))
                 listBoxAvailableDevices.Items.Add(d);
         }
         void readDevsForUtil()
@@ -61,6 +61,36 @@ namespace utils_db2
                 _devices = lst.ToArray();
             }
             DialogResult = DialogResult.OK;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+
+        private void listBoxAvailableDevices_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBoxAvailableDevices.SelectedIndex == -1)
+                return;
+            Device dev = (Device)listBoxAvailableDevices.SelectedItem;
+            if (listBoxDevices.Items.Contains(dev))
+                return;
+            listBoxDevices.Items.Add(dev);
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            Device dev = Device.addNewDevice2DB(txtDEVname.Text, database._sqlConnection);
+            dev.ToString();
+            listBoxAvailableDevices.Items.Add(dev);
+        }
+
+        private void listBoxDevices_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBoxDevices.SelectedIndex == -1)
+                return;
+            listBoxDevices.Items.Remove(listBoxDevices.SelectedItem);
+
         }
     }
 }

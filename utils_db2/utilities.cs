@@ -183,13 +183,21 @@ namespace utils_db2
             iRes = 0;
             foreach (Device d in devs)
             {
-                cmd.CommandText = "INSERT INTO utils_device util_id, device_id, name VALUES (" +
-                    d.util_id.ToString() + ", " +
-                    d.device_id.ToString() + ", " +
-                    d.name + ");";
+                cmd.Parameters.Clear();
+                cmd.Dispose();
+                cmd.Connection = conn;
+                cmd.CommandText = "INSERT INTO utils_device (util_id, device_id, name) VALUES (@uid1, @did1, @name);";
+                cmd.Parameters.Add("uid1", SqlDbType.Int, sizeof(int)).Value = d.util_id;
+                cmd.Parameters.Add("did1", SqlDbType.Int, sizeof(int)).Value = d.device_id;
+                cmd.Parameters.Add("name", SqlDbType.Text, d.name.Length).Value = d.name;
                 iRes += cmd.ExecuteNonQuery();
             }
             cmd.Dispose();
+
+            _devicesList.Clear();
+            Device devTemp = new Device();
+            _devicesList = devTemp.readList(conn);
+
             return iRes;
         }
 
@@ -211,7 +219,7 @@ namespace utils_db2
             else
             {
                 cmd.CommandText = "INSERT INTO utils_operating_systems (utils_id, name) VALUES (@parm1, @parm2)" + ";";
-                cmd.Parameters.Add("parm1", SqlDbType.Int, sizeof(int)).Value = os.id;
+                cmd.Parameters.Add("parm1", SqlDbType.Int, sizeof(int)).Value = uID;
                 cmd.Parameters.Add("parm2", SqlDbType.Text, os.name.Length).Value = os.name;
                 rdr.Close();
                 iRes = cmd.ExecuteNonQuery();

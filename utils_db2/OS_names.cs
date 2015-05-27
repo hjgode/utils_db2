@@ -79,12 +79,31 @@ namespace utils_db2
             name = n;
         }
 
+        public Operating_System(string n)
+        {
+            id = -1;
+            name = n;
+        }
+
         public override string  ToString()
         {
             return name;
         }
 
         List<Operating_System> _operatingSystemsList = new List<Operating_System>();
+
+        public List<Operating_System> readListUnique(SqlConnection conn)
+        {
+            SqlCommand cmd = new SqlCommand("select DISTINCT name from [utils_operating_systems];", conn);
+            SqlDataReader rdr = cmd.ExecuteReader();
+            _operatingSystemsList.Clear();
+            while (rdr.Read())
+            {
+                _operatingSystemsList.Add(new Operating_System(rdr.GetString(0).Trim()));
+            }
+            rdr.Close();
+            return _operatingSystemsList;
+        }
 
         public List<Operating_System> readList(SqlConnection conn)
         {
