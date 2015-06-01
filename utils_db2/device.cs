@@ -10,59 +10,54 @@ namespace utils_db2
 {
     public class Device
     {
-        [XmlElement("device_id")]
-        public int device_id { get; set; }
-        [XmlElement("name")]
-        public string name { get; set; }
         [XmlElement("util_id")]
         public int util_id { get; set; }
+        [XmlElement("name")]
+        public string name { get; set; }
 
-        public Device(int utilID, int devID, string n)
+        public Device(int utilID, string n)
         {
             util_id = utilID;
-            device_id = devID;
             name = n;
         }
         public Device()
         {
             name = "undefined";
-            device_id = -1;
             util_id = -1;
         }
         public Device(string devName)
         {
             name = devName;
-            device_id = -1;
             util_id = -1;
         }
 
         public override string ToString()
         {
-            return device_id.ToString()+":"+util_id.ToString()+ ":" + name;
+            return util_id.ToString()+ ":" + name;
         }
 
         public static Device addNewDevice2DB(string name, SqlConnection conn)
         {
             Device dev = new Device(name);
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO [utils_device] (name, util_id, device_id) VALUES (@PARM1, -1, -1) "+
+            SqlCommand cmd = new SqlCommand("INSERT INTO [utils_device] (util_id, name) VALUES (-1, @PARM1) "+
                 " SELECT SCOPE_IDENTITY() As TheId;", conn);
             cmd.Parameters.Add("PARM1", SqlDbType.Text, name.Length).Value = name;
             cmd.Connection = conn;
             object o = cmd.ExecuteScalar();
 
-            if (o != null)
-            {
-                int iRet = Convert.ToInt32(o);
-                dev.device_id = iRet;
-                cmd.CommandText = "UPDATE utils_device set device_id=@did WHERE name=@name;";
-                cmd.Parameters.Clear();
-                cmd.Parameters.Add("did", SqlDbType.Int).Value = iRet;
-                cmd.Parameters.Add("name", SqlDbType.Text).Value = name;
-                iRet = cmd.ExecuteNonQuery();
-            }
-            else
-                dev.device_id = -1;
+            //if (o != null)
+            //{
+            //    int iRet = Convert.ToInt32(o);
+            //    dev.device_id = iRet;
+            //    cmd.CommandText = "UPDATE utils_device set device_id=@did WHERE name=@name;";
+            //    cmd.Parameters.Clear();
+            //    cmd.Parameters.Add("did", SqlDbType.Int).Value = iRet;
+            //    cmd.Parameters.Add("name", SqlDbType.Text).Value = name;
+            //    iRet = cmd.ExecuteNonQuery();
+            //}
+            //else
+            //    dev.device_id = -1;
 
             Program._logger.log("addNewDevice2DB: " + dev.ToString());
 
@@ -82,12 +77,12 @@ namespace utils_db2
             if (_lstDevices.Count > 0)
                 return _lstDevices;
 
-            SqlCommand cmd = new SqlCommand("select util_id, device_id, name from [utils_device];", conn);
+            SqlCommand cmd = new SqlCommand("select util_id, name from [utils_device];", conn);
             SqlDataReader rdr = cmd.ExecuteReader();
             _lstDevices.Clear();
             while (rdr.Read())
             {
-                _lstDevices.Add(new Device(rdr.GetInt32(0), rdr.GetInt32(1), rdr.GetString(2).Trim()));
+                _lstDevices.Add(new Device(rdr.GetInt32(0), rdr.GetString(1).Trim()));
             }
             rdr.Close();
             return _lstDevices;
@@ -111,14 +106,14 @@ namespace utils_db2
             return devs;
         }
 
-        public Device deviceName(int id)
+        public Device deviceName(int uID)
         {
-            Device _dev = new Device(-1,-1,"undefined");
+            Device _dev = new Device(-1, "undefined");
             if (_lstDevices.Count > 0)
             {
                 foreach (Device d in _lstDevices)
                 {
-                    if (d.device_id == id)
+                    if (d.util_id == uID)
                         _dev = d;
                 }
             }

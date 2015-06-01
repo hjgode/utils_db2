@@ -35,7 +35,7 @@ namespace utils_db2
             description = "undefined";
             author = "undefined";
             file_link = "undefined";
-            //build table of device_id and utils_id
+            //build table of utils_id and device names
             devices = new Device[] { new Device() };
 
             operating_system = new Operating_System();

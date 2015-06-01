@@ -5,29 +5,6 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 
-/*
-*/
-/*
-CREATE TABLE [dbo].[utils](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[name] [nchar](80) NOT NULL,
-	[description] [text] NOT NULL,
-	[author] [nchar](80) NOT NULL,
-	[file_link] [nchar](254) NOT NULL
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-CREATE TABLE [dbo].[utils_device](
-	[device_id] [int] IDENTITY(1,1) NOT NULL,
-	[name] [nchar](80) NOT NULL
-	[util_id] [int] NOT NULL,                   //link to [dbo].[utils].id
-) ON [PRIMARY]
-
-CREATE TABLE [dbo].[utils_operating_systems](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[utils_id] [int] NOT NULL,                  //link to [dbo].[utils].id
-	[name] [nchar](80) NOT NULL
-) ON [PRIMARY]
-*/
 
 #region OLD_DB_DESIGN
 /*
@@ -37,11 +14,9 @@ CREATE TABLE [dbo].[utils_operating_systems](
  *      dbo.utils
                 CREATE TABLE [dbo].[utils](
 	                [id] [int] IDENTITY(1,1) NOT NULL,      ==> pointer into utils_devices->utils_id
- *                                                          ==> pointer into utils_operating_systems->utils_id
+                                                            ==> pointer into utils_operating_systems->utils_id
 	                [name] [nchar](80) NOT NULL
- ### DELETED ###    [devices_id] [int] NOT NULL,            ==> pointer into utils_devices->devices_id
- ### DELETED ###    [operating_id] [int] NOT NULL,          ==> pointer into utils_operating_systems->operating_id
-	                [description] [text] NOT NULL,
+ 	                [description] [text] NOT NULL,
 	                [author] [nchar](80) NOT NULL,
 	                [file_link] [nchar](254) NOT NULL
                 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
@@ -52,17 +27,10 @@ CREATE TABLE [dbo].[utils_operating_systems](
 	                [utils_id] [int] NOT NULL,
 	                [name] [nchar](80) NOT NULL
                 ) ON [PRIMARY]
- *      dbo.utils_devices
- *          many-to-many junction table
-                CREATE TABLE [dbo].[utils_devices](
-	                [id] [int] IDENTITY(1,1) NOT NULL,
-	                [utils_id] [int] NOT NULL,              <== utils.devices_id
-	                [device_id] [int] NOT NULL              ==> pointer into utils_device->device_id
-                ) ON [PRIMARY]
  *      dbo.utils_device
                 CREATE TABLE [dbo].[utils_device](
                     [id] [int] IDENTITY(1,1) NOT NULL,
-	                [device_id] [int] IDENTITY(1,1) NOT NULL,   <== utils_devices.device_id
+	                [util_id] [int] IDENTITY(1,1) NOT NULL,   <== utils.id
 	                [name] [nchar](80) NOT NULL
                 ) ON [PRIMARY]
  * constraints
@@ -73,11 +41,11 @@ namespace utils_db2
 {
     class database:IDisposable
     {
-        string sqlALL = "SELECT     dbo.utils.id, dbo.utils.name, dbo.utils.author, dbo.utils.description, dbo.utils.file_link, dbo.utils_device.name AS Expr1 "+
-                        "FROM       dbo.utils_operating_systems INNER JOIN "+
-                        "dbo.utils ON dbo.utils_operating_systems.operating_id = dbo.utils.id LEFT OUTER JOIN "+
-                        "dbo.utils_devices INNER JOIN "+
-                        "dbo.utils_device ON dbo.utils_devices.device_id = dbo.utils_device.device_id ON dbo.utils.id = dbo.utils_devices.devices_id";
+        string sqlALL = "SELECT     dbo.utils.id, dbo.utils.name, dbo.utils.description, dbo.utils.author, dbo.utils.file_link, dbo.utils_device.name AS dev_names, "+
+                                    "dbo.utils_operating_systems.name AS os_names "+
+                        "FROM        dbo.utils LEFT OUTER JOIN "+
+                                    "dbo.utils_operating_systems ON dbo.utils.id = dbo.utils_operating_systems.utils_id LEFT OUTER JOIN "+
+                                    "dbo.utils_device ON dbo.utils.id = dbo.utils_device.util_id";
 
         logger _logger = Program._logger;
         string _u = "supportstaff-rw";
@@ -147,17 +115,16 @@ namespace utils_db2
         {
             _ListDevices = new List<Device>();
             _dtDevicesNames = new DataTable();
-            SqlCommand cmdReadDevices = new SqlCommand("select util_id, device_id, name from utils_device", _sqlConnection);
+            SqlCommand cmdReadDevices = new SqlCommand("select util_id, name from utils_device", _sqlConnection);
             _dtDevicesNames.Load(cmdReadDevices.ExecuteReader());
             foreach (DataRow dr in _dtDevicesNames.Rows)
             {
-                int uID = -1, devID = -1; string n = "undef";
+                int uID = -1; string n = "undef";
                 if (int.TryParse(dr["util_id"].ToString(), out uID))
                     uID=int.Parse(dr["util_id"].ToString());
-                if (int.TryParse(dr["device_id"].ToString(), out devID))
-                    devID = int.Parse(dr["device_id"].ToString());
+                n = dr["name"].ToString().Trim();
 
-                _ListDevices.Add(new Device(uID, devID, dr["name"].ToString()));
+                _ListDevices.Add(new Device(uID, n));
             }
             return _ListDevices;
         }
@@ -186,7 +153,7 @@ namespace utils_db2
                         if ((int)drDeviceLink["utils_id"] == utilsID)
                         {
                             //get name of device
-                            devicesList.Add(getDevice((int)drDeviceLink["device_id"]));
+                            devicesList.Add(getDevice((int)drDeviceLink["util_id"]));
                         }
                     }
                 }
@@ -225,8 +192,8 @@ namespace utils_db2
                 {
                     //insert utils_devices
                     // "Insert into utils_devices.devices_id, utils_devices.device_id VALUES (2,2);"
-                    string sSql = "Insert into utils_devices (utils_id, device_id) VALUES (" +
-                        util_id.ToString() + "," + lstDevicesToAdd[i].device_id.ToString() +
+                    string sSql = "Insert into utils_devices (utils_id, name) VALUES (" +
+                        util_id.ToString() + ", '" + lstDevicesToAdd[i].name +"'"+
                         ");";
                     iRes = executeSQLnoQuery(sSql);
                     iCnt += iRes;
@@ -235,12 +202,12 @@ namespace utils_db2
             return iRes;
         }
 
-        Device getDevice(int device_id)
+        Device getDevice(int util_id)
         {
             Device dev= new Device();
             foreach (Device d in _ListDevices)
             {
-                if (d.device_id == device_id)
+                if (d.util_id == util_id)
                     dev = d;
             }
             return dev;

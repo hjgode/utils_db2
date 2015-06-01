@@ -27,13 +27,6 @@ namespace utils_db2
             _utilities = new List<utility>();
         }
 
-        public int addUtil(utility ut)
-        {
-            int iRet = 0;
-            utilitiesList.Add(ut);
-            return iRet;
-        }
-
         public int readUtilsDB(SqlConnection conn)
         {
             utilitiesList.Clear();
@@ -45,7 +38,7 @@ namespace utils_db2
 
             SqlCommand cmd = new SqlCommand(sql, conn);
 
-            //load the util_id<->device_id table
+            //load the util_id<->device table
             _devicesList.Clear();
             Device devTemp = new Device();
             _devicesList = devTemp.readList(conn);
@@ -69,7 +62,7 @@ namespace utils_db2
                 //find devices attached to this util
                 uDevices = devTemp.getDevicesForID(utilID);
                 if (uDevices == null || uDevices.Length == 0)
-                    uDevices = new Device[] { new Device(utilID, 0, "undefined") };
+                    uDevices = new Device[] { new Device(utilID, "undefined") };
 
                 //load the binary data
                 if (rdr.IsDBNull(5)) //is there any binary data?
@@ -169,26 +162,40 @@ namespace utils_db2
                 if (u.id == uID)
                     u.name = sName;
 
-            return iRes;
             cmd.Dispose();
+            return iRes;
         }
 
         public int setDevices(int uID, Device[] devs, SqlConnection conn)
         {
             int iRes = 0;
-            //drop all from utils_device with uID
-            SqlCommand cmd = new SqlCommand("DELETE from utils_device WHERE util_id=" + uID.ToString(), conn);
-            iRes = cmd.ExecuteNonQuery();
+            //read all from utils_device with uID
+            SqlCommand cmd = new SqlCommand("SELECT util_id,name from utils_device WHERE util_id=" + uID.ToString(), conn);
+            //iRes = cmd.ExecuteNonQuery();
+            SqlDataReader dr = cmd.ExecuteReader();
+            List<Device> dbDevicesForID = new List<Device>();
+            while (dr.Read())
+            {
+                dbDevicesForID.Add(new Device(uID, dr["name"].ToString().Trim()));
+            }
+            dr.Close();
+
+            List<Device> devToAdd = devs.ToList<Device>();
+            foreach (Device db in dbDevicesForID)
+            {
+                foreach (Device dNew in devToAdd)
+                    if (dNew.name.Equals(db.name))
+                        devToAdd.Remove(dNew);
+            }
             //add all devs with uID
             iRes = 0;
-            foreach (Device d in devs)
+            foreach (Device d in devToAdd)
             {
                 cmd.Parameters.Clear();
                 cmd.Dispose();
                 cmd.Connection = conn;
-                cmd.CommandText = "INSERT INTO utils_device (util_id, device_id, name) VALUES (@uid1, @did1, @name);";
+                cmd.CommandText = "INSERT INTO utils_device (util_id, name) VALUES (@uid1, @name);";
                 cmd.Parameters.Add("uid1", SqlDbType.Int, sizeof(int)).Value = d.util_id;
-                cmd.Parameters.Add("did1", SqlDbType.Int, sizeof(int)).Value = d.device_id;
                 cmd.Parameters.Add("name", SqlDbType.Text, d.name.Length).Value = d.name;
                 iRes += cmd.ExecuteNonQuery();
             }
@@ -198,6 +205,12 @@ namespace utils_db2
             Device devTemp = new Device();
             _devicesList = devTemp.readList(conn);
 
+            //publish the new list to the object
+            foreach (utility u in _utilities)
+            {
+                if (u.id == uID)
+                    u.devices = devs;
+            }
             return iRes;
         }
 
@@ -226,7 +239,9 @@ namespace utils_db2
             }
             cmd.Dispose();
 
-            foreach(utility u in _utilities){
+            //publish the new list to the object
+            foreach (utility u in _utilities)
+            {
                 if (u.id == uID)
                     u.operating_system = os;
             }

@@ -1,98 +1,81 @@
 ﻿USE [SupportStaff]
 GO
 
+/****** Object:  Table [dbo].[utils]    Script Date: 06/01/2015 15:49:35 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-BEGIN TRY
-    DROP TABLE [dbo].[utils];
-END TRY
-BEGIN CATCH
-END CATCH
-
-BEGIN TRY
-    DROP TABLE [dbo].[utils_devices];
-END TRY
-BEGIN CATCH
-END CATCH
-
-BEGIN TRY
-    DROP TABLE [dbo].[utils_device];
-END TRY
-BEGIN CATCH
-END CATCH
-
-BEGIN TRY
-    DROP TABLE [dbo].[utils_operating_systems];
-END TRY
-BEGIN CATCH
-END CATCH
-
-GO
-
-CREATE TABLE [dbo].[utils_device](
-	[device_id] [int] IDENTITY(1,1) NOT NULL,
-	[name] [nchar](80) NOT NULL)
-GO
-
-CREATE TABLE [dbo].[utils_devices](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[devices_id] [int] NOT NULL DEFAULT 1,
-	[device_id] [int] NOT NULL DEFAULT 1
-	)
-GO
-
 CREATE TABLE [dbo].[utils](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[name] [nchar](80) NOT NULL,
-	[devices_id] [int] DEFAULT 1 NOT NULL,
-	[operating_id] [int] DEFAULT 1 NOT NULL,
-	[description] [text] DEFAULT '' NOT NULL,
-	[author] [nchar](80) DEFAULT '' NOT NULL,
-	[file_link] [nchar] (254) DEFAULT '' NOT NULL
+	[description] [text] NOT NULL,
+	[author] [nchar](80) NOT NULL,
+	[file_link] [nchar](254) NOT NULL,
+	[file_data] [image] NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[utils] ADD  DEFAULT ('') FOR [description]
+GO
+
+ALTER TABLE [dbo].[utils] ADD  DEFAULT ('') FOR [author]
+GO
+
+ALTER TABLE [dbo].[utils] ADD  DEFAULT ('') FOR [file_link]
+GO
+
+
+#############################
+
+USE [SupportStaff]
+GO
+
+/****** Object:  Table [dbo].[utils_device]    Script Date: 06/01/2015 15:50:42 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[utils_device](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[util_id] [int] NOT NULL,
+	[name] [nchar](80) NOT NULL
 ) ON [PRIMARY]
 
+GO
+
+
+##############################
+
+USE [SupportStaff]
+GO
+
+/****** Object:  Table [dbo].[utils_operating_systems]    Script Date: 06/01/2015 15:52:40 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[utils_operating_systems](
 	[id] [int] IDENTITY(1,1) NOT NULL,
-	[operating_id] [int] NOT NULL,
+	[utils_id] [int] NOT NULL,
 	[name] [nchar](80) NOT NULL
 ) ON [PRIMARY]
 
-declare @crlf char(2)
-select @crlf = char(13)+char(10)
-
-Insert into dbo.utils_operating_systems (operating_id,name) VALUES (1,'not defined'),(2,'Windows Mobile'),(3,'Windows Desktop'),(4,'Android');
-
-Insert into dbo.utils_device (name) values ('not defined'),('Intermec Windows Embedded Handheld 6.5'),('Honeywell Windows Embedded Handheld 6.5');
-
-Insert into dbo.utils_devices (devices_id,device_id) values (1,1),(2,2),(2,3);
-
-Insert into dbo.utils (name, devices_id, operating_id) values ('Microsoft DevHealth',2,2), ( 'cpumon',1,2), ( 'PhoneStateChangeLogger',1,2), ( 'BatteryLog',1,2), 
-( 'WWANCollector',1,2), ( 'DebugLog',1,2), ( 'NetValidate',1,2), ( 'RILLogger',1,2), ( 'BatteryLog',1,2), ( 'BTmon',1,2), ( 'memuse',1,2), ( 'connMgrLog',1,2), 
-( 'deviceMon',1,2), ( 'PowerMsgLog',1,2), ( 'rb_logger',1,2), ( 'Intermec DevHealth',1,2);
-
 GO
 
-/*
-SELECT     dbo.utils.name, dbo.utils_device.name AS utils_device, dbo.utils_operating_systems.name AS OS, dbo.utils.description, dbo.utils.author, dbo.utils.file_link
+
+=====================================
+SELECT     dbo.utils.id, dbo.utils.name, dbo.utils.description, dbo.utils.author, dbo.utils.file_link, dbo.utils_device.name AS dev_names, 
+                      dbo.utils_operating_systems.name AS os_names
 FROM         dbo.utils LEFT OUTER JOIN
-                      dbo.utils_operating_systems ON dbo.utils.operating_id = dbo.utils_operating_systems.operating_id LEFT OUTER JOIN
-                      dbo.utils_devices ON dbo.utils.devices_id = dbo.utils_devices.devices_id LEFT OUTER JOIN
-                      dbo.utils_device ON dbo.utils_devices.device_id = dbo.utils_device.device_id
-
-*/
-
-/*
-SELECT     dbo.utils.id, dbo.utils.name, dbo.utils_device.name AS Devices, dbo.utils.description, dbo.utils.author, dbo.utils_operating_systems.name AS OS, dbo.utils.file_link, 
-                      dbo.utils.file_data
-FROM         dbo.utils_operating_systems RIGHT OUTER JOIN
-                      dbo.utils ON dbo.utils_operating_systems.utils_id = dbo.utils.id LEFT OUTER JOIN
-                      dbo.utils_device INNER JOIN
-                      dbo.utils_devices ON dbo.utils_device.device_id = dbo.utils_devices.device_id ON dbo.utils.id = dbo.utils_devices.utils_id
-*/
+                      dbo.utils_operating_systems ON dbo.utils.id = dbo.utils_operating_systems.utils_id LEFT OUTER JOIN
+                      dbo.utils_device ON dbo.utils.id = dbo.utils_device.util_id
+                      
                       
