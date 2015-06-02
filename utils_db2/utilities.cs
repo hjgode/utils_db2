@@ -39,6 +39,8 @@ namespace utils_db2
             SqlCommand cmd = new SqlCommand(sql, conn);
 
             //load the util_id<->device table
+            if (_devicesList == null)
+                _devicesList = new List<Device>();
             _devicesList.Clear();
             Device devTemp = new Device();
             _devicesList = devTemp.readList(conn);

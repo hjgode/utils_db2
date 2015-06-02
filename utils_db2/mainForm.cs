@@ -15,7 +15,7 @@ namespace utils_db2
     {
         database _database=null;
         utilities _utilities=null;
-        logger _logger = Program._logger;
+        myLogger.logger _logger = Program._logger;
 
         public mainForm()
         {
@@ -37,8 +37,10 @@ namespace utils_db2
             int iRes = 0;
             try
             {
+                string connect = Properties.Settings.Default.connectstring;
+
                 _logger.log("Open database...");
-                _database = new database();
+                _database = new database(connect);
                 _utilities = new utilities();
                 _utilities.readUtilsDB(database._sqlConnection);
 

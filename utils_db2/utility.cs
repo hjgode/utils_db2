@@ -73,6 +73,10 @@ namespace utils_db2
             this.file_data = bData;
         }
 
+        public override string ToString()
+        {
+            return this.name;
+        }
 
     }
 }

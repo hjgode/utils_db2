@@ -26,4 +26,12 @@ namespace utils_db2
             }
         }
     }
+    public class mySettings
+    {
+        public static string getConnectionString()
+        {
+            return Properties.Settings.Default.connectstring;
+        }
+    }
 }
+

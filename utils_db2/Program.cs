@@ -8,14 +8,14 @@ namespace utils_db2
     static class Program
     {
         public static frmSplash frm;
-        public static logger _logger;// = new logger(logger.logLevel.info);
+        public static myLogger.logger _logger;// = new logger(logger.logLevel.info);
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            _logger = new logger(logger.logLevel.info);
+            _logger = new myLogger.logger(myLogger.logger.logLevel.info);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             

@@ -5,7 +5,6 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 
-
 #region OLD_DB_DESIGN
 /*
  * database
@@ -47,7 +46,7 @@ namespace utils_db2
                                     "dbo.utils_operating_systems ON dbo.utils.id = dbo.utils_operating_systems.utils_id LEFT OUTER JOIN "+
                                     "dbo.utils_device ON dbo.utils.id = dbo.utils_device.util_id";
 
-        logger _logger = Program._logger;
+        myLogger.logger _logger = Program._logger;
         string _u = "supportstaff-rw";
         string _p = "rqySGX4D";
         string _c = "";
@@ -71,9 +70,9 @@ namespace utils_db2
         public List<descriptionText> _descriptions = null;
         public descriptionText _description = new descriptionText();
 
-        public database(){
+        public database(String connectString){
             _logger.log("init database");
-            _c = String.Format(Properties.Settings.Default.connectstring, _u,_p);
+            _c = String.Format(connectString, _u, _p);
             _bConnected = connect();
 
             //test
@@ -86,6 +85,20 @@ namespace utils_db2
             }
         }
 
+        public database(String connectString, bool prefetchData){
+            _logger.log("init database");
+            _c = String.Format(connectString, _u, _p);
+            _bConnected = connect();
+
+            //test
+            if (_bConnected && prefetchData)
+                readDataUtils();
+            if(!_bConnected)
+            {
+                _logger.log("not connected");
+                throw new Exception("database connect failed");
+            }
+        }
         void readDataUtils()
         {
             _dtUtils = new DataTable();
@@ -261,6 +274,7 @@ namespace utils_db2
             {
                 _sqlConnection.ConnectionString = _c;
                 _sqlConnection.Open();
+                _sqlConnection.StateChange += new StateChangeEventHandler(_sqlConnection_StateChange);
                 return true;
             }
             catch (SqlException ex)
@@ -273,6 +287,46 @@ namespace utils_db2
                 _logger.log("connect() exception: " + ex.Message);
                 return false;
             }
+        }
+
+        void _sqlConnection_StateChange(object sender, StateChangeEventArgs e)
+        {
+            bool bOK=false;
+            ConnectionState st = (ConnectionState)e.CurrentState;
+            switch (st)
+            {
+                case ConnectionState.Broken:
+                case ConnectionState.Closed:
+                    bOK = false;
+                    break;
+                case ConnectionState.Connecting:
+                case ConnectionState.Executing:
+                case ConnectionState.Fetching:
+                case ConnectionState.Open:
+                    bOK = true;
+                    break;
+            }
+            onUpdateHandler(new MyEventArgs(bOK,st));
+        }
+        public class MyEventArgs : EventArgs
+        {
+            public bool bIsOpen = false;
+            public ConnectionState state = ConnectionState.Closed;
+            public MyEventArgs(bool b, ConnectionState st)
+            {
+                this.bIsOpen = b;
+                this.state = st;
+            }
+        }
+        public delegate void updateEventHandler(object sender, MyEventArgs eventArgs);
+        public event updateEventHandler updateEvent;
+        void onUpdateHandler(MyEventArgs args)
+        {
+            //anyone listening?
+            if (this.updateEvent == null)
+                return;
+            MyEventArgs a = args;
+            this.updateEvent(this, a);
         }
 
         public void Dispose()

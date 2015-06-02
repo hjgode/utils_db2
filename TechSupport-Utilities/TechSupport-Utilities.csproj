@@ -48,17 +48,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="..\utils_db2\database.cs">
+      <Link>database.cs</Link>
+    </Compile>
+    <Compile Include="..\utils_db2\descriptionText.cs">
+      <Link>descriptionText.cs</Link>
+    </Compile>
+    <Compile Include="..\utils_db2\device.cs">
+      <Link>device.cs</Link>
+    </Compile>
+    <Compile Include="..\utils_db2\logger.cs">
+      <Link>logger.cs</Link>
+    </Compile>
+    <Compile Include="..\utils_db2\OS_names.cs">
+      <Link>OS_names.cs</Link>
+    </Compile>
+    <Compile Include="..\utils_db2\utilities.cs">
+      <Link>utilities.cs</Link>
+    </Compile>
+    <Compile Include="..\utils_db2\utility.cs">
+      <Link>utility.cs</Link>
+    </Compile>
+    <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="mainForm.Designer.cs">
+      <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="helper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="mainForm.resx">
+      <DependentUpon>mainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
