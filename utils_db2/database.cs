@@ -40,12 +40,6 @@ namespace utils_db2
 {
     class database:IDisposable
     {
-        string sqlALL = "SELECT     dbo.utils.id, dbo.utils.name, dbo.utils.description, dbo.utils.author, dbo.utils.file_link, dbo.utils_device.name AS dev_names, "+
-                                    "dbo.utils_operating_systems.name AS os_names "+
-                        "FROM        dbo.utils LEFT OUTER JOIN "+
-                                    "dbo.utils_operating_systems ON dbo.utils.id = dbo.utils_operating_systems.utils_id LEFT OUTER JOIN "+
-                                    "dbo.utils_device ON dbo.utils.id = dbo.utils_device.util_id";
-
         myLogger.logger _logger = Program._logger;
         string _u = "supportstaff-rw";
         string _p = "rqySGX4D";
@@ -157,9 +151,9 @@ namespace utils_db2
             //look thru utils
             foreach (DataRow dr in _dtUtils.Rows)
             {
-                if ((int)dr["id"] == util_id)// find utils record for ID
+                if ((int)dr["util_id"] == util_id)// find utils record for ID
                 {
-                    int utilsID=(int)dr["id"];
+                    int utilsID=(int)dr["util_id"];
                     //look thru devices link list
                     foreach (DataRow drDeviceLink in _dtDevicesLinkTable.Rows)
                     {

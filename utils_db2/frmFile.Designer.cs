@@ -35,6 +35,7 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.txtFileLink = new System.Windows.Forms.TextBox();
             this.txtFileDetails = new System.Windows.Forms.TextBox();
+            this.btnSaveFile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -98,6 +99,16 @@
             this.txtFileDetails.Size = new System.Drawing.Size(164, 20);
             this.txtFileDetails.TabIndex = 6;
             // 
+            // btnSaveFile
+            // 
+            this.btnSaveFile.Location = new System.Drawing.Point(461, 55);
+            this.btnSaveFile.Name = "btnSaveFile";
+            this.btnSaveFile.Size = new System.Drawing.Size(100, 29);
+            this.btnSaveFile.TabIndex = 3;
+            this.btnSaveFile.Text = "save file";
+            this.btnSaveFile.UseVisualStyleBackColor = true;
+            this.btnSaveFile.Click += new System.EventHandler(this.btnSaveFile_Click);
+            // 
             // frmFile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -106,6 +117,7 @@
             this.Controls.Add(this.txtFileDetails);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnSaveFile);
             this.Controls.Add(this.btnSelectFile);
             this.Controls.Add(this.txtFileLink);
             this.Controls.Add(this.txtFile);
@@ -126,5 +138,6 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.TextBox txtFileLink;
         private System.Windows.Forms.TextBox txtFileDetails;
+        private System.Windows.Forms.Button btnSaveFile;
     }
 }

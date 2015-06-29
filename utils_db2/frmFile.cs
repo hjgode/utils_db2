@@ -12,14 +12,26 @@ namespace utils_db2
     public partial class frmFile : Form
     {
         public utility _utility = null;
+        utilities _utilities = null;
+
         byte[] filedata=null;
         string filename = "";
 
-        public frmFile(utility utl)
+        public frmFile(utility utl, ref utilities utls)
         {
             InitializeComponent();
             _utility = utl;
+            _utilities = utls;
+
             label1.Text = _utility.name;
+            txtFile.Text = _utility.file_link;
+
+            //on demmand read of byte data
+            if (_utility.file_data == null)
+            {
+                byte[] fData = _utilities.getFileData(_utility.util_id);
+                _utility.setFileData(fData);
+            }
             
             if (_utility.file_link.Length > 0)
                 txtFileLink.Text = _utility.file_link;
@@ -28,6 +40,7 @@ namespace utils_db2
 
             if (_utility.file_data != null)
             {
+                filedata = _utility.file_data;
                 if (_utility.file_data.Length > 0)
                     txtFileDetails.Text = _utility.file_data.Length.ToString();
                 else
@@ -70,6 +83,29 @@ namespace utils_db2
                 }
                 catch (Exception ex) {
                     MessageBox.Show("Exception reading file: " + ex.Message);
+                }
+            }
+            ofd.Dispose();
+        }
+
+        private void btnSaveFile_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog ofd = new SaveFileDialog();
+            ofd.RestoreDirectory = true;
+            ofd.CheckPathExists = true;
+            ofd.OverwritePrompt = true;
+            ofd.Filter = "zip files|*.zip|all files|*.*";
+            ofd.FilterIndex = 0;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    _utility.writeFileData(ofd.FileName);
+                    txtFile.Text = ofd.FileName;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Exception writing file: " + ex.Message);
                 }
             }
             ofd.Dispose();

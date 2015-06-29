@@ -19,6 +19,7 @@ namespace utils_db2
             InitializeComponent();
             _utility = utl;
             textBox1.Text = _utility.author;
+            label1.Text = _utility.name;
             fillKnownNames();
         }
 

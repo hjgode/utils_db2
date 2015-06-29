@@ -17,6 +17,8 @@ namespace utils_db2
         utilities _utilities=null;
         myLogger.logger _logger = Program._logger;
 
+        BindingSource source = new BindingSource();
+
         public mainForm()
         {
 
@@ -44,9 +46,19 @@ namespace utils_db2
                 _utilities = new utilities();
                 _utilities.readUtilsDB(database._sqlConnection);
 
-                dataGridView1.DataSource = _utilities.utilitiesList;
+                source = new BindingSource();
+                source.DataSource = _utilities.utilitiesList;
+                dataGridView1.DataSource = source;
+
+//                dataGridView1.DataSource = _utilities.utilitiesList;
+
                 dataGridView1.Columns["id"].Visible = false;
-                dataGridView1.Columns["file_data"].Visible = false; //we can not show binary data as image
+                //dataGridView1.Columns["util_id"].Visible = true;
+                try
+                {
+                    dataGridView1.Columns["file_data"].Visible = false; //we can not show binary data as image
+                }
+                catch (Exception) { }
                 dataGridView1.Columns.Add("devices", "devices");
                 
                 dataGridView1.Columns["devices"].DataPropertyName = "devices";
@@ -102,7 +114,7 @@ namespace utils_db2
 
             if (row.Cells[iColumn].OwningColumn.HeaderText == "file_link")
             {
-                frmFile frm = new frmFile(_utilities.getUtilityByID(util_id));
+                frmFile frm = new frmFile(_utilities.getUtilityByID(util_id), ref _utilities);
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     _utilities.setImageData(util_id, frm._utility.file_data, database._sqlConnection);
@@ -166,7 +178,7 @@ namespace utils_db2
                     utilities.Serialize(_utilities, ofd.FileName);
                 }
                 catch (Exception ex) {
-                    MessageBox.Show("Exception reading file: " + ex.Message);
+                    MessageBox.Show("Exception saving file: " + ex.Message);
                 }
             }
             ofd.Dispose();
@@ -222,6 +234,18 @@ namespace utils_db2
                     s += dev.name.Trim() + "+";
                 e.Value = s.Trim(new char[]{'+'});
             }
+        }
+
+        private void btnNewUtility_Click(object sender, EventArgs e)
+        {
+            frmNewUtility frm = new frmNewUtility(ref _utilities);
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                //refresh
+                source.ResetBindings(false);
+                //dataGridView1.Refresh();
+            }
+            frm.Dispose();
         }
 
     }

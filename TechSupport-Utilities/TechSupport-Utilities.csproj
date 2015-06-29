@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\utils_db2\category.cs">
+      <Link>category.cs</Link>
+    </Compile>
     <Compile Include="..\utils_db2\database.cs">
       <Link>database.cs</Link>
     </Compile>

@@ -29,15 +29,16 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSaveXML = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLoadXML = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuFileExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnNewUtility = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -55,15 +56,6 @@
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             this.dataGridView1.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::utils_db2.Properties.Resources.utils_image;
-            this.pictureBox1.Location = new System.Drawing.Point(585, 165);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(252, 276);
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
             // 
             // menuStrip1
             // 
@@ -106,11 +98,31 @@
             this.mnuFileExit.Text = "Exit";
             this.mnuFileExit.Click += new System.EventHandler(this.mnuFileExit_Click);
             // 
+            // btnNewUtility
+            // 
+            this.btnNewUtility.Location = new System.Drawing.Point(12, 271);
+            this.btnNewUtility.Name = "btnNewUtility";
+            this.btnNewUtility.Size = new System.Drawing.Size(127, 30);
+            this.btnNewUtility.TabIndex = 3;
+            this.btnNewUtility.Text = "add new utility";
+            this.btnNewUtility.UseVisualStyleBackColor = true;
+            this.btnNewUtility.Click += new System.EventHandler(this.btnNewUtility_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::utils_db2.Properties.Resources.utils_image;
+            this.pictureBox1.Location = new System.Drawing.Point(585, 165);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(252, 276);
+            this.pictureBox1.TabIndex = 1;
+            this.pictureBox1.TabStop = false;
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 463);
+            this.Controls.Add(this.btnNewUtility);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.menuStrip1);
@@ -118,9 +130,9 @@
             this.Name = "mainForm";
             this.Text = "Form2";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -135,5 +147,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnuSaveXML;
         private System.Windows.Forms.ToolStripMenuItem mnuLoadXML;
         private System.Windows.Forms.ToolStripMenuItem mnuFileExit;
+        private System.Windows.Forms.Button btnNewUtility;
     }
 }

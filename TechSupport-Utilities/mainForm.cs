@@ -22,6 +22,7 @@ namespace TechSupport_Utilities
         {
             InitializeComponent();
 
+            lbUtilities.SelectionMode = SelectionMode.MultiExtended;
 
             connectTest = new helper.ConnectTest();
             connectTest.updateEvent += new helper.ConnectTest.updateEventHandler(connectTest_updateEvent);
@@ -142,6 +143,95 @@ namespace TechSupport_Utilities
             if (iProg >= 100)
                 iProg = 0;
             Invoke(new Action(() => toolStripProgressBar1.Value = iProg));
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            int iCnt = 0;
+            for (int i=0; i<lbUtilities.Items.Count; i++){
+                utility U=(utility)lbUtilities.Items[i];
+                if (U.description.ToLower().Contains(txtSearch.Text.ToLower()))
+                {
+                    lbUtilities.SetSelected(i, true);
+                    iCnt++;
+                }
+                else
+                    lbUtilities.SetSelected(i, false);                  
+            }
+            tsLblResult.Text = "found " + iCnt.ToString() + " items";
+        }
+
+        private void lbUtilities_DoubleClick(object sender, EventArgs e)
+        {
+            if (lbUtilities.SelectedIndex == -1){
+                txtDescription.Text = "";
+                return;
+            }
+
+            var list = (ListBox)sender;
+
+            int itemIndex = list.IndexFromPoint(((MouseEventArgs)e).Location);
+            if (itemIndex != -1)
+            {
+                // This is your double clicked item
+                utility item = (utility)list.Items[itemIndex];
+                txtDescription.Text = item.description;
+            }
+        }
+
+        private void lbUtilities_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbUtilities.SelectedIndex == -1)
+                return;
+            utility item = (utility)lbUtilities.Items[lbUtilities.SelectedIndex];
+            txtDescription.Text = item.description;
+            //get file?
+            if (item.file_link.Length > 0)
+            {
+                panelFile.Visible = true;
+                lblFilename.Text = item.file_link;
+            }
+            else
+            {
+                panelFile.Visible = false;
+                lblFilename.Text = "";
+            }
+                //byte[] data = _utilities.getFileData(item.util_id);
+        }
+
+        private void btnSaveFile_Click(object sender, EventArgs e)
+        {
+            if (lbUtilities.SelectedIndex == -1)
+                return;
+            utility item = (utility)lbUtilities.Items[lbUtilities.SelectedIndex];
+            byte[] data = _utilities.getFileData(item.util_id);
+            if (data != null)
+            {
+                SaveFileDialog ofd = new SaveFileDialog();
+                ofd.RestoreDirectory = true;
+                ofd.CheckPathExists = true;
+                ofd.OverwritePrompt = true;
+                ofd.Filter = "zip files|*.zip|all files|*.*";
+                ofd.FilterIndex = 0;
+                ofd.FileName = item.file_link;
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        item.writeFileData(ofd.FileName);
+                        MessageBox.Show("Saved " + data.Length.ToString() + " bytes to '" + ofd.FileName + "'");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Exception writing file: " + ex.Message);
+                    }
+                }
+                ofd.Dispose();
+            }
+            else
+            {
+                MessageBox.Show("No data");
+            }
         }
     }
 }

@@ -10,8 +10,13 @@ namespace utils_db2
 {
     public class utility
     {
+        myLogger.logger _logger = Program._logger;
+
         [XmlElement("id")]
         public int id { get; set; }
+        [XmlElement("util_id")]
+        public int util_id { get; set; }
+
         [XmlElement("name")]
         public string name { get; set; }
         [XmlElement("description")]
@@ -31,6 +36,7 @@ namespace utils_db2
         public utility()
         {
             id = -1;
+            util_id = -1;
             name = "undefined";
             description = "undefined";
             author = "undefined";
@@ -45,6 +51,7 @@ namespace utils_db2
         public utility(int i, string n, string desc, string a, string f, Device[] devs, Operating_System os, byte[] bData)
         {
             id = i;
+            util_id = i;
             name = n;
             description = desc;
             author = a;
@@ -57,10 +64,12 @@ namespace utils_db2
         public utility(int i, string n, string desc, string a, string f)
         {
             id = i;
+            util_id = i;
             name = n;
             description = desc;
             author = a;
             file_link = f;
+            file_data = null;
         }
 
         public byte[] getFileData()
@@ -78,5 +87,29 @@ namespace utils_db2
             return this.name;
         }
 
+        public int writeFileData(string sFilename)
+        {
+            int iRet = -1;
+            try
+            {
+                FileStream fs = new FileStream(sFilename, FileMode.CreateNew);
+                BinaryWriter bw = new BinaryWriter(fs);
+                bw.Write(this.file_data);
+                bw.Flush();
+                fs.Flush();
+                bw.Close();
+                fs.Close();
+                iRet = 0;
+            }
+            catch (IOException ex)
+            {
+                _logger.log("IOException in writeFileData: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.log("Exception in writeFileData: " + ex.Message);
+            }
+            return iRet;
+        }
     }
 }

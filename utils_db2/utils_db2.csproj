@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="category.cs" />
     <Compile Include="database.cs" />
     <Compile Include="descriptionText.cs" />
     <Compile Include="device.cs" />
@@ -80,6 +81,12 @@
     </Compile>
     <Compile Include="frmName.Designer.cs">
       <DependentUpon>frmName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmNewUtility.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNewUtility.Designer.cs">
+      <DependentUpon>frmNewUtility.cs</DependentUpon>
     </Compile>
     <Compile Include="frmOperatingSystems.cs">
       <SubType>Form</SubType>
@@ -118,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmName.resx">
       <DependentUpon>frmName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNewUtility.resx">
+      <DependentUpon>frmNewUtility.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmOperatingSystems.resx">
       <DependentUpon>frmOperatingSystems.cs</DependentUpon>
