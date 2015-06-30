@@ -118,9 +118,12 @@ namespace utils_db2
                         ms.Close();
                     }
                     //add a new utility to our class
-                    utilitiesList.Add(new utility(util_id, name, desc, author, filelink, uDevices, _os_Class.getOsForId(util_id), filedata));
+                    utility U = new utility(util_id, name, desc, author, filelink, uDevices, _os_Class.getOsForId(util_id), filedata);
+                    utilitiesList.Add(U);
 #else
-                    utilitiesList.Add(new utility(util_id, name, desc, author, filelink, uDevices, _os_Class.getOsForId(util_id), null));
+                    utility U = new utility(util_id, name, desc, author, filelink, uDevices, _os_Class.getOsForId(util_id), null);
+                    utilitiesList.Add(U);
+
 #endif
                     iRet++;
                 }
@@ -136,6 +139,12 @@ namespace utils_db2
             rdr.Close();
             //cmd = new SqlCommand("Select id,name,description,author,file_link from utils", conn);
             //rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess);
+
+            //read categories in a seprate session!
+            foreach (utility UTL in utilitiesList)
+            {
+                UTL.readCategoriesForUtil();
+            }
 
             return iRet;
         }

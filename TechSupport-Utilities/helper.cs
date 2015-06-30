@@ -74,6 +74,7 @@ namespace TechSupport_Utilities
                     }
                     catch (Exception ex)
                     {
+                        ;
                     }
                     Thread.Sleep(5000);
                 } while (runThread);

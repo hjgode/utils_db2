@@ -64,6 +64,9 @@ namespace utils_db2
         public List<descriptionText> _descriptions = null;
         public descriptionText _description = new descriptionText();
 
+        //categories
+        public categories _categories = new categories();
+
         public database(String connectString){
             _logger.log("init database");
             _c = String.Format(connectString, _u, _p);
@@ -105,6 +108,9 @@ namespace utils_db2
             _bsUtils.DataSource = _dtUtils;
 
             readDeviceNameList();
+
+            //read all categories
+            _categories.readCatsFromDB(database._sqlConnection);
 
             //readDeviceLinkList();
 

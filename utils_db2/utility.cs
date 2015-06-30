@@ -33,6 +33,9 @@ namespace utils_db2
         [XmlElement("file_data")]
         public byte[] file_data { get; set; }
 
+        [XmlElement("categories")]
+        public List<category> _category_list=new List<category>();
+
         public utility()
         {
             id = -1;
@@ -110,6 +113,20 @@ namespace utils_db2
                 _logger.log("Exception in writeFileData: " + ex.Message);
             }
             return iRet;
+        }
+
+        public int readCategoriesForUtil()
+        {
+            int iCnt = 0;
+            _category_list.Clear();
+            categories cats= new categories();
+            cats.readCatsFromDB(database._sqlConnection);
+            foreach (category C in cats.categories_list)
+            {
+                if (C.util_ids.Contains(this.util_id.ToString()))
+                    _category_list.Add(C);
+            }
+            return iCnt;
         }
     }
 }

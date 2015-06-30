@@ -18,6 +18,8 @@ namespace TechSupport_Utilities
         database db=null;
         utilities _utilities;
 
+        categories _categories=new categories();
+
         public mainForm()
         {
             InitializeComponent();
@@ -104,6 +106,9 @@ namespace TechSupport_Utilities
             }
         }
 
+        /// <summary>
+        /// read data by DB
+        /// </summary>
         void readDataThread()
         {
             Invoke(new Action(() => toolStripStatusLabel2.Text = "loading..."));
@@ -113,8 +118,13 @@ namespace TechSupport_Utilities
             //lbUtilities.DisplayMember = "name";
             Invoke(new Action(()=> lbUtilities.Refresh()));
 
+            //read categories
+            _categories.readCatsFromDB(database._sqlConnection);
+            Invoke(new Action(() => lbCategories.DataSource = _categories.categories_list));
+
             Cursor.Current = Cursors.Default;
             Invoke(new Action(() => toolStripStatusLabel2.Text = lbUtilities.Items.Count.ToString()));
+
             stopAnimate();
         }
 
@@ -231,6 +241,37 @@ namespace TechSupport_Utilities
             else
             {
                 MessageBox.Show("No data");
+            }
+        }
+
+        private void lbCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbCategories.SelectedIndex == -1)
+                return;
+            category this_cat = (category) lbCategories.SelectedItem;
+            txtCatDescription.Text = this_cat.description;
+            lbUtilitiesByCategory.DataSource = this_cat.readUtilsFromDB(database._sqlConnection);
+            lbUtilitiesByCategory.Refresh();
+        }
+
+        private void lbUtilitiesByCategory_DoubleClick(object sender, EventArgs e)
+        {
+            if (lbUtilitiesByCategory.SelectedIndex == -1 || lbUtilities.Items.Count==0)
+                return;
+            string sUtil = (string)lbUtilitiesByCategory.SelectedItem;
+            //find utility in lbUtilities and select it
+            int iFound = -1;
+            for (int i = 0; i < lbUtilities.Items.Count; i++)
+            {
+                utility u=(utility)lbUtilities.Items[i];
+                if (u.name.Trim() == sUtil)
+                {
+                    iFound = i;
+                    lbUtilities.SelectedItems.Clear();
+                    lbUtilities.SelectedIndex = iFound;
+                    tabControl1.SelectedTab = tabUtilities;
+                    return;
+                }
             }
         }
     }
