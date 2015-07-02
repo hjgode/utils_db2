@@ -49,21 +49,21 @@
             this.btnSaveFile = new System.Windows.Forms.Button();
             this.lblFilename = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabUtilities = new System.Windows.Forms.TabPage();
             this.tabCategories = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.lbCategories = new System.Windows.Forms.ListBox();
             this.txtCatDescription = new System.Windows.Forms.TextBox();
             this.lbUtilitiesByCategory = new System.Windows.Forms.ListBox();
+            this.tabUtilities = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panelFile.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.tabUtilities.SuspendLayout();
             this.tabCategories.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tabUtilities.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -148,7 +148,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 260F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 261F));
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lbUtilities, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.txtDescription, 1, 1);
@@ -268,17 +268,6 @@
             this.tabControl1.Size = new System.Drawing.Size(653, 452);
             this.tabControl1.TabIndex = 3;
             // 
-            // tabUtilities
-            // 
-            this.tabUtilities.Controls.Add(this.tableLayoutPanel1);
-            this.tabUtilities.Location = new System.Drawing.Point(4, 22);
-            this.tabUtilities.Name = "tabUtilities";
-            this.tabUtilities.Padding = new System.Windows.Forms.Padding(3);
-            this.tabUtilities.Size = new System.Drawing.Size(645, 426);
-            this.tabUtilities.TabIndex = 0;
-            this.tabUtilities.Text = "Utilities";
-            this.tabUtilities.UseVisualStyleBackColor = true;
-            // 
             // tabCategories
             // 
             this.tabCategories.Controls.Add(this.tableLayoutPanel2);
@@ -339,6 +328,17 @@
             this.lbUtilitiesByCategory.TabIndex = 2;
             this.lbUtilitiesByCategory.DoubleClick += new System.EventHandler(this.lbUtilitiesByCategory_DoubleClick);
             // 
+            // tabUtilities
+            // 
+            this.tabUtilities.Controls.Add(this.tableLayoutPanel1);
+            this.tabUtilities.Location = new System.Drawing.Point(4, 22);
+            this.tabUtilities.Name = "tabUtilities";
+            this.tabUtilities.Padding = new System.Windows.Forms.Padding(3);
+            this.tabUtilities.Size = new System.Drawing.Size(645, 426);
+            this.tabUtilities.TabIndex = 0;
+            this.tabUtilities.Text = "Utilities";
+            this.tabUtilities.UseVisualStyleBackColor = true;
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -364,10 +364,10 @@
             this.panel1.PerformLayout();
             this.panelFile.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
-            this.tabUtilities.ResumeLayout(false);
             this.tabCategories.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.tabUtilities.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

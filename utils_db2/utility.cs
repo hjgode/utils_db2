@@ -33,8 +33,14 @@ namespace utils_db2
         [XmlElement("file_data")]
         public byte[] file_data { get; set; }
 
+        /// <summary>
+        /// will hold a string with category IDs this utility can be usefull
+        /// </summary>
         [XmlElement("categories")]
-        public List<category> _category_list=new List<category>();
+        public string _categories { get; set; }
+
+        [XmlIgnore]
+        List<category> _category_list=new List<category>();
 
         public utility()
         {
@@ -49,9 +55,12 @@ namespace utils_db2
 
             operating_system = new Operating_System();
             file_data = null;
+
+            _categories = "-1";
+            _category_list.Add(new category());
         }
 
-        public utility(int i, string n, string desc, string a, string f, Device[] devs, Operating_System os, byte[] bData)
+        public utility(int i, string n, string desc, string a, string f, Device[] devs, Operating_System os, byte[] bData, string cats):base()
         {
             id = i;
             util_id = i;
@@ -62,9 +71,11 @@ namespace utils_db2
             devices = devs;
             operating_system = os;
             file_data = bData;
+
+            _categories = cats;
         }
 
-        public utility(int i, string n, string desc, string a, string f)
+        public utility(int i, string n, string desc, string a, string f):base()
         {
             id = i;
             util_id = i;
@@ -115,6 +126,40 @@ namespace utils_db2
             return iRet;
         }
 
+        List<int> getCatList()
+        {
+            List<int> iList = new List<int>();
+            string[] aList = this._categories.Split(new char[] { ' ' });
+            foreach (string S in aList)
+            {
+                int V;
+                if(Int32.TryParse(S,out V))
+                    iList.Add(V);
+            }
+            return iList;
+        }
+
+        void cat_ids_to_categories(List<category> cats)
+        {
+            _category_list.Clear();
+            List<int> iList = getCatList();
+            foreach (category C in cats)
+            {
+                if(iList.Contains(C.cat_id))
+                    _category_list.Add(C);
+            }
+        }
+
+        public int addCategory(category cat)
+        {
+            int iRet = 0;
+            if (_category_list.Contains(cat))
+                return iRet;
+            this._categories += " " + cat.cat_id.ToString();
+            this._category_list.Add(cat);
+            return iRet+1;
+        }
+
         public int readCategoriesForUtil()
         {
             int iCnt = 0;
@@ -128,5 +173,7 @@ namespace utils_db2
             }
             return iCnt;
         }
+
+        
     }
 }

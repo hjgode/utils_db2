@@ -63,6 +63,9 @@ namespace utils_db2
                 
                 dataGridView1.Columns["devices"].DataPropertyName = "devices";
 
+                //dataGridView1.Columns.Add("categories", "categories");
+                //dataGridView1.Columns["categories"].DataPropertyName = "categories";
+
                 dataGridView1.Refresh();
 
                 //utilities.Serialize(_utilities);

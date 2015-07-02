@@ -26,19 +26,32 @@ namespace utils_db2
         [XmlIgnore]
         public List<Device> _devicesList = new List<Device>();
 
+        [XmlIgnore]
+        public List<category> _categoryList=new List<category>();
+
         public utilities()
         {
             _utilities = new List<utility>();
         }
 
+        void readCategories(SqlConnection conn)
+        {
+            _categoryList.Clear();
+            categories cats = new categories();
+            cats.readCatsFromDB(conn);
+            _categoryList = cats.categories_list;
+        }
+
         public int readUtilsDB(SqlConnection conn)
         {
             utilitiesList.Clear();
+            readCategories(conn);
+
             int iRet = 0;
 #if READ_WITH_FILE_DATA                    
             string sql = "Select id, util_id, name, description, author, file_link, file_data from utils";
 #else
-            string sql = "Select id, util_id, name, description, author, file_link from utils";
+            string sql = "Select id, util_id, name, description, author, file_link, categories from utils";
 #endif
             //sql = "SELECT     dbo.utils.id, dbo.utils.name, dbo.utils.description, dbo.utils.author, dbo.utils.file_link, dbo.utils.file_data, dbo.utils_device.name AS Device "+
             //      "FROM         dbo.utils LEFT OUTER JOIN "+
@@ -80,6 +93,7 @@ namespace utils_db2
                     string desc = rdr.GetString(columnNr ++).Trim();
                     string author = rdr.GetString(columnNr++).Trim();
                     string filelink = rdr.GetString(columnNr++).Trim();
+                    string cats = rdr.GetString(columnNr++).Trim();
 
                     //find devices attached to this util
                     uDevices = devTemp.getDevicesForID(util_id);
@@ -121,7 +135,7 @@ namespace utils_db2
                     utility U = new utility(util_id, name, desc, author, filelink, uDevices, _os_Class.getOsForId(util_id), filedata);
                     utilitiesList.Add(U);
 #else
-                    utility U = new utility(util_id, name, desc, author, filelink, uDevices, _os_Class.getOsForId(util_id), null);
+                    utility U = new utility(util_id, name, desc, author, filelink, uDevices, _os_Class.getOsForId(util_id), null, cats);
                     utilitiesList.Add(U);
 
 #endif
