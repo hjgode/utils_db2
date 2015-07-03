@@ -82,7 +82,15 @@ namespace TechSupport_Utilities
         void thStartConnect()
         {
             string connect = Properties.Settings.Default.connectstring;
-            db = new database(connect, false);
+            try
+            {
+                db = new database(connect, false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to connect to server.\n" + ex.Message);
+                return;
+            }
             db.updateEvent += new database.updateEventHandler(db_updateEvent);
             if (db._bConnected)
                 Invoke(new Action(() => toolStripStatusLabel2.Text = "connected"));
