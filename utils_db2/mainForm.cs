@@ -159,6 +159,17 @@ namespace utils_db2
                 }
                 frm.Dispose();
             }
+
+            if (row.Cells[iColumn].OwningColumn.HeaderText.EndsWith("categories"))
+            {
+                frmCategories frm = new frmCategories(_utilities.getUtilityByID(util_id));
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    //_utilities.setDevices(util_id, frm._devices, database._sqlConnection);
+                    dataGridView1.Refresh();
+                }
+                frm.Dispose();
+            }
         }
 
         private void mnuSaveXML_Click(object sender, EventArgs e)

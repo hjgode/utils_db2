@@ -58,6 +58,12 @@
     <Compile Include="frmAuthor.Designer.cs">
       <DependentUpon>frmAuthor.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmCategories.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCategories.Designer.cs">
+      <DependentUpon>frmCategories.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmDescription.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -113,6 +119,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmAuthor.resx">
       <DependentUpon>frmAuthor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCategories.resx">
+      <DependentUpon>frmCategories.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDescription.resx">
       <DependentUpon>frmDescription.cs</DependentUpon>

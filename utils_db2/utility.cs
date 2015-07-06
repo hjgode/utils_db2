@@ -40,7 +40,7 @@ namespace utils_db2
         public string _categories { get; set; }
 
         [XmlIgnore]
-        List<category> _category_list=new List<category>();
+        public List<category> _category_list { get; set; }
 
         public utility()
         {
@@ -57,6 +57,7 @@ namespace utils_db2
             file_data = null;
 
             _categories = "-1";
+            _category_list = new List<category>();
             _category_list.Add(new category());
         }
 
@@ -163,11 +164,16 @@ namespace utils_db2
         public int readCategoriesForUtil()
         {
             int iCnt = 0;
-            _category_list.Clear();
+            if (_category_list == null)
+                _category_list = new List<category>();
+            else
+                _category_list.Clear();
             categories cats= new categories();
             cats.readCatsFromDB(database._sqlConnection);
             foreach (category C in cats.categories_list)
             {
+                if (C.util_ids == null)
+                    C.util_ids = "";
                 if (C.util_ids.Contains(this.util_id.ToString()))
                     _category_list.Add(C);
             }

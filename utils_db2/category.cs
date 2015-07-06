@@ -42,6 +42,9 @@ namespace utils_db2
         [XmlElement("util_ids")]
         public string util_ids { get; set; }
 
+        /// <summary>
+        /// list of util ids (int values)
+        /// </summary>
         [XmlIgnore]
         List<int> utils_with_category = new List<int>();
 
@@ -55,15 +58,26 @@ namespace utils_db2
             description = "placeholder";
             util_ids = "-1 ";
         }
-
-        public category(int cat_ID, string sName, string sDescription, string sUtilsIDList)
+        public category(int cat_ID, string sName, string sDescription)
+            : base()
         {
             cat_id = cat_ID;
             name = sName;
             description = sDescription;
-            util_ids = sUtilsIDList;
-            utils_with_category = getUtils();
+            //util_ids = sUtilsIDList;
+
+            //utils_with_category = getUtils();
         }
+
+        //public category(int cat_ID, string sName, string sDescription, string sUtilsIDList)
+        //    : base()
+        //{
+        //    cat_id = cat_ID;
+        //    name = sName;
+        //    description = sDescription;
+        //    util_ids = sUtilsIDList;
+        //    utils_with_category = getUtils();
+        //}
 
         List<int> getUtils()
         {
@@ -82,11 +96,12 @@ namespace utils_db2
             return iList;
         }
 
+
         public List<string> readUtilsFromDB(SqlConnection conn)
         {
             int iCnt = 0;
             List<string> sList = new List<string>();
-            string sql = "select util_id, name FROM utils;";
+            string sql = "select util_id, name, categories FROM utils;";
             SqlCommand cmd = new SqlCommand(sql);
             cmd.Connection = conn;
             SqlDataReader rdr = cmd.ExecuteReader();
@@ -140,7 +155,8 @@ namespace utils_db2
         public int readCatsFromDB(SqlConnection conn)
         {
             int iCnt = 0;
-            string sql = "select cat_id, name, description, util_ids FROM utils_categories;";
+            //string sql = "select cat_id, name, description, util_ids FROM utils_categories;";
+            string sql = "select cat_id, name, description FROM utils_categories;";
             SqlCommand cmd = new SqlCommand(sql);
             cmd.Connection = conn;
             SqlDataReader rdr = cmd.ExecuteReader();
@@ -149,13 +165,57 @@ namespace utils_db2
                 int catID = rdr.GetInt32(0);
                 string n = rdr.GetString(1).Trim();
                 string d = rdr.GetString(2).Trim();
-                string u = rdr.GetString(3).Trim();
-                categories_list.Add(new category(catID,n,d,u));
+                //string u = rdr.GetString(3).Trim();
+                categories_list.Add(new category(catID,n,d));
                 iCnt++;
             }
             rdr.Close();
             cmd.Dispose();
+            rdr.Dispose();
+
+            //now read utils table and add utils_id to the categories
+            sql = "select util_id, name, categories FROM utils;";
+            cmd.Connection = conn;
+            rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                int uid=rdr.GetInt32(0);
+                string uname=rdr.GetString(1).Trim();
+                string cats = rdr.GetString(2).Trim();//space delimitted list of cat_id's
+
+                //list of cat_id in utils.categories
+                string[] catListForUtil = cats.Split(new char[] { ' ' });
+                List<int> catIListForUtil = getIntList(cats);
+
+                //add util id to cat list
+                foreach (category C in categories_list)
+                {
+                    if (catIListForUtil.Contains(C.cat_id))
+                        C.util_ids += " " + uid.ToString();
+                }
+
+            }
+            rdr.Close();
+            cmd.Dispose();
+            rdr.Dispose();
             return iCnt;
+        }
+
+        List<int> getIntList(string space_delimitted)
+        {
+            List<int> iList = new List<int>();
+            string[] sList = space_delimitted.Split(new char[] { ' ' });
+            foreach (string s in sList)
+            {
+                int i = -1;
+                int uID = -1;
+                if (int.TryParse(s, out i))
+                {
+                    uID = i;
+                    iList.Add(uID);
+                }
+            }
+            return iList;
         }
 
         static public void Serialize(categories _cats, string sFile)
