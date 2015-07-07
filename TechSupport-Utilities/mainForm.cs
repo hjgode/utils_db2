@@ -18,7 +18,7 @@ namespace TechSupport_Utilities
         database db=null;
         utilities _utilities;
 
-        categories _categories=new categories();
+        Categories _categories=new Categories();
 
         public mainForm()
         {
@@ -256,7 +256,7 @@ namespace TechSupport_Utilities
         {
             if (lbCategories.SelectedIndex == -1)
                 return;
-            category this_cat = (category) lbCategories.SelectedItem;
+            Category this_cat = (Category) lbCategories.SelectedItem;
             txtCatDescription.Text = this_cat.description;
             lbUtilitiesByCategory.DataSource = this_cat.readUtilsFromDB(database._sqlConnection);
             lbUtilitiesByCategory.Refresh();

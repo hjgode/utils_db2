@@ -12,7 +12,7 @@ namespace utils_db2
     public partial class frmCategories : Form
     {
         utility _utility;
-        categories _categories;
+        Categories _categories;
 
         public frmCategories(utility utl)
         {
@@ -21,9 +21,9 @@ namespace utils_db2
             label1.Text = _utility.name;
             textBox1.Text = _utility._categories;
 
-            _categories = new categories();
+            _categories = new Categories();
             _categories.readCatsFromDB(database._sqlConnection);
-            foreach (category C in _categories.categories_list)
+            foreach (Category C in _categories.categories_list)
             {
                 lbCategoriesAvailable.Items.Add(C);
                 if (_utility._categories.Trim().Split().Contains<string>(C.cat_id.ToString()))
@@ -56,7 +56,7 @@ namespace utils_db2
 
             textBox1.Text = "";
             foreach(object o in lbCategoriesOfUtil.Items){
-                textBox1.Text += " " + ((category)o).cat_id.ToString();
+                textBox1.Text += " " + ((Category)o).cat_id.ToString();
             }
         }
     }

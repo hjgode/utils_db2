@@ -15,6 +15,8 @@ namespace utils_db2
         utilities _utilities;
         public Device[] _devices;
 
+        Devices _devicesClass = new Devices();
+
         public frmDevices(utility utl, ref utilities utls)
         {
             InitializeComponent();
@@ -32,7 +34,7 @@ namespace utils_db2
         void fillDevicesListbox()
         {
             listBoxAvailableDevices.Items.Clear();
-            foreach (Device d in Device.readListUnique(database._sqlConnection))
+            foreach (Device d in Devices.readListUnique(database._sqlConnection))
                 listBoxAvailableDevices.Items.Add(d);
         }
         void readDevsForUtil()
@@ -80,7 +82,7 @@ namespace utils_db2
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Device dev = Device.addNewDevice2DB(txtDEVname.Text, database._sqlConnection);
+            Device dev = _devicesClass.addNewDevice2DB(txtDEVname.Text, database._sqlConnection);
             listBoxAvailableDevices.Items.Add(dev);
         }
 

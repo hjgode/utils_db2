@@ -65,7 +65,7 @@ namespace utils_db2
         public descriptionText _description = new descriptionText();
 
         //categories
-        public categories _categories = new categories();
+        public Categories _categories = new Categories();
 
         public database(String connectString){
             _logger.log("init database");

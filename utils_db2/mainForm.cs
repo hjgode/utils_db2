@@ -43,8 +43,33 @@ namespace utils_db2
 
                 _logger.log("Open database...");
                 _database = new database(connect);
+
+                //read the helper lists first and update the utilities objects
+                //devices
+                Devices devices = new Devices();
+                devices.readDevicesFromDB(database._sqlConnection);
+                //categories
+                Categories categories = new Categories();
+                categories.readCatsFromDB(database._sqlConnection);
+
+                //OS
+                Operating_System operating_system = new Operating_System();
+                operating_system.readList(database._sqlConnection);
+
+                //read the utils
                 _utilities = new utilities();
                 _utilities.readUtilsDB(database._sqlConnection);
+
+                //update the utils embedded lists (categories,devices,operating_system)
+                foreach (utility U in _utilities.utilitiesList)
+                {
+                    //update devices
+                    U.devices = devices.getDevicesForID(U.util_id);
+                    //update operating_system
+                    U.operating_system = operating_system.getOsForId(U.util_id);
+                    U._category_list = categories.getCategoriesForUtil(U.util_id);
+                }
+
 
                 source = new BindingSource();
                 source.DataSource = _utilities.utilitiesList;
@@ -200,7 +225,8 @@ namespace utils_db2
 
         private void mnuFileExit_Click(object sender, EventArgs e)
         {
-            _database.Dispose();
+            if(_database!=null)
+                _database.Dispose();
             Application.Exit();
         }
 

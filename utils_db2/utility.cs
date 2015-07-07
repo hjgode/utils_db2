@@ -40,7 +40,7 @@ namespace utils_db2
         public string _categories { get; set; }
 
         [XmlIgnore]
-        public List<category> _category_list { get; set; }
+        public List<Category> _category_list { get; set; }
 
         public utility()
         {
@@ -57,11 +57,48 @@ namespace utils_db2
             file_data = null;
 
             _categories = "-1";
-            _category_list = new List<category>();
-            _category_list.Add(new category());
+            _category_list = new List<Category>();
+            _category_list.Add(new Category());
         }
 
-        public utility(int i, string n, string desc, string a, string f, Device[] devs, Operating_System os, byte[] bData, string cats):base()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i">util_id</param>
+        /// <param name="n">name</param>
+        /// <param name="desc">description</param>
+        /// <param name="a">author</param>
+        /// <param name="f">file_link</param>
+        /// <param name="cats"></param>
+        public utility(int i, string n, string desc, string a, string f, string cats)
+            : base()
+        {
+            id = i;
+            util_id = i;
+            name = n;
+            description = desc;
+            author = a;
+            file_link = f;
+
+            _categories = cats;
+        }
+
+        public utility(int i, string n, string desc, string a, string f, byte[] fData, string cats)
+            : base()
+        {
+            id = i;
+            util_id = i;
+            name = n;
+            description = desc;
+            author = a;
+            file_link = f;
+            file_data = fData;
+            _categories = cats;
+        }
+
+        /*
+        public utility(int i, string n, string desc, string a, string f, Device[] devs, Operating_System os, byte[] bData, string cats)
+            : base()
         {
             id = i;
             util_id = i;
@@ -86,6 +123,7 @@ namespace utils_db2
             file_link = f;
             file_data = null;
         }
+        */
 
         public byte[] getFileData()
         {
@@ -140,18 +178,18 @@ namespace utils_db2
             return iList;
         }
 
-        void cat_ids_to_categories(List<category> cats)
+        void cat_ids_to_categories(List<Category> cats)
         {
             _category_list.Clear();
             List<int> iList = getCatList();
-            foreach (category C in cats)
+            foreach (Category C in cats)
             {
                 if(iList.Contains(C.cat_id))
                     _category_list.Add(C);
             }
         }
 
-        public int addCategory(category cat)
+        public int addCategory(Category cat)
         {
             int iRet = 0;
             if (_category_list.Contains(cat))
@@ -165,12 +203,12 @@ namespace utils_db2
         {
             int iCnt = 0;
             if (_category_list == null)
-                _category_list = new List<category>();
+                _category_list = new List<Category>();
             else
                 _category_list.Clear();
-            categories cats= new categories();
+            Categories cats= new Categories();
             cats.readCatsFromDB(database._sqlConnection);
-            foreach (category C in cats.categories_list)
+            foreach (Category C in cats.categories_list)
             {
                 if (C.util_ids == null)
                     C.util_ids = "";

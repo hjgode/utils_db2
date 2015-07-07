@@ -27,25 +27,23 @@ namespace utils_db2
         public List<Device> _devicesList = new List<Device>();
 
         [XmlIgnore]
-        public List<category> _categoryList=new List<category>();
+        public List<Category> _categoryList { get; set; }
 
         public utilities()
         {
             _utilities = new List<utility>();
         }
 
-        void readCategories(SqlConnection conn)
-        {
-            _categoryList.Clear();
-            categories cats = new categories();
-            cats.readCatsFromDB(conn);
-            _categoryList = cats.categories_list;
-        }
-
+        /// <summary>
+        /// read ONLY utilites from DB
+        /// use the other classes readFromDB functions to fill categories etc 
+        /// BEFORE reading the utilities list
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <returns></returns>
         public int readUtilsDB(SqlConnection conn)
         {
             utilitiesList.Clear();
-            readCategories(conn);
 
             int iRet = 0;
 #if READ_WITH_FILE_DATA                    
@@ -59,6 +57,7 @@ namespace utils_db2
 
             SqlCommand cmd = new SqlCommand(sql, conn);
 
+            /*
             //load the util_id<->device table
             if (_devicesList == null)
                 _devicesList = new List<Device>();
@@ -69,6 +68,8 @@ namespace utils_db2
             //load the util_id<->OS Names table
             Operating_System _os_Class = new Operating_System();
             _os_Class.readList(conn);
+            Device[] uDevices;
+            */
 
             //read util_db
 #if READ_WITH_FILE_DATA                    
@@ -76,7 +77,6 @@ namespace utils_db2
 #else
             SqlDataReader rdr = cmd.ExecuteReader(); 
 #endif
-            Device[] uDevices;
             int ID=-1, util_id = -1;
             int columnNr = 0; //sequentiel access, increments by ++ after use
             try
@@ -95,10 +95,12 @@ namespace utils_db2
                     string filelink = rdr.GetString(columnNr++).Trim();
                     string cats = rdr.GetString(columnNr++).Trim();
 
+                    /*
                     //find devices attached to this util
                     uDevices = devTemp.getDevicesForID(util_id);
                     if (uDevices == null || uDevices.Length == 0)
                         uDevices = new Device[] { new Device(util_id, "undefined") };
+                    */
 
 #if READ_WITH_FILE_DATA                    
                     byte[] filedata = null;
@@ -132,10 +134,10 @@ namespace utils_db2
                         ms.Close();
                     }
                     //add a new utility to our class
-                    utility U = new utility(util_id, name, desc, author, filelink, uDevices, _os_Class.getOsForId(util_id), filedata);
+                    utility U = new utility(util_id, name, desc, author, filelink, filedata, cats);
                     utilitiesList.Add(U);
 #else
-                    utility U = new utility(util_id, name, desc, author, filelink, uDevices, _os_Class.getOsForId(util_id), null, cats);
+                    utility U = new utility(util_id, name, desc, author, filelink, cats);
                     utilitiesList.Add(U);
 
 #endif
@@ -154,11 +156,13 @@ namespace utils_db2
             //cmd = new SqlCommand("Select id,name,description,author,file_link from utils", conn);
             //rdr = cmd.ExecuteReader(CommandBehavior.SequentialAccess);
 
+            /*
             //read categories in a seprate session!
             foreach (utility UTL in utilitiesList)
             {
                 UTL.readCategoriesForUtil();
             }
+            */
 
             return iRet;
         }
@@ -256,7 +260,8 @@ namespace utils_db2
             cmd.Dispose();
 
             _devicesList.Clear();
-            Device devTemp = new Device();
+
+            Devices devTemp = new Devices();
             _devicesList = devTemp.readList(conn);
 
             //publish the new list to the object

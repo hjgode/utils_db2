@@ -27,7 +27,7 @@ namespace utils_db2
     ALTER TABLE [dbo].[utils_categories] ADD  CONSTRAINT [DF_utils_categories_util_ids]  DEFAULT ((0)) FOR [util_ids]
     GO
     */
-    public class category
+    public class Category
     {
         [XmlElement("cat_id")]
         public int cat_id { get; set; }
@@ -51,22 +51,20 @@ namespace utils_db2
         [XmlIgnore]
         public List<String> util_names_with_category = new List<string>();
 
-        public category()
+        public Category()
         {
             cat_id = -1;
             name = "undef";
             description = "placeholder";
             util_ids = "-1 ";
         }
-        public category(int cat_ID, string sName, string sDescription)
+        public Category(int cat_ID, string sName, string sDescription, string uIDs)
             : base()
         {
             cat_id = cat_ID;
             name = sName;
             description = sDescription;
-            //util_ids = sUtilsIDList;
-
-            //utils_with_category = getUtils();
+            util_ids = uIDs;
         }
 
         //public category(int cat_ID, string sName, string sDescription, string sUtilsIDList)
@@ -127,14 +125,14 @@ namespace utils_db2
         }
     }
 
-    public class categories
+    public class Categories
     {
         [XmlElement("categories")]
-        public List<category> categories_list { get; set; }
+        public List<Category> categories_list { get; set; }
 
-        public categories()
+        public Categories()
         {
-            categories_list = new List<category>();
+            categories_list = new List<Category>();
         }
 
         //public List<category> getCatForUtil(int uID)
@@ -156,23 +154,24 @@ namespace utils_db2
         {
             int iCnt = 0;
             //string sql = "select cat_id, name, description, util_ids FROM utils_categories;";
-            string sql = "select cat_id, name, description FROM utils_categories;";
+            string sql = "select cat_id, name, description, util_ids FROM utils_categories;";
             SqlCommand cmd = new SqlCommand(sql);
             cmd.Connection = conn;
             SqlDataReader rdr = cmd.ExecuteReader();
             while (rdr.Read())
             {
-                int catID = rdr.GetInt32(0);
-                string n = rdr.GetString(1).Trim();
-                string d = rdr.GetString(2).Trim();
-                //string u = rdr.GetString(3).Trim();
-                categories_list.Add(new category(catID,n,d));
+                int catID = rdr.GetInt32(0);            //cat_id
+                string n = rdr.GetString(1).Trim();     //name
+                string d = rdr.GetString(2).Trim();     //description
+                string uIDs = rdr.GetString(3).Trim();     //util_ids
+                categories_list.Add(new Category(catID, n, d, uIDs));
                 iCnt++;
             }
             rdr.Close();
             cmd.Dispose();
             rdr.Dispose();
 
+            /*
             //now read utils table and add utils_id to the categories
             sql = "select util_id, name, categories FROM utils;";
             cmd.Connection = conn;
@@ -188,7 +187,7 @@ namespace utils_db2
                 List<int> catIListForUtil = getIntList(cats);
 
                 //add util id to cat list
-                foreach (category C in categories_list)
+                foreach (Category C in categories_list)
                 {
                     if (catIListForUtil.Contains(C.cat_id))
                         C.util_ids += " " + uid.ToString();
@@ -198,7 +197,24 @@ namespace utils_db2
             rdr.Close();
             cmd.Dispose();
             rdr.Dispose();
+            */
+
             return iCnt;
+        }
+
+        public List<Category> getCategoriesForUtil(int uID)
+        {
+            List<Category> cats = new List<Category>();
+            foreach(Category C in categories_list){
+                if (C.util_ids == null)
+                    continue;
+                string[] ids = C.util_ids.Split(new char[] { ' ' }); 
+                foreach(string s in ids){
+                    if (s==uID.ToString())
+                        cats.Add(C);
+                }
+            }
+            return cats;
         }
 
         List<int> getIntList(string space_delimitted)
@@ -218,21 +234,21 @@ namespace utils_db2
             return iList;
         }
 
-        static public void Serialize(categories _cats, string sFile)
+        static public void Serialize(Categories _cats, string sFile)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(categories));
+            XmlSerializer serializer = new XmlSerializer(typeof(Categories));
             using (TextWriter writer = new StreamWriter(sFile))
             {
                 serializer.Serialize(writer, _cats);
             }
         }
 
-        static public categories Deserialize(string fileName)
+        static public Categories Deserialize(string fileName)
         {
-            XmlSerializer deserializer = new XmlSerializer(typeof(categories));
+            XmlSerializer deserializer = new XmlSerializer(typeof(Categories));
             TextReader reader = new StreamReader(fileName);
             object obj = deserializer.Deserialize(reader);
-            categories XmlData = (categories)obj;
+            Categories XmlData = (Categories)obj;
             reader.Close();
             return XmlData;
         }

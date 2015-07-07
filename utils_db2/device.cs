@@ -36,11 +36,50 @@ namespace utils_db2
             return util_id.ToString()+ ":" + name;
         }
 
-        public static Device addNewDevice2DB(string name, SqlConnection conn)
+    }//end of class device
+
+    public class Devices{
+
+        List<Device> _lstDevices;
+
+        public Devices()
+        {
+            _lstDevices = new List<Device>();
+        }
+
+        public int readDevicesFromDB(SqlConnection conn)
+        {
+            _lstDevices = readList(conn);
+            return _lstDevices.Count;
+        }
+
+
+        /// <summary>
+        /// read utils->devices link table
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        public List<Device> readList(SqlConnection conn)
+        {
+            if (_lstDevices.Count > 0)
+                return _lstDevices;
+
+            SqlCommand cmd = new SqlCommand("select util_id, name from [utils_device];", conn);
+            SqlDataReader rdr = cmd.ExecuteReader();
+            _lstDevices.Clear();
+            while (rdr.Read())
+            {
+                _lstDevices.Add(new Device(rdr.GetInt32(0), rdr.GetString(1).Trim()));
+            }
+            rdr.Close();
+            return _lstDevices;
+        }
+
+        public Device addNewDevice2DB(string name, SqlConnection conn)
         {
             Device dev = new Device(name);
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO [utils_device] (util_id, name) VALUES (-1, @PARM1) "+
+            SqlCommand cmd = new SqlCommand("INSERT INTO [utils_device] (util_id, name) VALUES (-1, @PARM1) " +
                 " SELECT SCOPE_IDENTITY() As TheId;", conn);
             cmd.Parameters.Add("PARM1", SqlDbType.Text, name.Length).Value = name;
             cmd.Connection = conn;
@@ -63,29 +102,6 @@ namespace utils_db2
 
             _lstDevices.Add(dev);
             return dev;
-        }
-
-        public static List<Device> _lstDevices = new List<Device>();
-
-        /// <summary>
-        /// read utils->devices link table
-        /// </summary>
-        /// <param name="conn"></param>
-        /// <returns></returns>
-        public List<Device> readList(SqlConnection conn)
-        {
-            if (_lstDevices.Count > 0)
-                return _lstDevices;
-
-            SqlCommand cmd = new SqlCommand("select util_id, name from [utils_device];", conn);
-            SqlDataReader rdr = cmd.ExecuteReader();
-            _lstDevices.Clear();
-            while (rdr.Read())
-            {
-                _lstDevices.Add(new Device(rdr.GetInt32(0), rdr.GetString(1).Trim()));
-            }
-            rdr.Close();
-            return _lstDevices;
         }
 
         /// <summary>
