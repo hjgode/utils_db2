@@ -42,6 +42,9 @@ namespace utils_db2
         [XmlElement("util_ids")]
         public string util_ids { get; set; }
 
+        [XmlIgnore]
+        public List<int> util_IDs = new List<int>();
+
         /// <summary>
         /// list of util ids (int values)
         /// </summary>
@@ -65,6 +68,19 @@ namespace utils_db2
             name = sName;
             description = sDescription;
             util_ids = uIDs;
+            util_IDs = splitUtil_ids(util_ids);
+        }
+
+        List<int> splitUtil_ids(string s)
+        {
+            List<int> iList = new List<int>();
+            string[] sList = s.Split(new char[] { ' ' });
+            int iT;
+            foreach(string S in sList){
+                if(int.TryParse(S,out iT))
+                    iList.Add(iT);
+            }
+            return iList;
         }
 
         //public category(int cat_ID, string sName, string sDescription, string sUtilsIDList)
@@ -133,6 +149,16 @@ namespace utils_db2
         public Categories()
         {
             categories_list = new List<Category>();
+        }
+
+        public static string getCategoriesAsString(List<Category> cats)
+        {
+            string s = " ";
+            foreach (Category C in cats)
+            {
+                s += C.ToString() + " ";
+            }
+            return s;
         }
 
         //public List<category> getCatForUtil(int uID)
@@ -232,6 +258,22 @@ namespace utils_db2
                 }
             }
             return iList;
+        }
+
+        public override string ToString()
+        {
+            string s = "";
+            foreach (Category C in this.categories_list)
+                s += "|" + C.ToString();
+            return s;
+        }
+
+        public static string asString(List<Category> Cats)
+        {
+            string s = "";
+            foreach (Category C in Cats)
+                s += "|" + C.ToString();
+            return s;
         }
 
         static public void Serialize(Categories _cats, string sFile)

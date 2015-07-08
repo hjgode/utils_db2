@@ -5,6 +5,7 @@ using System.Text;
 
 using System.Xml.Serialization;
 using System.IO;
+using System.Data.SqlClient;
 
 namespace utils_db2
 {
@@ -162,6 +163,62 @@ namespace utils_db2
             {
                 _logger.log("Exception in writeFileData: " + ex.Message);
             }
+            return iRet;
+        }
+
+        /// <summary>
+        /// add the util_id to the category row in utils_categories for the list of categories of this util
+        /// </summary>
+        /// <returns></returns>
+        public int saveCategoriesToDB()
+        {
+            int iRet = 0;
+            //build a list with cat_ids
+            string myCatIDs = " ";
+            foreach (Category C in this._category_list)
+                myCatIDs += C.cat_id + " ";
+
+            //go thru Categories and add this util_id to util_ids if not already listed
+            //read all categories
+            Categories cats = new Categories();
+            cats.readCatsFromDB(database._sqlConnection);
+
+            List<string> sqlUpdates = new List<string>();
+            //clear util_ids list?
+            
+            foreach (Category C in cats.categories_list) //loop thur all categories
+            {
+                C.util_ids = " ";
+                C.util_IDs.Clear();
+                if (this._category_list.Contains(C)) //is the current category the one ?
+                {
+                    //if (!C.util_IDs.Contains<int>(this.util_id))
+                    //{
+                    C.util_IDs.Add(util_id);
+                    C.util_IDs
+                    //sqlUpdates.Add("UPDATE [utils_categories] SET [util_ids]=RTRIM([util_ids])+' '+'" + util_id.ToString() + "' WHERE [cat_id]=" + C.cat_id + " ;");
+                    //}
+                }
+            }
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = database._sqlConnection;
+            foreach (string sql in sqlUpdates)
+            {
+                cmd.CommandText = sql;
+                iRet += cmd.ExecuteNonQuery();
+            }
+
+            //save local utils categories list
+            this._categories = myCatIDs;
+            cmd.CommandText = "UPDATE [utils] SET categories='" + this._categories.Trim() + "' WHERE [util_id]=" + this.util_id.ToString() + ";";
+            cmd.ExecuteNonQuery();
+
+            cmd.Dispose();
+
+            _logger.log("Util: " + this.util_id.ToString() + ": <LIST> " + Categories.asString(this._category_list));
+            _logger.log("Util: " + this.util_id.ToString() + ": <string> " + this._category_list);
+
             return iRet;
         }
 

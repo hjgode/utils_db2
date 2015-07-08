@@ -67,7 +67,15 @@ namespace utils_db2
                     U.devices = devices.getDevicesForID(U.util_id);
                     //update operating_system
                     U.operating_system = operating_system.getOsForId(U.util_id);
+
                     U._category_list = categories.getCategoriesForUtil(U.util_id);
+                    _logger.log("Util: "+ U.util_id.ToString() + ": <LIST> " + Categories.asString(U._category_list));
+
+                    U._categories = Categories.getCategoriesAsString(U._category_list);
+                    _logger.log("Util: "+ U.util_id.ToString() + ": <string> " + U._categories);
+
+                    //save changes back to utils table
+                    U.saveCategoriesToDB();
                 }
 
 
@@ -187,7 +195,8 @@ namespace utils_db2
 
             if (row.Cells[iColumn].OwningColumn.HeaderText.EndsWith("categories"))
             {
-                frmCategories frm = new frmCategories(_utilities.getUtilityByID(util_id));
+                utility U = _utilities.getUtilityByID(util_id);
+                frmCategories frm = new frmCategories(ref U);
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     //_utilities.setDevices(util_id, frm._devices, database._sqlConnection);
