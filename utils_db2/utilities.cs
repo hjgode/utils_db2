@@ -49,7 +49,7 @@ namespace utils_db2
 #if READ_WITH_FILE_DATA                    
             string sql = "Select id, util_id, name, description, author, file_link, file_data from utils";
 #else
-            string sql = "Select id, util_id, name, description, author, file_link, categories from utils";
+            string sql = "Select id, util_id, name, description, author, file_link from utils";
 #endif
             //sql = "SELECT     dbo.utils.id, dbo.utils.name, dbo.utils.description, dbo.utils.author, dbo.utils.file_link, dbo.utils.file_data, dbo.utils_device.name AS Device "+
             //      "FROM         dbo.utils LEFT OUTER JOIN "+
@@ -93,7 +93,10 @@ namespace utils_db2
                     string desc = rdr.GetString(columnNr ++).Trim();
                     string author = rdr.GetString(columnNr++).Trim();
                     string filelink = rdr.GetString(columnNr++).Trim();
-                    string cats = rdr.GetString(columnNr++).Trim();
+
+///TODO
+                    //string cats = rdr.GetString(columnNr++).Trim();
+                    List<Category> cats = new List<Category>();
 
                     /*
                     //find devices attached to this util
@@ -134,7 +137,7 @@ namespace utils_db2
                         ms.Close();
                     }
                     //add a new utility to our class
-                    utility U = new utility(util_id, name, desc, author, filelink, filedata, cats);
+                    utility U = new utility(util_id, name, desc, author, filelink, cats, filedata);
                     utilitiesList.Add(U);
 #else
                     utility U = new utility(util_id, name, desc, author, filelink, cats);

@@ -48,6 +48,7 @@ namespace utils_db2
                 //devices
                 Devices devices = new Devices();
                 devices.readDevicesFromDB(database._sqlConnection);
+                
                 //categories
                 Categories categories = new Categories();
                 categories.readCatsFromDB(database._sqlConnection);
@@ -56,11 +57,14 @@ namespace utils_db2
                 Operating_System operating_system = new Operating_System();
                 operating_system.readList(database._sqlConnection);
 
+                //utils_cats_link
+                Utils_Cats utils_cats = new Utils_Cats();
+                utils_cats.readUtils_Cats_Links();
+
                 //read the utils
                 _utilities = new utilities();
                 _utilities.readUtilsDB(database._sqlConnection);
 
-                //update the utils embedded lists (categories,devices,operating_system)
                 foreach (utility U in _utilities.utilitiesList)
                 {
                     //update devices
@@ -68,14 +72,20 @@ namespace utils_db2
                     //update operating_system
                     U.operating_system = operating_system.getOsForId(U.util_id);
 
-                    U._category_list = categories.getCategoriesForUtil(U.util_id);
+                    //categories
+                    List<Utils_Cats_link> cat_ids = utils_cats.getCatsForUtil(U.util_id);
+                    U._category_list.Clear();
+                    List<Category> category_for_util = new List<Category>();
+                    category_for_util = categories.getCategoryByUtil(U.util_id, categories.categories_list, utils_cats._utils_cats_links);
+
+                    U._category_list = category_for_util;
                     _logger.log("Util: "+ U.util_id.ToString() + ": <LIST> " + Categories.asString(U._category_list));
 
-                    U._categories = Categories.getCategoriesAsString(U._category_list);
-                    _logger.log("Util: "+ U.util_id.ToString() + ": <string> " + U._categories);
+                    ///U._categories = Categories.getCategoriesAsString(U._category_list);
+                    ///_logger.log("Util: "+ U.util_id.ToString() + ": <string> " + U._categories);
 
                     //save changes back to utils table
-                    U.saveCategoriesToDB();
+                    ///U.saveCategoriesToDB();
                 }
 
 
@@ -96,8 +106,8 @@ namespace utils_db2
                 
                 dataGridView1.Columns["devices"].DataPropertyName = "devices";
 
-                //dataGridView1.Columns.Add("categories", "categories");
-                //dataGridView1.Columns["categories"].DataPropertyName = "categories";
+                dataGridView1.Columns.Add("categories", "categories");
+                dataGridView1.Columns["categories"].DataPropertyName = "_category_list";
 
                 dataGridView1.Refresh();
 

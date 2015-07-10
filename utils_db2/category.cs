@@ -36,12 +36,6 @@ namespace utils_db2
         [XmlElement("description")]
         public string description { get; set; }
 
-        /// <summary>
-        /// a list of util_id values providing a tool for the category
-        /// </summary>
-        [XmlElement("util_ids")]
-        public string util_ids { get; set; }
-
         [XmlIgnore]
         public List<int> util_IDs = new List<int>();
 
@@ -59,16 +53,13 @@ namespace utils_db2
             cat_id = -1;
             name = "undef";
             description = "placeholder";
-            util_ids = "-1 ";
         }
-        public Category(int cat_ID, string sName, string sDescription, string uIDs)
+        public Category(int cat_ID, string sName, string sDescription)
             : base()
         {
             cat_id = cat_ID;
             name = sName;
             description = sDescription;
-            util_ids = uIDs;
-            util_IDs = splitUtil_ids(util_ids);
         }
 
         List<int> splitUtil_ids(string s)
@@ -93,29 +84,29 @@ namespace utils_db2
         //    utils_with_category = getUtils();
         //}
 
-        List<int> getUtils()
-        {
-            List<int> iList = new List<int>();
-            string[] sList = util_ids.Split(new char[] { ' ' });
-            foreach (string s in sList)
-            {
-                int i = -1;
-                int uID = -1;
-                if (int.TryParse(s, out i))
-                {
-                    uID = i;
-                    iList.Add(uID);
-                }
-            }
-            return iList;
-        }
+        //List<int> getUtils()
+        //{
+        //    List<int> iList = new List<int>();
+        //    string[] sList = util_ids.Split(new char[] { ' ' });
+        //    foreach (string s in sList)
+        //    {
+        //        int i = -1;
+        //        int uID = -1;
+        //        if (int.TryParse(s, out i))
+        //        {
+        //            uID = i;
+        //            iList.Add(uID);
+        //        }
+        //    }
+        //    return iList;
+        //}
 
 
-        public List<string> readUtilsFromDB(SqlConnection conn)
+        public List<string> readUtilNamesFromDB(SqlConnection conn)
         {
             int iCnt = 0;
             List<string> sList = new List<string>();
-            string sql = "select util_id, name, categories FROM utils;";
+            string sql = "select util_id, name FROM utils;";
             SqlCommand cmd = new SqlCommand(sql);
             cmd.Connection = conn;
             SqlDataReader rdr = cmd.ExecuteReader();
@@ -180,7 +171,7 @@ namespace utils_db2
         {
             int iCnt = 0;
             //string sql = "select cat_id, name, description, util_ids FROM utils_categories;";
-            string sql = "select cat_id, name, description, util_ids FROM utils_categories;";
+            string sql = "select cat_id, name, description FROM utils_categories;";
             SqlCommand cmd = new SqlCommand(sql);
             cmd.Connection = conn;
             SqlDataReader rdr = cmd.ExecuteReader();
@@ -189,8 +180,7 @@ namespace utils_db2
                 int catID = rdr.GetInt32(0);            //cat_id
                 string n = rdr.GetString(1).Trim();     //name
                 string d = rdr.GetString(2).Trim();     //description
-                string uIDs = rdr.GetString(3).Trim();     //util_ids
-                categories_list.Add(new Category(catID, n, d, uIDs));
+                categories_list.Add(new Category(catID, n, d));
                 iCnt++;
             }
             rdr.Close();
@@ -228,20 +218,55 @@ namespace utils_db2
             return iCnt;
         }
 
-        public List<Category> getCategoriesForUtil(int uID)
+        public string getCatName(int cID)
         {
-            List<Category> cats = new List<Category>();
-            foreach(Category C in categories_list){
-                if (C.util_ids == null)
-                    continue;
-                string[] ids = C.util_ids.Split(new char[] { ' ' }); 
-                foreach(string s in ids){
-                    if (s==uID.ToString())
-                        cats.Add(C);
-                }
+            string s = "undef";
+            foreach (Category C in this.categories_list)
+            {
+                if (C.cat_id == cID)
+                    return C.name;
             }
-            return cats;
+            return s;
         }
+
+        public List<Category> getCategoryByUtil(int uID, List<Category> catList, List<utils_db2.Utils_Cats_link> utilcatsList)
+        {
+            List<Category> returnList = new List<Category>();
+
+            List<Utils_Cats_link> cats_list = new List<Utils_Cats_link>();
+            
+            Category c = new Category(0, "undef", "Please select valid category");
+            foreach (Utils_Cats_link ucl in utilcatsList)
+            {
+                if (ucl.util_id == uID)
+                    returnList.Add(this.getCategoryByCatID (ucl.cat_id));
+            }
+            return returnList;
+        }
+        public Category getCategoryByCatID(int cID)
+        {
+            foreach (Category c in this.categories_list)
+            {
+                if (c.cat_id == cID)
+                    return c;
+            }
+            return new Category();
+        }
+
+        //public List<Category> getCategoriesForUtil(int uID)
+        //{
+        //    List<Category> cats = new List<Category>();
+        //    foreach(Category C in categories_list){
+        //        if (C.util_ids == null)
+        //            continue;
+        //        string[] ids = C.util_ids.Split(new char[] { ' ' }); 
+        //        foreach(string s in ids){
+        //            if (s==uID.ToString())
+        //                cats.Add(C);
+        //        }
+        //    }
+        //    return cats;
+        //}
 
         List<int> getIntList(string space_delimitted)
         {

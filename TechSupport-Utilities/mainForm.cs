@@ -258,7 +258,7 @@ namespace TechSupport_Utilities
                 return;
             Category this_cat = (Category) lbCategories.SelectedItem;
             txtCatDescription.Text = this_cat.description;
-            lbUtilitiesByCategory.DataSource = this_cat.readUtilsFromDB(database._sqlConnection);
+            lbUtilitiesByCategory.DataSource = this_cat.readUtilNamesFromDB(database._sqlConnection);
             lbUtilitiesByCategory.Refresh();
         }
 

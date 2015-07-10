@@ -37,8 +37,8 @@ namespace utils_db2
         /// <summary>
         /// will hold a string with category IDs this utility can be usefull
         /// </summary>
-        [XmlElement("categories")]
-        public string _categories { get; set; }
+        //[XmlElement("categories")]
+        //public string _categories { get; set; }
 
         [XmlIgnore]
         public List<Category> _category_list { get; set; }
@@ -57,7 +57,6 @@ namespace utils_db2
             operating_system = new Operating_System();
             file_data = null;
 
-            _categories = "-1";
             _category_list = new List<Category>();
             _category_list.Add(new Category());
         }
@@ -71,7 +70,7 @@ namespace utils_db2
         /// <param name="a">author</param>
         /// <param name="f">file_link</param>
         /// <param name="cats"></param>
-        public utility(int i, string n, string desc, string a, string f, string cats)
+        public utility(int i, string n, string desc, string a, string f, List<Category> cats)
             : base()
         {
             id = i;
@@ -80,11 +79,10 @@ namespace utils_db2
             description = desc;
             author = a;
             file_link = f;
-
-            _categories = cats;
+            _category_list = cats;
         }
 
-        public utility(int i, string n, string desc, string a, string f, byte[] fData, string cats)
+        public utility(int i, string n, string desc, string a, string f, List<Category> cats, byte[] fData)
             : base()
         {
             id = i;
@@ -93,8 +91,8 @@ namespace utils_db2
             description = desc;
             author = a;
             file_link = f;
+            _category_list = cats;
             file_data = fData;
-            _categories = cats;
         }
 
         /*
@@ -166,114 +164,110 @@ namespace utils_db2
             return iRet;
         }
 
-        /// <summary>
-        /// add the util_id to the category row in utils_categories for the list of categories of this util
-        /// </summary>
-        /// <returns></returns>
-        public int saveCategoriesToDB()
-        {
-            int iRet = 0;
-            //build a list with cat_ids
-            string myCatIDs = " ";
-            foreach (Category C in this._category_list)
-                myCatIDs += C.cat_id + " ";
+        ///// <summary>
+        ///// add the util_id to the category row in utils_categories for the list of categories of this util
+        ///// </summary>
+        ///// <returns></returns>
+        //public int saveCategoriesToDB()
+        //{
+        //    int iRet = 0;
+        //    //build a list with cat_ids
+        //    string myCatIDs = " ";
 
-            //go thru Categories and add this util_id to util_ids if not already listed
-            //read all categories
-            Categories cats = new Categories();
-            cats.readCatsFromDB(database._sqlConnection);
+        //    //go thru Categories and add this util_id to util_ids if not already listed
+        //    //read all categories
+        //    Categories cats = new Categories();
+        //    cats.readCatsFromDB(database._sqlConnection);
 
-            List<string> sqlUpdates = new List<string>();
-            //clear util_ids list?
+        //    List<string> sqlUpdates = new List<string>();
+        //    //clear util_ids list?
             
-            foreach (Category C in cats.categories_list) //loop thur all categories
-            {
-                C.util_ids = " ";
-                C.util_IDs.Clear();
-                if (this._category_list.Contains(C)) //is the current category the one ?
-                {
-                    //if (!C.util_IDs.Contains<int>(this.util_id))
-                    //{
-                    C.util_IDs.Add(util_id);
-                    C.util_IDs
-                    //sqlUpdates.Add("UPDATE [utils_categories] SET [util_ids]=RTRIM([util_ids])+' '+'" + util_id.ToString() + "' WHERE [cat_id]=" + C.cat_id + " ;");
-                    //}
-                }
-            }
+        //    foreach (Category C in cats.categories_list) //loop thur all categories
+        //    {
+        //        C.util_IDs.Clear();
+        //        if (this._category_list.Contains(C)) //is the current category the one ?
+        //        {
+        //            //if (!C.util_IDs.Contains<int>(this.util_id))
+        //            //{
+        //            C.util_IDs.Add(util_id);
+        //            C.util_IDs
+        //            //sqlUpdates.Add("UPDATE [utils_categories] SET [util_ids]=RTRIM([util_ids])+' '+'" + util_id.ToString() + "' WHERE [cat_id]=" + C.cat_id + " ;");
+        //            //}
+        //        }
+        //    }
 
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = database._sqlConnection;
-            foreach (string sql in sqlUpdates)
-            {
-                cmd.CommandText = sql;
-                iRet += cmd.ExecuteNonQuery();
-            }
+        //    SqlCommand cmd = new SqlCommand();
+        //    cmd.Connection = database._sqlConnection;
+        //    foreach (string sql in sqlUpdates)
+        //    {
+        //        cmd.CommandText = sql;
+        //        iRet += cmd.ExecuteNonQuery();
+        //    }
 
-            //save local utils categories list
-            this._categories = myCatIDs;
-            cmd.CommandText = "UPDATE [utils] SET categories='" + this._categories.Trim() + "' WHERE [util_id]=" + this.util_id.ToString() + ";";
-            cmd.ExecuteNonQuery();
+        //    //save local utils categories list
+        //    this._categories = myCatIDs;
+        //    cmd.CommandText = "UPDATE [utils] SET categories='" + this._categories.Trim() + "' WHERE [util_id]=" + this.util_id.ToString() + ";";
+        //    cmd.ExecuteNonQuery();
 
-            cmd.Dispose();
+        //    cmd.Dispose();
 
-            _logger.log("Util: " + this.util_id.ToString() + ": <LIST> " + Categories.asString(this._category_list));
-            _logger.log("Util: " + this.util_id.ToString() + ": <string> " + this._category_list);
+        //    _logger.log("Util: " + this.util_id.ToString() + ": <LIST> " + Categories.asString(this._category_list));
+        //    _logger.log("Util: " + this.util_id.ToString() + ": <string> " + this._category_list);
 
-            return iRet;
-        }
+        //    return iRet;
+        //}
 
-        List<int> getCatList()
-        {
-            List<int> iList = new List<int>();
-            string[] aList = this._categories.Split(new char[] { ' ' });
-            foreach (string S in aList)
-            {
-                int V;
-                if(Int32.TryParse(S,out V))
-                    iList.Add(V);
-            }
-            return iList;
-        }
+        //List<int> getCatList()
+        //{
+        //    List<int> iList = new List<int>();
+        //    string[] aList = this._categories.Split(new char[] { ' ' });
+        //    foreach (string S in aList)
+        //    {
+        //        int V;
+        //        if(Int32.TryParse(S,out V))
+        //            iList.Add(V);
+        //    }
+        //    return iList;
+        //}
 
-        void cat_ids_to_categories(List<Category> cats)
-        {
-            _category_list.Clear();
-            List<int> iList = getCatList();
-            foreach (Category C in cats)
-            {
-                if(iList.Contains(C.cat_id))
-                    _category_list.Add(C);
-            }
-        }
+        //void cat_ids_to_categories(List<Category> cats)
+        //{
+        //    _category_list.Clear();
+        //    List<int> iList = getCatList();
+        //    foreach (Category C in cats)
+        //    {
+        //        if(iList.Contains(C.cat_id))
+        //            _category_list.Add(C);
+        //    }
+        //}
 
         public int addCategory(Category cat)
         {
             int iRet = 0;
             if (_category_list.Contains(cat))
                 return iRet;
-            this._categories += " " + cat.cat_id.ToString();
             this._category_list.Add(cat);
             return iRet+1;
         }
 
-        public int readCategoriesForUtil()
-        {
-            int iCnt = 0;
-            if (_category_list == null)
-                _category_list = new List<Category>();
-            else
-                _category_list.Clear();
-            Categories cats= new Categories();
-            cats.readCatsFromDB(database._sqlConnection);
-            foreach (Category C in cats.categories_list)
-            {
-                if (C.util_ids == null)
-                    C.util_ids = "";
-                if (C.util_ids.Contains(this.util_id.ToString()))
-                    _category_list.Add(C);
-            }
-            return iCnt;
-        }
+        //public int readCategoriesForUtil()
+        //{
+        //    int iCnt = 0;
+        //    if (_category_list == null)
+        //        _category_list = new List<Category>();
+        //    else
+        //        _category_list.Clear();
+        //    Categories cats= new Categories();
+        //    cats.readCatsFromDB(database._sqlConnection);
+        //    foreach (Category C in cats.categories_list)
+        //    {
+        //        if (C.util_ids == null)
+        //            C.util_ids = "";
+        //        if (C.util_ids.Contains(this.util_id.ToString()))
+        //            _category_list.Add(C);
+        //    }
+        //    return iCnt;
+        //}
 
         
     }

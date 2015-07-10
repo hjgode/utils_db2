@@ -14,15 +14,18 @@ namespace utils_db2
         utility _utility;
         Categories _categories;
 
+        Utils_Cats_link _utils_cats_link = new Utils_Cats_link();
+
         public frmCategories(ref utility utl)
         {
             InitializeComponent();
             _utility = utl;
             label1.Text = _utility.name;
-            textBox1.Text = _utility._categories;
+            textBox1.Text = _utility._category_list.ToString();
 
             _categories = new Categories();
             _categories.readCatsFromDB(database._sqlConnection);
+
             foreach (Category C in _categories.categories_list)
             {
                 lbCategoriesAvailable.Items.Add(C);
@@ -45,7 +48,8 @@ namespace utils_db2
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            _utility.saveCategoriesToDB();
+            //INSERT NEW ROW in utils_cats_link TABLE?
+            System.Diagnostics.Debugger.Break();
             this.DialogResult = DialogResult.OK;
         }
 
@@ -57,7 +61,7 @@ namespace utils_db2
             lbCategoriesOfUtil.Items.Remove(lbCategoriesOfUtil.SelectedItem);
 
             _utility._category_list.Remove(catToRemove);
-            _utility._categories = updateCatIdString();
+            ///_utility._categories = updateCatIdString();
         }
 
         private void lbCategoriesAvailable_DoubleClick(object sender, EventArgs e)
@@ -71,7 +75,7 @@ namespace utils_db2
             lbCategoriesOfUtil.Items.Add(lbCategoriesAvailable.SelectedItem);
 
             _utility._category_list.Add(catToAdd);
-            _utility._categories = updateCatIdString();
+            ///_utility._categories = updateCatIdString();
         }
 
         string updateCatIdString()
