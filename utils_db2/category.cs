@@ -229,7 +229,7 @@ namespace utils_db2
             return s;
         }
 
-        public List<Category> getCategoryByUtil(int uID, List<Category> catList, List<utils_db2.Utils_Cats_link> utilcatsList)
+        public List<Category> getCategoryByUtil(int uID, List<Category> catList, List<Utils_Cats_link> utilcatsList)
         {
             List<Category> returnList = new List<Category>();
 

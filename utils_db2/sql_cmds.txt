@@ -1,4 +1,9 @@
-﻿USE [SupportStaff]
+﻿
+IF NOT EXISTS 
+(SELECT * FROM [utils_cats_link] WHERE util_id=1 AND cat_id=2)
+INSERT INTO [utils_cats_link] (util_id, cat_id) VALUES(1, 2) 
+
+USE [SupportStaff]
 GO
 
 /****** Object:  Table [dbo].[utils]    Script Date: 06/01/2015 15:49:35 ******/

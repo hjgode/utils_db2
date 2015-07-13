@@ -50,6 +50,14 @@ namespace utils_db2
         {
             //INSERT NEW ROW in utils_cats_link TABLE?
             System.Diagnostics.Debugger.Break();
+            
+            Utils_Cats utils_cats = new Utils_Cats();            
+            foreach (Category C in _utility._category_list)
+            {
+                utils_cats._utils_cats_links.Add(new Utils_Cats_link(_utility.util_id, C.cat_id));
+            }
+            utils_cats.saveUtils_Cats_LinksToDB();
+
             this.DialogResult = DialogResult.OK;
         }
 

@@ -98,6 +98,10 @@ namespace utils_db2
             return cat_list;
         }
 
+        /// <summary>
+        /// read all utils_cats_link data
+        /// </summary>
+        /// <returns></returns>
         public int readUtils_Cats_Links()
         {
             int iRet = 0;
@@ -129,7 +133,10 @@ namespace utils_db2
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = database._sqlConnection;
 
-            cmd.CommandText = "INSERT INTO VALUES(@util, @cat);";
+            //delete existing data???
+
+            //add non existing data
+            cmd.CommandText = "IF NOT EXISTS (SELECT * FROM [utils_cats_link] WHERE util_id=@util AND cat_id=@cat) INSERT INTO [utils_cats_link] VALUES(@util, @cat);";
             
             foreach(Utils_Cats_link UCL in _utils_cats_links){
                 cmd.Parameters.Add("util", SqlDbType.Int).Value = UCL.util_id;
