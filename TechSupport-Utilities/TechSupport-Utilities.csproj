@@ -73,6 +73,9 @@
     <Compile Include="..\utils_db2\utility.cs">
       <Link>utility.cs</Link>
     </Compile>
+    <Compile Include="..\utils_db2\Utils_Cats_link.cs">
+      <Link>Utils_Cats_link.cs</Link>
+    </Compile>
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>

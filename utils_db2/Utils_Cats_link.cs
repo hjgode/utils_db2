@@ -127,37 +127,78 @@ namespace utils_db2
             return iRet;
         }
 
-        public int saveUtils_Cats_LinksToDB()
+        int deleteCatsForUtil(int uID)
         {
             int iRet = 0;
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = database._sqlConnection;
+            try
+            {
+                //delete existing data???
+                //cmd.CommandText = "IF EXISTS (SELECT * FROM [utils_cats_link] WHERE util_id=@util) DELETE FROM [utils_cats_link] WHERE util_id=@util);";
+                cmd.CommandText = "DELETE FROM [utils_cats_link] WHERE util_id=@util;";
+                cmd.Parameters.Add("util", SqlDbType.Int, sizeof(int)).Value=uID;
+                iRet = cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex) {
+                _logger.log("Exception in deleteCatsForUtil() for " + uID.ToString() +". "+ex.Message);
+            }
+            cmd.Parameters.Clear();
+            cmd.Dispose();
+
+            return iRet;
+        }
+        public int saveUtils_Cats_LinksToDB()
+        {
+            int iRet = 0;
 
             //delete existing data???
+            if( this._utils_cats_links.Count!=0 )
+                deleteCatsForUtil(this._utils_cats_links[0].util_id);
 
             //add non existing data
-            cmd.CommandText = "IF NOT EXISTS (SELECT * FROM [utils_cats_link] WHERE util_id=@util AND cat_id=@cat) INSERT INTO [utils_cats_link] VALUES(@util, @cat);";
-            
-            foreach(Utils_Cats_link UCL in _utils_cats_links){
-                cmd.Parameters.Add("util", SqlDbType.Int).Value = UCL.util_id;
-                cmd.Parameters.Add("cat", SqlDbType.Int).Value = UCL.cat_id;
-                try
+            SqlCommand cmd = new SqlCommand();
+            SqlTransaction transaction;
+            transaction = database._sqlConnection.BeginTransaction();
+            try
+            {
+                cmd.Transaction = transaction;
+                cmd.Connection = database._sqlConnection;
+                cmd.CommandText = "IF NOT EXISTS (SELECT * FROM [utils_cats_link] WHERE util_id=@util AND cat_id=@cat) INSERT INTO [utils_cats_link] VALUES(@util, @cat);";
+
+                foreach (Utils_Cats_link UCL in _utils_cats_links)
                 {
-                    iRet = cmd.ExecuteNonQuery();
+                    cmd.Parameters.Add("util", SqlDbType.Int).Value = UCL.util_id;
+                    cmd.Parameters.Add("cat", SqlDbType.Int).Value = UCL.cat_id;
+                    try
+                    {
+                        iRet = cmd.ExecuteNonQuery();
+                    }
+                    catch (SqlException ex)
+                    {
+                        //we will get errors for existing data!
+                        _logger.log("SqlException in saveUtils_Cats_LinksToDB(): " + ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.log("Exception in saveUtils_Cats_LinksToDB(): " + ex.Message);
+                    }
+                    finally
+                    {
+                        cmd.Parameters.Clear();
+                    }
                 }
-                catch (SqlException ex)
-                {
-                    //we will get errors for existing data!
-                    _logger.log("SqlException in saveUtils_Cats_LinksToDB(): "+ex.Message);
-                }
-                catch (Exception ex) {
-                    _logger.log("Exception in saveUtils_Cats_LinksToDB(): " + ex.Message);
-                }
-                finally
-                {
-                    cmd.Parameters.Clear();
-                }
+                transaction.Commit();
             }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                iRet = -1;
+            }
+            finally
+            {
+            }
+
             cmd.Dispose();
 
             return iRet;
