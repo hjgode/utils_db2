@@ -234,11 +234,13 @@ namespace utils_db2
                 try
                 {
                     utilities.Serialize(_utilities, ofd.FileName);
+                    // Categories, Links, Devices, OS_Systems lists???
                 }
                 catch (Exception ex) {
                     MessageBox.Show("Exception saving file: " + ex.Message);
                 }
             }
+
             ofd.Dispose();
         }
 

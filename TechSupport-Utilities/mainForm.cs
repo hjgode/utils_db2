@@ -20,6 +20,8 @@ namespace TechSupport_Utilities
 
         Categories _categories=new Categories();
 
+        myUtilities _myUtilities = new myUtilities();
+
         public mainForm()
         {
             InitializeComponent();
@@ -120,14 +122,18 @@ namespace TechSupport_Utilities
         void readDataThread()
         {
             Invoke(new Action(() => toolStripStatusLabel2.Text = "loading..."));
-            _utilities.readUtilsDB(database._sqlConnection);
+            
+            _myUtilities.openDB();
+            
+            _utilities = _myUtilities._utilities; //_utilities.readUtilsDB(database._sqlConnection);
 
             Invoke(new Action(()=> lbUtilities.DataSource = _utilities.utilitiesList));// db._bsUtils.DataSource;
+            
             //lbUtilities.DisplayMember = "name";
             Invoke(new Action(()=> lbUtilities.Refresh()));
 
             //read categories
-            _categories.readCatsFromDB(database._sqlConnection);
+            _categories = _myUtilities._categories; //_categories.readCatsFromDB(database._sqlConnection);
             Invoke(new Action(() => lbCategories.DataSource = _categories.categories_list));
 
             Cursor.Current = Cursors.Default;
@@ -258,21 +264,25 @@ namespace TechSupport_Utilities
                 return;
             Category this_cat = (Category) lbCategories.SelectedItem;
             txtCatDescription.Text = this_cat.description;
-            lbUtilitiesByCategory.DataSource = this_cat.readUtilNamesFromDB(database._sqlConnection);
-            lbUtilitiesByCategory.Refresh();
+
+            lbUtilitiesByCategory.Items.Clear();
+            foreach(utility U in _utilities.utilitiesList){
+                if(U._category_list.Contains(this_cat))
+                    lbUtilitiesByCategory.Items.Add(U);
+            }
         }
 
         private void lbUtilitiesByCategory_DoubleClick(object sender, EventArgs e)
         {
             if (lbUtilitiesByCategory.SelectedIndex == -1 || lbUtilities.Items.Count==0)
                 return;
-            string sUtil = (string)lbUtilitiesByCategory.SelectedItem;
+            utility UtilToLookFor = (utility)lbUtilitiesByCategory.SelectedItem;
             //find utility in lbUtilities and select it
             int iFound = -1;
             for (int i = 0; i < lbUtilities.Items.Count; i++)
             {
                 utility u=(utility)lbUtilities.Items[i];
-                if (u.name.Trim() == sUtil)
+                if (u == UtilToLookFor)
                 {
                     iFound = i;
                     lbUtilities.SelectedItems.Clear();

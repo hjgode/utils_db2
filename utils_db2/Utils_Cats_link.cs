@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Data.SqlClient;
 using System.Data;
+using System.IO;
 
 namespace utils_db2
 {
@@ -59,6 +60,25 @@ namespace utils_db2
         public Utils_Cats()
         {
             _utils_cats_links = new List<Utils_Cats_link>();
+        }
+
+        static public void Serialize(Utils_Cats _utils, string sFile)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Utils_Cats));
+            using (TextWriter writer = new StreamWriter(sFile))
+            {
+                serializer.Serialize(writer, _utils);
+            }
+        }
+
+        static public Utils_Cats Deserialize(string fileName)
+        {
+            XmlSerializer deserializer = new XmlSerializer(typeof(Utils_Cats));
+            TextReader reader = new StreamReader(fileName);
+            object obj = deserializer.Deserialize(reader);
+            Utils_Cats XmlData = (Utils_Cats)obj;
+            reader.Close();
+            return XmlData;
         }
 
         public static string getAsString(List<Utils_Cats_link> cat_list)

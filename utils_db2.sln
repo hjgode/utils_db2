@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "utils_db2", "utils_db2\utils_db2.csproj", "{F7544CA2-2B4E-4B2D-9670-E14C502EE6E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechSupport-Utilities", "TechSupport-Utilities\TechSupport-Utilities.csproj", "{EA4B5FB0-9127-4CA9-A810-E2292561633B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F7544CA2-2B4E-4B2D-9670-E14C502EE6E4} = {F7544CA2-2B4E-4B2D-9670-E14C502EE6E4}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +31,7 @@ Global
 		{EA4B5FB0-9127-4CA9-A810-E2292561633B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA4B5FB0-9127-4CA9-A810-E2292561633B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA4B5FB0-9127-4CA9-A810-E2292561633B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EA4B5FB0-9127-4CA9-A810-E2292561633B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{EA4B5FB0-9127-4CA9-A810-E2292561633B}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Any CPU
 		{EA4B5FB0-9127-4CA9-A810-E2292561633B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA4B5FB0-9127-4CA9-A810-E2292561633B}.Release|Any CPU.Build.0 = Release|Any CPU

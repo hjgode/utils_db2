@@ -24,22 +24,26 @@ namespace utils_db2
             textBox1.Text = _utility._category_list.ToString();
 
             _categories = new Categories();
-            _categories.readCatsFromDB(database._sqlConnection);
+            fillAvailableCategories();
 
-            foreach (Category C in _categories.categories_list)
-            {
-                lbCategoriesAvailable.Items.Add(C);
-                //if (_utility._categories.Trim().Split().Contains<string>(C.cat_id.ToString()))
-                //{
-                //    lbCategoriesOfUtil.Items.Add(C);
-                //    _utility._category_list.Add(C);
-                //}
-            }
             foreach (Category C in _utility._category_list)
             {
                 lbCategoriesOfUtil.Items.Add(C);
             }
         }
+
+        void fillAvailableCategories()
+        {
+            _categories.readCatsFromDB(database._sqlConnection);
+
+            lbCategoriesAvailable.DataSource = null;
+            lbCategoriesAvailable.DataSource = _categories.categories_list;
+
+            //foreach (Category C in _categories.categories_list)
+            //{
+            //    lbCategoriesAvailable.Items.Add(C);
+            //}
+       }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -93,6 +97,27 @@ namespace utils_db2
                 textBox1.Text += " " + ((Category)o).cat_id.ToString();
             }
             return textBox1.Text;
+        }
+
+        private void btnNewCat_Click(object sender, EventArgs e)
+        {
+            frmCategoryNew frm = new frmCategoryNew(ref _categories);
+            if (frm.ShowDialog() == DialogResult.OK)
+                fillAvailableCategories();
+            frm.Dispose();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if(lbCategoriesAvailable.SelectedIndex==-1)
+                return;
+            Category C = (Category) lbCategoriesAvailable.SelectedItem;
+            frmCategoryDescription frm = new frmCategoryDescription(ref C);
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                C.saveToDB();
+            }
+            frm.Dispose();
         }
     }
 }

@@ -33,5 +33,6 @@ namespace utils_db2
             return Properties.Settings.Default.connectstring;
         }
     }
+
 }
 

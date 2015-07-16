@@ -40,7 +40,7 @@ namespace utils_db2
         //[XmlElement("categories")]
         //public string _categories { get; set; }
 
-        [XmlIgnore]
+        [XmlElement]
         public List<Category> _category_list { get; set; }
 
         public utility()

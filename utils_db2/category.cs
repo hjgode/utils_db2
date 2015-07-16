@@ -48,6 +48,8 @@ namespace utils_db2
         [XmlIgnore]
         public List<String> util_names_with_category = new List<string>();
 
+        myLogger.logger _logger=Program._logger;
+
         public Category()
         {
             cat_id = -1;
@@ -74,33 +76,26 @@ namespace utils_db2
             return iList;
         }
 
-        //public category(int cat_ID, string sName, string sDescription, string sUtilsIDList)
-        //    : base()
-        //{
-        //    cat_id = cat_ID;
-        //    name = sName;
-        //    description = sDescription;
-        //    util_ids = sUtilsIDList;
-        //    utils_with_category = getUtils();
-        //}
+        public int saveToDB()
+        {
+            int iRet = 0;
+            string sql = "UPDATE utils_categories SET description=@desc WHERE cat_id=@catid;";
+            SqlCommand cmd = new SqlCommand(sql);
+            cmd.Connection = database._sqlConnection;
+            try
+            {
+                cmd.Parameters.Add("catid", System.Data.SqlDbType.Int, sizeof(int)).Value = this.cat_id;
+                cmd.Parameters.Add("desc", System.Data.SqlDbType.NVarChar, this.description.Length).Value = this.description;
+                iRet = cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+            }
+            cmd.Parameters.Clear();
+            cmd.Dispose();
 
-        //List<int> getUtils()
-        //{
-        //    List<int> iList = new List<int>();
-        //    string[] sList = util_ids.Split(new char[] { ' ' });
-        //    foreach (string s in sList)
-        //    {
-        //        int i = -1;
-        //        int uID = -1;
-        //        if (int.TryParse(s, out i))
-        //        {
-        //            uID = i;
-        //            iList.Add(uID);
-        //        }
-        //    }
-        //    return iList;
-        //}
-
+            return iRet;
+        }
 
         public List<string> readUtilNamesFromDB(SqlConnection conn)
         {
@@ -137,6 +132,8 @@ namespace utils_db2
         [XmlElement("categories")]
         public List<Category> categories_list { get; set; }
 
+        myLogger.logger _logger=Program._logger;
+
         public Categories()
         {
             categories_list = new List<Category>();
@@ -170,6 +167,7 @@ namespace utils_db2
         public int readCatsFromDB(SqlConnection conn)
         {
             int iCnt = 0;
+            categories_list.Clear();
             //string sql = "select cat_id, name, description, util_ids FROM utils_categories;";
             string sql = "select cat_id, name, description FROM utils_categories;";
             SqlCommand cmd = new SqlCommand(sql);
@@ -186,34 +184,6 @@ namespace utils_db2
             rdr.Close();
             cmd.Dispose();
             rdr.Dispose();
-
-            /*
-            //now read utils table and add utils_id to the categories
-            sql = "select util_id, name, categories FROM utils;";
-            cmd.Connection = conn;
-            rdr = cmd.ExecuteReader();
-            while (rdr.Read())
-            {
-                int uid=rdr.GetInt32(0);
-                string uname=rdr.GetString(1).Trim();
-                string cats = rdr.GetString(2).Trim();//space delimitted list of cat_id's
-
-                //list of cat_id in utils.categories
-                string[] catListForUtil = cats.Split(new char[] { ' ' });
-                List<int> catIListForUtil = getIntList(cats);
-
-                //add util id to cat list
-                foreach (Category C in categories_list)
-                {
-                    if (catIListForUtil.Contains(C.cat_id))
-                        C.util_ids += " " + uid.ToString();
-                }
-
-            }
-            rdr.Close();
-            cmd.Dispose();
-            rdr.Dispose();
-            */
 
             return iCnt;
         }
@@ -252,21 +222,6 @@ namespace utils_db2
             }
             return new Category();
         }
-
-        //public List<Category> getCategoriesForUtil(int uID)
-        //{
-        //    List<Category> cats = new List<Category>();
-        //    foreach(Category C in categories_list){
-        //        if (C.util_ids == null)
-        //            continue;
-        //        string[] ids = C.util_ids.Split(new char[] { ' ' }); 
-        //        foreach(string s in ids){
-        //            if (s==uID.ToString())
-        //                cats.Add(C);
-        //        }
-        //    }
-        //    return cats;
-        //}
 
         List<int> getIntList(string space_delimitted)
         {
@@ -320,5 +275,31 @@ namespace utils_db2
             return XmlData;
         }
 
+        public int addCategory(ref Category cat)
+        {
+            int iRet = 0;
+            int iNewCatID = 0;
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "SELECT MAX(cat_id) FROM utils_categories;";
+            cmd.Connection = database._sqlConnection;
+            iNewCatID = (int)cmd.ExecuteScalar();
+            cat.cat_id = iNewCatID+1;
+            try
+            {
+                cmd.CommandText = "INSERT INTO utils_categories (cat_id, name, description) VALUES(@catid,@name,@description);";
+                cmd.Parameters.Add("catid", System.Data.SqlDbType.Int, sizeof(int)).Value = cat.cat_id;
+                cmd.Parameters.Add("name", System.Data.SqlDbType.NVarChar, cat.name.Length).Value = cat.name;
+                cmd.Parameters.Add("description", System.Data.SqlDbType.NVarChar, cat.description.Length).Value = cat.description;
+                iRet = cmd.ExecuteNonQuery();
+                if (iRet == 1)
+                    iRet = cat.cat_id;
+                categories_list.Add(cat);
+            }catch(Exception ex){
+                _logger.log(String.Format("Exception in addCategory() for {0}, {1}. \n{2}\n", cat.cat_id, cat.name, ex.Message));
+            }
+            cmd.Parameters.Clear();
+            cmd.Dispose();
+            return iRet;
+        }
     }
 }

@@ -64,6 +64,9 @@
     <Compile Include="..\utils_db2\logger.cs">
       <Link>logger.cs</Link>
     </Compile>
+    <Compile Include="..\utils_db2\myUtilities.cs">
+      <Link>myUtilities.cs</Link>
+    </Compile>
     <Compile Include="..\utils_db2\OS_names.cs">
       <Link>OS_names.cs</Link>
     </Compile>

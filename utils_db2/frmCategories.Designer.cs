@@ -34,6 +34,8 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lbCategoriesOfUtil = new System.Windows.Forms.ListBox();
             this.lbCategoriesAvailable = new System.Windows.Forms.ListBox();
+            this.btnNewCat = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -47,7 +49,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(603, 380);
+            this.btnCancel.Location = new System.Drawing.Point(333, 380);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(96, 27);
             this.btnCancel.TabIndex = 18;
@@ -57,8 +59,7 @@
             // 
             // btnSave
             // 
-            //this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSave.Location = new System.Drawing.Point(705, 380);
+            this.btnSave.Location = new System.Drawing.Point(435, 380);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(96, 27);
             this.btnSave.TabIndex = 17;
@@ -92,11 +93,33 @@
             this.lbCategoriesAvailable.TabIndex = 20;
             this.lbCategoriesAvailable.DoubleClick += new System.EventHandler(this.lbCategoriesAvailable_DoubleClick);
             // 
+            // btnNewCat
+            // 
+            this.btnNewCat.Location = new System.Drawing.Point(436, 271);
+            this.btnNewCat.Name = "btnNewCat";
+            this.btnNewCat.Size = new System.Drawing.Size(94, 24);
+            this.btnNewCat.TabIndex = 21;
+            this.btnNewCat.Text = "new";
+            this.btnNewCat.UseVisualStyleBackColor = true;
+            this.btnNewCat.Click += new System.EventHandler(this.btnNewCat_Click);
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Location = new System.Drawing.Point(333, 272);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(95, 22);
+            this.btnEdit.TabIndex = 22;
+            this.btnEdit.Text = "edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
             // frmCategories
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(813, 419);
+            this.ClientSize = new System.Drawing.Size(545, 419);
+            this.Controls.Add(this.btnEdit);
+            this.Controls.Add(this.btnNewCat);
             this.Controls.Add(this.lbCategoriesAvailable);
             this.Controls.Add(this.lbCategoriesOfUtil);
             this.Controls.Add(this.textBox1);
@@ -118,5 +141,7 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ListBox lbCategoriesOfUtil;
         private System.Windows.Forms.ListBox lbCategoriesAvailable;
+        private System.Windows.Forms.Button btnNewCat;
+        private System.Windows.Forms.Button btnEdit;
     }
 }

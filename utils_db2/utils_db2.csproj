@@ -50,6 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="category.cs" />
+    <Compile Include="frmCategoryDescription.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCategoryDescription.Designer.cs">
+      <DependentUpon>frmCategoryDescription.cs</DependentUpon>
+    </Compile>
     <Compile Include="database.cs" />
     <Compile Include="descriptionText.cs" />
     <Compile Include="device.cs" />
@@ -64,6 +70,12 @@
     </Compile>
     <Compile Include="frmCategories.Designer.cs">
       <DependentUpon>frmCategories.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCategoryNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCategoryNew.Designer.cs">
+      <DependentUpon>frmCategoryNew.cs</DependentUpon>
     </Compile>
     <Compile Include="frmDescription.cs">
       <SubType>Form</SubType>
@@ -115,14 +127,21 @@
       <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="logger.cs" />
+    <Compile Include="myUtilities.cs" />
     <Compile Include="OS_names.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmCategoryDescription.resx">
+      <DependentUpon>frmCategoryDescription.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmAuthor.resx">
       <DependentUpon>frmAuthor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmCategories.resx">
       <DependentUpon>frmCategories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCategoryNew.resx">
+      <DependentUpon>frmCategoryNew.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDescription.resx">
       <DependentUpon>frmDescription.cs</DependentUpon>
