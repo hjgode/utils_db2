@@ -10,12 +10,12 @@ using System.Data;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace utils_db2
+namespace utils_data
 {
     [XmlRoot("utilities")]
     public class utilities
     {
-        myLogger.logger _logger = Program._logger;
+        myLogger.logger _logger = new myLogger.logger(myLogger.logger.logLevel.debug);
 
         [XmlElement("utilities")]
         public List<utility> utilitiesList { get { return _utilities; } set { _utilities = value; } }

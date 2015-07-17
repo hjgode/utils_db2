@@ -6,7 +6,9 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Xml.Serialization;
 
-namespace utils_db2
+using utils_data;
+
+namespace utils_data
 {
     public class Device
     {
@@ -39,6 +41,8 @@ namespace utils_db2
     }//end of class device
 
     public class Devices{
+
+        myLogger.logger _logger = new myLogger.logger(myLogger.logger.logLevel.debug);
 
         List<Device> _lstDevices;
 
@@ -98,7 +102,7 @@ namespace utils_db2
             //else
             //    dev.device_id = -1;
 
-            Program._logger.log("addNewDevice2DB: " + dev.ToString());
+            _logger.log("addNewDevice2DB: " + dev.ToString());
 
             _lstDevices.Add(dev);
             return dev;

@@ -49,16 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="category.cs" />
     <Compile Include="frmCategoryDescription.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmCategoryDescription.Designer.cs">
       <DependentUpon>frmCategoryDescription.cs</DependentUpon>
     </Compile>
-    <Compile Include="database.cs" />
-    <Compile Include="descriptionText.cs" />
-    <Compile Include="device.cs" />
     <Compile Include="frmAuthor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,16 +115,12 @@
     <Compile Include="frmSplash.Designer.cs">
       <DependentUpon>frmSplash.cs</DependentUpon>
     </Compile>
-    <Compile Include="helper.cs" />
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="mainForm.Designer.cs">
       <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="logger.cs" />
-    <Compile Include="myUtilities.cs" />
-    <Compile Include="OS_names.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmCategoryDescription.resx">
@@ -190,13 +182,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="utilities.cs" />
-    <Compile Include="utility.cs" />
-    <Compile Include="Utils_Cats_link.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\utils_image.png" />
-    <Content Include="sql_cmds.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\utils_data\utils_data.csproj">
+      <Project>{CE2E1C58-CEFB-4064-B39B-856755F48FB6}</Project>
+      <Name>utils_data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TechSupport_Utilities.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="connectstring" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source=10.192.43.91;Initial Catalog=SupportStaff;User ID={0}; password={1};Connect Timeout=10</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using utils_data;
+
 namespace utils_db2
 {
     public partial class frmDescription : Form

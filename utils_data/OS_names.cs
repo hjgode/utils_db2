@@ -5,9 +5,9 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace utils_db2
+namespace utils_data
 {
-    class OS_name
+    public class OS_name
     {
         public int id = 0; //auto!
         public int utils_id = 0;

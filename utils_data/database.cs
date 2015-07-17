@@ -36,11 +36,12 @@ using System.Data;
  * */
 #endregion
 
-namespace utils_db2
+namespace utils_data
 {
-    class database:IDisposable
+    public class database:IDisposable
     {
-        myLogger.logger _logger = Program._logger;
+        myLogger.logger _logger = new myLogger.logger(myLogger.logger.logLevel.debug);
+
         string _u = "supportstaff-rw";
         string _p = "rqySGX4D";
         string _c = "";

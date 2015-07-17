@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace utils_db2
+namespace utils_data
 {
     class helper
     {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace utils_db2
+namespace utils_data
 {
     public class myUtilities
     {
-        myLogger.logger _logger = Program._logger;
+        myLogger.logger _logger = new myLogger.logger(myLogger.logger.logLevel.debug);
         //database _database;
         public utilities _utilities;
         public Categories _categories;

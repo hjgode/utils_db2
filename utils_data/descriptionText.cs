@@ -5,7 +5,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace utils_db2
+namespace utils_data
 {
     public class descriptionText
     {

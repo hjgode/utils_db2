@@ -11,6 +11,16 @@ namespace myLogger
         System.IO.StreamWriter sw = null;
         logLevel _logLevel = logLevel.info;
 
+        //make single instance
+        static System.IO.StreamWriter _streamwriter = null;
+        static System.IO.StreamWriter getStreamwriter(string filename) {
+            if (_streamwriter == null)
+            {
+                _streamwriter = new System.IO.StreamWriter(filename + "utils_data.log", true);
+                _streamwriter.AutoFlush = true;
+            }
+            return _streamwriter;
+        }
         public enum logLevel
         {
             info,
@@ -24,8 +34,7 @@ namespace myLogger
             sFile = new Uri(sFile).LocalPath;
             if (!sFile.EndsWith(@"\"))
                 sFile += @"\";
-            sw = new System.IO.StreamWriter(sFile + "utils_db2.log");
-            sw.AutoFlush = true;
+            sw = getStreamwriter(sFile);// new System.IO.StreamWriter(sFile + "utils_data.log", true);
         }
         public void log(string s)
         {

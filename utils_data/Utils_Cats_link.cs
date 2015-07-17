@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.IO;
 
-namespace utils_db2
+namespace utils_data
 {
     public class Utils_Cats_link
     {
@@ -52,7 +52,7 @@ namespace utils_db2
 
     public class Utils_Cats
     {
-        myLogger.logger _logger = Program._logger;
+        myLogger.logger _logger = new myLogger.logger(myLogger.logger.logLevel.debug);
 
         [XmlElement("utils_cats_links")]
         public List<Utils_Cats_link> _utils_cats_links{get;set;}

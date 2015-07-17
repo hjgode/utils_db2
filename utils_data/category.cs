@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using System.Data.SqlClient;
 using System.IO;
 
-namespace utils_db2
+namespace utils_data
 {
     /*
     CREATE TABLE [dbo].[utils_categories](
@@ -48,7 +48,7 @@ namespace utils_db2
         [XmlIgnore]
         public List<String> util_names_with_category = new List<string>();
 
-        myLogger.logger _logger=Program._logger;
+        myLogger.logger _logger = new myLogger.logger(myLogger.logger.logLevel.debug);
 
         public Category()
         {
@@ -132,7 +132,7 @@ namespace utils_db2
         [XmlElement("categories")]
         public List<Category> categories_list { get; set; }
 
-        myLogger.logger _logger=Program._logger;
+        myLogger.logger _logger = new myLogger.logger(myLogger.logger.logLevel.debug);
 
         public Categories()
         {

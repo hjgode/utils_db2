@@ -7,11 +7,11 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Data.SqlClient;
 
-namespace utils_db2
+namespace utils_data
 {
     public class utility
     {
-        myLogger.logger _logger = Program._logger;
+        myLogger.logger _logger = new myLogger.logger(myLogger.logger.logLevel.debug);
 
         [XmlElement("id")]
         public int id { get; set; }
