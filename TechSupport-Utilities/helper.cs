@@ -11,6 +11,23 @@ namespace TechSupport_Utilities
 {
     class helper
     {
+        static string _appPath=String.Empty;
+        public static string appPath
+        {
+            get
+            {
+                if (_appPath != String.Empty)
+                    return _appPath;
+                string AppPath;
+                AppPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+                if (!AppPath.EndsWith(@"\"))
+                    AppPath += @"\";
+                Uri uri = new Uri(AppPath);
+                AppPath = uri.AbsolutePath;
+                _appPath = AppPath;
+                return _appPath;
+            }
+        }
         public static IPAddress getIP()
         {
             string s = Properties.Settings.Default.connectstring;
@@ -105,4 +122,5 @@ namespace TechSupport_Utilities
             return Properties.Settings.Default.connectstring;
         }
     }
+    
 }

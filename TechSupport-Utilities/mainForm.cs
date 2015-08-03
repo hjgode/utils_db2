@@ -292,5 +292,11 @@ namespace TechSupport_Utilities
                 }
             }
         }
+
+        private void findToolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Help hfm = new Help();
+            hfm.ShowDialog();
+        }
     }
 }

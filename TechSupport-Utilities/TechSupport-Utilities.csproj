@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Help.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Help.Designer.cs">
+      <DependentUpon>Help.cs</DependentUpon>
+    </Compile>
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +64,9 @@
     <Compile Include="helper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Help.resx">
+      <DependentUpon>Help.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,6 +95,17 @@
       <Project>{CE2E1C58-CEFB-4064-B39B-856755F48FB6}</Project>
       <Name>utils_data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="index.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="modelcode_firmware.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="software_version.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,72 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Start troubleshooting help</title>
+
+<script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+function handleSelection(choice){
+document.getElementById("div1").style.display="none"
+document.getElementById("div2").style.display="none"
+document.getElementById(choice).style.display="block"
+}
+function handleSelection2(choice){
+document.getElementById("div3").style.display="none"
+document.getElementById("div4").style.display="none"
+document.getElementById(choice).style.display="block"
+}
+</script>
+<link rel="stylesheet" href="styles.css" type="text/css">
+</head>
+<body>
+<h1>Collecting Information</h1>
+<blockquote>
+<h2>Model Code and Firmware - <button onclick="NotifyWin('modelcode');">Show</button></h2>
+<h2>Software and version - <button onclick="NotifyWin('modelcode_done');">Show</button></h2>
+</blockquote>
+<h1>
+Deduction</h1>
+<blockquote>
+<h2>Did it ever work?</h2>
+<button onclick="handleSelection('div2');">No, it did
+never work</button>
+<button onclick="handleSelection('div1');">Yes, it
+worked
+before</button>
+</blockquote>
+<blockquote>
+<blockquote>
+<div id="div1" style="display: none;">
+<h3>Intermittent or permanent issue</h3>
+</div>
+<div id="div2" style="display: none;">
+<h3>Configuration/setup or application issue</h3>
+</div>
+</blockquote>
+<blockquote>
+<h2>More than one device shows the issue</h2>
+<button onclick="handleSelection2('div4');">YES</button>
+<button onclick="handleSelection2('div3');">NO</button>
+<blockquote>
+<div id="div3" style="display: none;">
+<h3>No, unique to device: wipe, reflash, re-install device
+and software - <button onclick="NotifyWin('reflash');">Show</button>
+</h3>
+</div>
+<div id="div4" style="display: none;">
+<h3>Yes, do all or only some devices&nbsp;show the
+issue?</h3>
+</div>
+</blockquote>
+</blockquote>
+<hr>
+<h4>All devices show the issue. It is a general issue.</h4>
+<h4>Only some devices show the issue. What is different
+between the devices or there environment?</h4>
+<h2>Compare with other competitor device</h2>
+<blockquote>
+<h3>OS or Standards restriction?</h3>
+</blockquote>
+</blockquote>
+</body></html>

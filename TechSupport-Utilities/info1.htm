@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Model Code and Firmware</title>
+
+<script language="javascript">
+function NotifyWin(s) {
+alert(s);
+window.external.callMe(s);
+}
+</script>
+</head>
+
+	<body>
+<h1>Information gathering</h1>
+<h2>Do you have &nbsp;all informations about the device?</h2>
+<blockquote>
+<h3>Model code and firmware/kernel version?<button onclick="NotifyWin('modelcode');">YES</button></h3>
+</blockquote>
+<p>The model code is printed on the device (for example at
+battery placement)</p>
+<p>The Intermec firmware version on actual Intermec devices can
+be found in:<br>
+</p>
+<ul>
+<li>Start&gt;Settings&gt;System&gt;About:Packages
+as ITC_Version</li>
+<li>in Device Health
+Dashboard&gt;Information&gt;Firmware Version</li>
+<li>in Device Health log file</li>
+</ul>
+<p>The Dolphin kernel version can be found &nbsp;at (see also
+<a href="https://na7.salesforce.com/kA0A0000000PvPk?srPos=0&amp;srKp=ka0">SF
+article</a>):</p>
+<ul>
+<li>On Dolphin's running Windows CE5.0. Go to: 'Start'
+&gt; 'Programs' &gt; 'Power Tools' &gt; 'SysInfo'.</li>
+<li>On Dolphins running Windows PPC, Embedded Handheld or
+Windows Mobile. Go to: 'Start' &gt; 'Power Tools' &gt;
+'SysInfo'.</li>
+</ul>
+<p>The LXE firmware version can be found at: (see also <a href="https://na7.salesforce.com/kA0A0000000Pu76?srPos=0&amp;srKp=ka0">SF
+article</a>)</p>
+<ul>
+<li>A Low Level Test Utility is available as
+\Windows\utility.exe. Information-Detailed information about the
+terminal hardware and software configuration with Firmware Versions
+</li>
+</ul>
+</body></html>
