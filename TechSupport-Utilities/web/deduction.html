@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>Deduction</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+  </head>
+  <body><h1>Deduction</h1>
+<h2>Required: The device, it's firmware, the software involved and the environment (server, connections) are known.</h2>
+<blockquote>
+  <hr>
+      <h2>Did it ever work?</h2>
+<p>&nbsp;&nbsp;&nbsp; No, did never work on this device - <input onclick="location.href='./did_never_work.html';" value="Go" type="button"></p>
+<p>&nbsp;&nbsp;&nbsp; Yes, it worked before on this device - <input onclick="location.href='./worked_before.html';" value="Go" type="button"></p>
+</blockquote>
+
+<blockquote>
+<hr>
+<h2>Does only one or some devices out of many show the issue?</h2>
+<p>&nbsp;&nbsp;&nbsp;Only one or some - <input onclick="location.href='./only_some_show_issue.html';" value="Go" type="button"></p>
+<p>&nbsp;&nbsp;&nbsp;All devices show the issue - <input onclick="location.href='./all_show_issue.html';" value="Go" type="button"></p>
+</blockquote>
+<blockquote>
+    <hr>
+<h2>Persistent or intermittent issue?</h2>
+<p>&nbsp;&nbsp;&nbsp; The issue shows intermediately - <input onclick="location.href='./persistent_issue.html';" value="Go" type="button"></p>
+<p>&nbsp;&nbsp;&nbsp; The issue is intermittent - <input onclick="location.href='./intermittent_issue.html';" value="Go" type="button"></p>
+    </blockquote>
+</body></html>

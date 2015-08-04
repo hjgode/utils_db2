@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>Collect Information</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+function handleSelection(choice){
+document.getElementById("div1").style.display="none"
+document.getElementById("div2").style.display="none"
+document.getElementById(choice).style.display="block"
+}
+function handleSelection2(choice){
+document.getElementById("div3").style.display="none"
+document.getElementById("div4").style.display="none"
+document.getElementById(choice).style.display="block"
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+  </head>
+  <body>
+    <h1>Collecting Information</h1>
+    <blockquote>
+      <h2>Model Code and Firmware - <input onclick="location.href='./firmware.html';" value="Go" type="button"></h2>
+      <h2>Software and version - <input onclick="location.href='./software.html';" value="Go" type="button"></h2>
+    </blockquote>
+    <h1><span style="font-weight: bold;">Environment</span></h1>
+    <h1><span style="font-weight: bold;"></span></h1>
+    <span style="font-weight: bold;"><br>
+    </span>
+</body></html>

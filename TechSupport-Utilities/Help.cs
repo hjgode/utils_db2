@@ -14,7 +14,7 @@ namespace TechSupport_Utilities
     public partial class Help : Form
     {
         public string[] pages = new string[] {
-            "index.htm",
+            "index.html",
             "modelcode_firmware.htm",
             "software_version.htm",
             "reflash.htm",
@@ -34,7 +34,7 @@ namespace TechSupport_Utilities
 
         public void navigate(string sFile)
         {
-            webBrowser1.Navigate(new Uri("file://" + helper.appPath + sFile));
+            webBrowser1.Navigate(new Uri("file://" + helper.appPath + "web\\" + sFile));
         }
 
         [System.Runtime.InteropServices.ComVisibleAttribute(true)]
