@@ -33,6 +33,8 @@
             this.mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLoadFile = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -55,8 +57,6 @@
             this.txtCatDescription = new System.Windows.Forms.TextBox();
             this.lbUtilitiesByCategory = new System.Windows.Forms.ListBox();
             this.tabUtilities = new System.Windows.Forms.TabPage();
-            this.hToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -108,6 +108,21 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // hToolStripMenuItem
+            // 
+            this.hToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.findToolToolStripMenuItem});
+            this.hToolStripMenuItem.Name = "hToolStripMenuItem";
+            this.hToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.hToolStripMenuItem.Text = "Help";
+            // 
+            // findToolToolStripMenuItem
+            // 
+            this.findToolToolStripMenuItem.Name = "findToolToolStripMenuItem";
+            this.findToolToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+            this.findToolToolStripMenuItem.Text = "Find tool";
+            this.findToolToolStripMenuItem.Click += new System.EventHandler(this.findToolToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -341,21 +356,6 @@
             this.tabUtilities.TabIndex = 0;
             this.tabUtilities.Text = "Utilities";
             this.tabUtilities.UseVisualStyleBackColor = true;
-            // 
-            // hToolStripMenuItem
-            // 
-            this.hToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.findToolToolStripMenuItem});
-            this.hToolStripMenuItem.Name = "hToolStripMenuItem";
-            this.hToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.hToolStripMenuItem.Text = "Help";
-            // 
-            // findToolToolStripMenuItem
-            // 
-            this.findToolToolStripMenuItem.Name = "findToolToolStripMenuItem";
-            this.findToolToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.findToolToolStripMenuItem.Text = "Find tool";
-            this.findToolToolStripMenuItem.Click += new System.EventHandler(this.findToolToolStripMenuItem_Click);
             // 
             // mainForm
             // 
