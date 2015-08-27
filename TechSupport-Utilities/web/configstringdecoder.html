@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>rblogger</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+    <meta content="Heinz-Josef Gode" name="author">
+  </head>
+  <body>
+<h1>Intermec Config String V1.0.0.6</h1>
+<h2>PURPOSE</h2>
+<p>Decode Intermec config (model) codes to clear text option list. Get information about the model code like WLAN, WWAN, Language, Scanner, Camera and Software options.</p>
+<h2>Installation</h2>
+<p>No installation needed. Just unpack the archive to a folder of your choice.</p>
+<h2>Usage</h2>
+<p>Just start the excecutable "ConfigStringDecoder.exe".</p>
+<p>Enter the config (model code) into the field beside "Config String" and press ENTER. The tool will then list the options included in the model code.</p>
+<p>You may also use the list below the "Config String" input field and select one of the available model codes.</p>
+<p>The lower text box shows the options included for the model code.</p>
+<h2>ActiveSync / Windows Mobile Device Center support</h2>
+<p>If a device is connected via WMDC to the PC, the tool will read the config string using the USB connection. So you do not need to enter this. The recognized model code will be place in the list in the middle of the dialog.</p>
+<h2>Update</h2>
+<p>If the PC is connected to internet and can access dropbox shared sites, a click on the [Update XML] button will update the internal list of known config/model codes.</p>
+</body></html>

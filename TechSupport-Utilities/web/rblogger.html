@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>rblogger</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+    <meta content="Heinz-Josef Gode" name="author">
+  </head>
+  <body>
+<h1>RBLogger</h1>
+<h2>Purpose</h2>
+<p>Log DEBUG and RETAIL messages of all kind of applications and processes running on a device. Very extensive and useful for finding issues for finding device software issues.</p>
+<h2>Technical</h2>
+<p>RBLOGGER is a tool to capture data from the RAM BUFFER retail message transport on AndromedaII/3/4 (Intermec Cx7x, CN5x) devices.</p>
+<p>The RAM BUFFER transport stores messages in the internal SRAM of the processor starting from when the kernel first boots (future support could be added to EBOOT).  RBLOGGER can pull all data from that point, assuming the SRAM buffer (16k) isn't full.  Like all other retail message transports, this will work on ship builds, although some OS messages are compiled out at build time.</p>
+<h2>RBTimeStamp</h2>
+<p>Some older versions of RBLogger do not log date and time inside the log file. If RBTimeStamp is running, it will merge Date and Time stamps inside the log file.</p>
+<h2>KNOWN ISSUES</h2>
+<ul>
+<li>For OS Builds earlier than Andromeda2_3.30.00.0714, the SRAM is not preserved during suspend/resume.  As a result there is a chunk of data that will be lost between the last flush of the data and when the system starts to resume.</li>
+</ul>
+<h1>Installation</h1>
+<h2>BASIC LOGGING</h2>
+<ul>
+<li>Copy RBLOGGER to the device, and run it.  If RAMBUFFER is not enabled, it will give you the option to enable it and reboot (depends on device). A log called RBLOGGER.TXT will be created in the current directory.  The default file extension is TXT, so you can read your retail messages on the device while its running.</li>
+</ul>
+<h2>ADVANCED OPTIONS</h2>
+<p>RBLOGGER can be run with command line options, or with a command file (RBLOGCMD.TXT) with the following options:</p>
+<pre><code> -f FILENAME.EXT        Set the name of the log file.  Note TXT extention will allow log to be read in PocketWord.  Default filename is RBLOGGER.TXT.
+ -nofile                Disables file logging.
+ -p                     Sets the priority (0-255) of the logging thread.  Default is 251.
+ -append                Append to an existing log file, if present.  Otherwise open a new log file.
+ -new                   Overwrite existing log file, if present.  Otherwise open a new log file.
+ -flush                 Flushes existing data prior to starting the log.  Useful for grabbing retail messages for a single test.
+ -ip XXX.XXX.XXX.XXX    Target IP address for the RBNETLOGGER server.
+ -port YYYYY            Target IP port for the RBNETLOGGER server.  Default is 52302.
+ -close                 Closes existing instances of RBLOGGER.
+ -autoenable            If RAM BUFFER retail messages are not enabled, enable them and reboot.
+</code></pre>
+
+<h2>Sample</h2>
+<p>RBLogger log files can get very large and show very detailed information. </p>
+<pre><code>...
+2015.07.29 - 13:27:43 --- RBTimeStamp - TC = 1373395
+CertVerify: \Storage Card\Owl.MobileCourier\mcup.exe trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.MobileCourier.Forms.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.Core.Forms.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.Core.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.MobileCourier.PluginInterfaces.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.MobileCourier.BusinessLayer.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.MobileCourier.DataLayer.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.MobileCourier.BusinessObjects.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.Mobile.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\OpenNETCF.Windows.Forms.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.Mobile.DigitalPod.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\OpenNETCF.Drawing.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\SunCouriers.MobileCourier.Plugin.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.Mobile.Intermec.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Intermec.DataCollection.CF3.5.dll trust = 2
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Intermec.Multimedia.Camera.CF35.dll trust = 2
+CUnknown::~CUnknown
+Data Abort: Thread=93baea30 Proc=8039eb30 'mcup.exe'
+AKY=02000001 PC=8000ca44(NK.EXE+0x0000ca44) RA=8000c970(NK.EXE+0x0000c970) BVA=35b2f000 FSR=00000804
+VerifyBuffer: \Storage Card\Owl.MobileCourier\Owl.Core.Utils.dll trust = 2
+2015.07.29 - 13:27:53 --- RBTimeStamp - TC = 1383396
+VerifyBuffer: \windows\GAC_Microsoft.WindowsMobile_v1_0_0_0_cneutral_1.dll trust = 2
+CUnknown::~CUnknown
+...
+</code></pre>
+
+<h2>Analysis</h2>
+<p>The above sample shows the start of an app named mcup.exe and then a Data Abort. Data Aborts are fired after a called function has crashed.</p>
+<p>"A data-abort exception is a response by a memory system to an invalid data access. The data-abort exception handler is a program that can inform the programmer where in his or her code this exception has occurred (after the application/function has crashed)".</p>
+<p>In this case the programmer of "mcup.exe" should check his/her code.</p>
+<p>The engineer of the Operating System image can find the function call for the address and program counter values logged with the Data Abort.</p>
+    
+  </body></html>

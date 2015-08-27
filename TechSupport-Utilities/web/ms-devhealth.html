@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>MS DevHealth</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+    <meta content="Heinz-Josef Gode" name="author">
+  </head>
+  <body>
+<h1>DevHealth</h1>
+<br>Microsoft DevHealth is a tool to dump the current memory map into a text-like file. There is also a viewer which runs on a Windows PC.<br>
+    <div style="text-align: center;"><span style="font-weight: bold; text-decoration: underline;">DevHealthViewer for OEM only.</span></div>
+    DevHealth takes some time to dump the memory map into a file. So it is only useful for static analysis. The dump file lists all DLLs and processes with there memory usage and can be used to identify low memory conditions.<br>
+<h2>Installation</h2>
+<p>Copy DevHealth.exe onto a ARMv4i based Windows Mobile/CE device.</p>
+<h2>USAGE</h2>
+<p>Just start DevHealth.exe using mobile file explorer. Depending on the device taking the VM snap shot may take a long time (1-3 minutes). The screen will show the wait symbol until DevHealth has finished.</p>
+<p>When finished you will find a new mem_x.txt on the first non-volatile volume (normally Flash File Store), where x is file counter which increments on every use.</p>
+<h2>OUTPUT</h2>
+<ul>
+<li>See sample\mem_1.txt. A list with all processes and there DLL use and linkage.</li>
+</ul>
+<h2>ADDENDUM</h2>
+<p>See ReadMe.txt for further use.</p>
+<p>Use DevhealthViewer to get a graphical view of the VM snap shot.</p>
+</body></html>

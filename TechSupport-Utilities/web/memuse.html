@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>TEMPLATE</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+    <meta content="Heinz-Josef Gode" name="author">
+  </head>
+  <body><h1>Intermec_Memuse.CAB</h1>
+    Memuse logs the memory usage of running processes periodically and is useful to analyze devices slow downs, application crashes and similar that occur after some time.&nbsp; <br>
+<h2>Installation</h2>
+<p>Intermec<em>Memuse.CAB will install memuse.exe and links to the tool in 
+\Windows\StartUp. As Intermec</em>Memuse.CAB does a reboot after install I 
+would install this after other tools that do no reboot. When the 
+device starts the logging should start automatically. </p>
+<h2>Log File</h2>
+<p>Memuse.exe creates a log file memusage.log.txt.</p>
+<h2>Sample</h2>
+<p>The log file states the date and time of a snapshot and the processes, the process memory usage, there process ID and finally the overall memory usage.</p>
+<pre><code>17.05.2015 01:36:01     0x1d6db002  'NK.EXE'    0   0x7d6caf9a  'filesys.exe'   0   0x9d68f2ea  'device.exe'    8564736 0xd965e6e6  'uptimesqm.exe' 40960   0xf9e8ae02  'cprog.exe' 1499136 0xfaae8de2  'gwes.exe'  1597440 0xfa32e4a6  'shell32.exe'   1937408 0x9a32e96e  'services.exe'  1069056 0xf9647b02  'connmgr.exe'   352256  0x9a3d80f2  'poutlook.exe'  86016   0xf8ef92c6  'memuse.exe'    102400  0x975e6fbe  'SSClient.exe'  778240  0x3973478e  'repllog.exe'   638976  0x5830104a  'CAStartup.exe' 94208   0x78fa55c6  'DataServer.exe'    1404928 0x18305f2e  'IQueue.exe'    536576  0x36dae736  'calupd.exe'    94208   0x78b53c42  'SSTransferAgent.exe'   102400      (18898944)
+17.05.2015 01:36:11     0x1d6db002  'NK.EXE'    0   0x7d6caf9a  'filesys.exe'   0   0x9d68f2ea  'device.exe'    8642560 0x36e0c422  'rapiclnt'  798720  0xf9e8ae02  'cprog.exe' 1585152 0xfaae8de2  'gwes.exe'  2379776 0xfa32e4a6  'shell32.exe'   1933312 0x9a32e96e  'services.exe'  1073152 0xf9647b02  'connmgr.exe'   352256  0x9a3d80f2  'poutlook.exe'  86016   0xf8ef92c6  'memuse.exe'    106496  0x975e6fbe  'SSClient.exe'  1597440 0x3973478e  'repllog.exe'   647168  0x5830104a  'CAStartup.exe' 94208   0x78fa55c6  'DataServer.exe'    1658880 0x18305f2e  'IQueue.exe'    937984  0x96ccea6a  'tmail.exe' 307200      (22200320)
+</code></pre>
+
+<p>Look for large process memory usage or increasing over time. The second may be related to a memory leak.</p>
+<br>
+</body></html>

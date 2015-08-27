@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>connMgrLog</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+    <meta content="Heinz-Josef Gode" name="author">
+  </head>
+  <body>
+<h1>connMgrLog</h1>
+<h2>PURPOSE</h2>
+<p>Dumps connections every time the OS fires the ConnMgr Status Changed event. Usefull to analyse when a device looses connection.</p>
+<h2>USAGE</h2>
+<p>Copy connMgrLog.exe to the Windows Mobile device. Then start it manually using the mobile file explorer or placing a link to the exe file in \Windows\Startup and re-boot the device.</p>
+<p>The log file connMgrLog.exe.log.txt is written to the same directory where connMgrLog.exe is located.</p>
+<h2>SAMPLE</h2>
+<pre><code>20141208 162719: connMgrLog started
+20141208 162719: dumpConnections...
+20141208 162719: 
+############################################
+20141208 162719:    ConnType= 'CM_CONNTYPE_PROXY'
+20141208 162719:    ConnSubtype= 'CM_CONNSUBTYPE_CELLULAR_CSD'
+20141208 162719:     cm_flags+=CM_DSF_BILLBYTIME
+20141208 162719:     cm_flags+=CM_DSF_ALWAYSON
+20141208 162719:     cm_flags+=CM_DSF_SUSPENDRESUME
+20141208 162719:    security level: 0
+20141208 162719:    dest guid: 20141208 162719: {A1182988-0D73-439E-87AD-2A5B369F808B}20141208 162719: 
+20141208 162719:    source guid: 20141208 162719: {18AD9FBD-F716-ACB6-FD8A-1965DB95B814}20141208 162719: 
+20141208 162719:    description: 'null-corp-{18AD9FBD-F716-ACB6-FD8A-1965DB95B814}'
+20141208 162719:    conn state: 32=''
+20141208 162719:    last connect: 0000-00-00(0) 00:00:00.000
+20141208 162719:    no IP
+20141208 162719: 
+############################################
+20141208 162719:    ConnType= 'CM_CONNTYPE_PROXY'
+20141208 162719:    ConnSubtype= 'CM_CONNSUBTYPE_CELLULAR_CSD'
+20141208 162719:    security level: 0
+20141208 162719:    dest guid: 20141208 162719: {436EF144-B4FB-4863-A041-8F905A62C572}20141208 162719: 
+20141208 162719:    source guid: 20141208 162719: {ADB0B001-10B5-3F39-27C6-9742E785FCD4}20141208 162719: 
+20141208 162719:    description: 'HTTP-{ADB0B001-10B5-3F39-27C6-9742E785FCD4}'
+20141208 162719:    conn state: 32=''
+20141208 162719:    last connect: 0000-00-00(0) 00:00:00.000
+20141208 162719:    no IP
+20141208 162719: 
+############################################
+20141208 162719:    ConnType= 'CM_CONNTYPE_NIC'
+20141208 162719:    ConnSubtype= 'CM_CONNSUBTYPE_CELLULAR_CSD'
+20141208 162719:    security level: 0
+20141208 162719:    dest guid: 20141208 162720: {436EF144-B4FB-4863-A041-8F905A62C572}20141208 162720: 
+20141208 162720:    description: 'Network Card'
+20141208 162720:    adapter: 'TIWLN1'
+20141208 162720:    conn state: 16='CONNMGR_STATUS_WAITINGFORRESOURCE'
+20141208 162720:    last connect: 2014-12-08(1) 14:49:10.292
+20141208 162720:    IP 0: '199.64.70.90'
+</code></pre>
+
+</body></html>
