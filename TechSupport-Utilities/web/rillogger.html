@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>RILlogger</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+    <meta content="Heinz-Josef Gode" name="author">
+  </head>
+  <body>
+<h1>RILLogger</h1>
+<p>A detailed doc is available as "Dolphin 6000 RIL Logger.pdf"</p>
+<h2>Purpose</h2>
+<p>GSM data connectivity issues are being reported on the Dolphin 6000 and diagnostic information is required, but the device as shipped has no RIL data logging capability.</p>
+<p>RILLogger intercepts the data streams between the RIL and the modem, and is capable of logging this data. It also has limited data editing capabilities. Full documentation is at the location linked below.</p>
+<h2>Installation</h2>
+<p>Copy the files "RILLogger.CAB" and "RILLogger Default.REG" (or a custom .REG file as described below) to \Honeywell\AutoInstall and warm boot. The virtual serial ports that are created are called RLG0: to RLG4:, and depending on the contents of the .REG file, various of these will be connected to the RIL. So, the normal and mapped routing for the RIL ports is:</p>
+<pre><code>Normal Routing  Mapped Routing 
+ComPort0  MUX5:  RLG0: 
+ComPort1  MUX6:   RLG1: 
+Comport2  MUX7:   RLG2: 
+ComPortNotifications  MUX8:   RLG3: 
+DataPort  MUX9:   Not currently possible to map 
+</code></pre>
+
+<p>After installation of the RIL Logger, this mapping may be changed so that one or more ports are directed to a RIL Logger port by the following string registry value:</p>
+<pre><code>HKLM\Software\Honeywell\RIL Logger\PortMap 
+</code></pre>
+
+<p>It contains a string consisting of "Y" and "N" characters, each one corresponding in order to the above list of RIL ports – if the corresponding character is "Y", the RIL port will be mapped, otherwise it will not be. So, for example, to map ComPort0 to RLG0: and ComPortNotifications to RLG3:, set the string value to "YNNYN".</p>
+<p>To completely disable the RIL Logger without uninstalling it via a factory reset, either remove the PortMap value from the registry or copy the registry file "RILLogger Disable.REG" to the device and launch it – in both cases perform a warm boot afterwards.</p>
+<p>The type of data logged is controlled by the following string registry value: </p>
+<pre><code>HKLM\Software\Honeywell\RIL Logger\LogMask
+</code></pre>
+
+<p>It contains a comma-separated list of log mask values – the first value is the default to be used for all ports, and the following values are the specific values to be used for RLG0:, RLG1:, and so on. If the single value "0" is specified then no log file will be written. Log masks are bitmaps formed by adding values together as follows:</p>
+<pre><code> 1  Initialisation and de-initialisation 
+ 2  Opening and closing 
+ 4  I/O control commands 
+ 8  Read/write byte counts 
+16  Read/write data (ASCII) 
+32  Read/write data (HEX)
+</code></pre>
+
+<p>So, for example, "16,,0" will log ASCII read/write data on all configured ports except for RLG1:.</p>
+<p>The log file is called RILLog.log and will be written either to the root folder of the device or to the SD card depending on the following DWORD registry value:</p>
+<pre><code>HKLM\Software\Honeywell\RIL Logger\UseSDCard 
+</code></pre>
+
+<p>Set the value to zero for the root folder or non-zero for the SD card and then warm boot. </p>
+<p>Because the RIL starts up before the SD card driver is loaded, a small part of the initial logging data may be lost if the SD card is selected as the log file location. There is no limit to the size of the log file other than available memory, so logging will terminate if the file system or SD card becomes full.</p>
+<h2>Files</h2>
+<p>The CAB file, the default registry settings file, the documentation and the decryption tool can be found here:</p>
+<h2>Log File Format</h2>
+<p>The log file is encrypted, all except for the first line that contains information that can be used to identify it. It must therefore be decrypted before viewing by using RLDecrypt.exe – run this program from a command prompt in the same folder as the log file, and it will produce the decrypted file RILLog<em><serial number=""></serial></em><datetime>.txt, where the date/time is from the first line of the log file. If the log file is deleted with the logger still active, the file will be recreated without a header line. The file can still be decrypted, but it will be called RILLog_(Unknown).txt instead. The input and output filenames may also be specified in the command line.</datetime></p>
+<h2>Sample Log</h2>
+<p>The decrypted log file contains lines of data such as: </p>
+<pre><code>2011-07-11 14:19:17   8698 -8 Open port MUX8: with log mask 18 
+2011-07-11 14:19:17   8739 &gt;7 ATQ0S0=0&lt;cr&gt; 
+2011-07-11 14:19:17   8739 ** ATQ0S0=1&lt;cr&gt; 
+2011-07-11 14:19:17   8750 &lt;7 &lt;cr&gt;&lt;lf&gt;OK&lt;cr&gt;&lt;lf&gt; 
+</code></pre>
+
+<p>The first two columns are the date and time, the third is the system tick count in milliseconds. The next column consists of two parts – the first is a "-" character for an informational or error message, "&gt;" for data sent to the modem or "&lt;" for data received from the modem, optionally followed by the multiplexer port number. This column may also be "**", indicating that the data of the previous line was modified before being sent or after being received. The rest of the line is the actual data. There is no limit to the size of the log file other than the amount of available memory space. For ASCII data, control characters will be displayed as follows: </p>
+<pre><code>&lt;nl&gt;  0x00  NUL  &lt;se&gt;  0x10  SLE 
+&lt;sh&gt;  0x01  SOH  &lt;xn&gt;  0x11  XON (DC1/CS1) 
+&lt;sx&gt;  0x02  STX  &lt;d2&gt;  0x12  DC2 
+&lt;ex&gt;  0x03  ETX  &lt;xf&gt;  0x13  XOFF (DC3) 
+&lt;et&gt;  0x04  EOT  &lt;d4&gt;  0x14  DC4 
+&lt;eq&gt;  0x05  ENQ  &lt;nk&gt;  0x15  NAK 
+&lt;ak&gt;  0x06  ACK  &lt;sn&gt;  0x16  SYN 
+&lt;bl&gt;  0x07  BEL  &lt;ec&gt;  0x17  ETC 
+&lt;bs&gt;  0x08  BS   &lt;cn&gt;  0x18  CAN 
+&lt;ht&gt;  0x09  HT   &lt;em&gt;  0x19  EM 
+&lt;lf&gt;  0x0a  LF   &lt;sb&gt;  0x1a  SIB 
+&lt;vt&gt;  0x0b  VT   &lt;es&gt;  0x1b  ESC 
+&lt;ff&gt;  0x0c  FF   &lt;fs&gt;  0x1c  FS 
+&lt;cr&gt;  0x0d  CR   &lt;gs&gt;  0x1d  GS 
+&lt;so&gt;  0x0e  SO   &lt;rs&gt;  0x1e  RS 
+&lt;si&gt;  0x0f  SI   &lt;us&gt;  0x1f  US 
+</code></pre>
+
+<h2>Source</h2>
+<p>https://ftp.honeywellaidc.com:443 </p>
+<h1>Confidential Note</h1>
+<p>Please note that this software was created before the requirement to have non-qualed software going outside of the company contained in an installer with click-through licensing and so exists only as a CAB file rather than a PC installer. However, the software has not needed to be used for a long time now. The decryption tool is not in any case to be distributed outside of the company as per a decision taken by management at the time.</p>
+</body></html>

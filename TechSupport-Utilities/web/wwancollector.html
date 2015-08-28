@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>WWAN Collector</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+    <meta content="Heinz-Josef Gode" name="author">
+  </head>
+  <body>
+<h1>wwanCollector</h1>
+<h2>Purpose</h2>
+<p>Application used to troubleshoot cellular (WWAN) issues.</p>
+<h2>Installation</h2>
+<p>Install the cab files attached to this answer on your device. Chose "install to device" and click finish.</p>
+<p>There are two different methods for install. One is a cab file, which installs the .exe, as well as placing a link in the windows startup and \start menu\programs. The other is just to install the raw .exe.</p>
+<p>For the cab file install you will need to run the cab on the device, which places all the files correctly so it will automatically launch at the next and every following reboot. After the install reboot the device and the logging will start automatically.</p>
+<p>If you don't need the application to run at every reboot or if this is just a one-time instance, you can move the itcWanInfoCollector.exe to any folder on your device and tap on it one time to run it and start the logging.</p>
+<h2>Usage</h2>
+<p>After install you will notice a blue cellular tower in the bottom right hand corner of the today screen which shows it is running. You will also notice that there is a new folder on the root of the device, \WWAN Log Files. Inside this directory you will find your .log files showing the details of the radio status as well as .kml files that can show location and status of the radio when opened using Google Earth. </p>
+<p>At install this application will start running with no further action needed. It will start to create 1 MB log files. Once the 1MB limit is reached, it will create a backup (_bak) of that log file and start to create a new one. The application will only save the most recent 4MB worth of data, 1 active log and 3 backup logs.</p>
+<p>As a note regarding the information gathered by this application, UMTS networks provide much more information to this application than CDMA networks (Sprint/Verizon). While it will still gather all the available information, some of the functionality of the logs and KML files will not be fully utilized in a CDMA environment. In order to stop the logging. Customers will need to navigate to the home screen, click on the blue tower on the bottom right and click on exit.</p>
+<h2>Customer instructions</h2>
+<p>When deploying this software, it is important to educate the user to be aware of when and where certain events happen. The log files are all time stamped, however if the user is able to record the time and events preceding the duplication of the issue, it is of significant help in reading the logs. It may also be helpful to have the user stop the logging once the data has been received, to avoid overwriting the data.</p>
+<h2>itcWanInfoCollector.log</h2>
+<p>The log files provide a great deal of time stamped information regarding the cellular radio of on the device. This data includes RSSI, the type of connection and many other engineering specific items that can be helpful in diagnosing cellular issues. To view this log, simply open it with notepad or any text editor. Some of the details include:</p>
+<ul>
+<li>RSSI (received signal strength indicator) shows the power present in the received RF signal.</li>
+<li>RIL (Radio Interface Layer) notifications.</li>
+<li>Latitude and longitude of the precise location where the device was provided you have a GPS lock. </li>
+<li>Connection Manager Notifications.</li>
+<li>Connection type and status - Shows what type of connection as well as the CONNMGR_STATUS values for that specific connection.</li>
+<li>Disconnection and reason.</li>
+<li>IP addresses on the device.</li>
+<li>Power status of the device.</li>
+</ul>
+<h2>itcWanInfoCollector.kml</h2>
+<p>The KML file shows the connection details on a Google Earth overlay, logging certain radio level information as well as the date and time. Provided that you have a GPS lock on your handheld, this application will record the route taken and overlay the RSSI values with correct GPS coordinates as place marks on the map. </p>
+<p>In order to view these logs, copy the .kml file from the \WWAN Log Files directory on your device and save to a location on your desktop open them on a PC that has Google Earth installed on it. This will show your recorded path with a different pushpin for every cellular event such as a change in RSSI, cell tower ID or other events. Double clicking on these place marks in Google Earth will show greater detail of that connection event as well as a date and time stamp that you can sync up with the log file for more detail. One helpful item you will notice is the RSSI labels on PushPins have scaled opacity based on the signal strength. The bolder the font, the stronger the signal. Users will also note that for UMTS devices, the push pins will change color when the cell tower ID changes. CDMA devices will not change colors when switching between different cell towers. Sample log files are attached to this case.</p>
+<h2>Blue tower on the home screen</h2>
+<p>As previously mentioned, after install you will see a blue cell tower icon on the bottom right hand corner of the today screen. Clicking on this icon will present you with a list of options:</p>
+<ul>
+<li>Copy CDMA Logs.</li>
+<li>Test voice - Launches the phone app to place a voice call.</li>
+<li>Test Data - Creates a data connection and downloads the google home page.</li>
+<li>Adavanced - Navigates to additional menus: Radio info, IP connectivity and GPS tabs. </li>
+<li>About - Shows version number of itcWanInfoCollector.</li>
+<li>Exit - Shuts down itcWanInfoCollector.exe.</li>
+</ul>
+<h2>Advanced menu</h2>
+<p>The advanced menu presents users with three (3) separate tabs. </p>
+<ul>
+<li>Radio Info - Shows the current RSSI, cell tower ID and other useful connection data.</li>
+<li>IP connectivity - shows a list of all the current networks adaptors and the IP addresses assigned to them. There is also a "write to log" checkbox in here. Checking this box will log the IP address along with the current power info every minute. There is also an option to get the current Byte count and reset that count as well.</li>
+<li>GPS - Shows current Latitude and longitude, allows you to clear the current KML file, Force a download of Extended Ephemeris (EE) data on a CN3 and set the base color for your pushpins on the KML file. 00 thru 05 will change the colors of the pushpins. This allows users running multiple tests to change the color for each test. The color choices are: Yellow-00, Light Blue-01, Blue-02, White-03, Purple-04 and Green-05.</li>
+</ul>
+<h2>Uninstall</h2>
+<p>In order to remove this program, simply delete the cab file and any files that it generated. If you only installed the itcWanInfoCollector.exe then you simply need to browse to that file and delete it. If you installed using the cab file you will need to remove the files it created. Those are a .lnk file in \Windows\Startup, a lnk shortcut in \Windows\StartMenu\Programs, and the EXE in \Windows\System\SysCache. In addition to those files you will also need to delete the \WWAN Logs directory.</p>
+</body></html>

@@ -310,5 +310,53 @@ namespace utils_db2
             frm.Dispose();
         }
 
+        class util_file
+        {
+            public string file;
+            public utility u;
+            public util_file(utility utl, string sFile)
+            {
+                u = utl;
+                file = sFile;
+            }
+        }
+        private void mnuUpdateAllFiles_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog ofd = new FolderBrowserDialog();
+            ofd.ShowNewFolderButton = false;
+            ofd.Description = "Select folder with zipped utilities";
+            if (ofd.ShowDialog() != DialogResult.OK)
+                return;
+            string sPath = ofd.SelectedPath;
+            
+            string[] files_disk = System.IO.Directory.GetFiles(ofd.SelectedPath, "*.zip");
+
+            List<util_file> files_db = new List<util_file>();
+            foreach (utility u in _utilities.utilitiesList)
+            {
+                string sName = u.file_link;
+                files_db.Add(new util_file(u, sName));
+            }
+
+            //compare and update
+            foreach (util_file u in files_db)
+            {
+                if (u.file.Length == 0)
+                    continue;
+                foreach (string f in files_disk)
+                {
+                    if (f.EndsWith(u.file)){
+                        ;//update file data
+                        _logger.log("updating: " + u.file);
+                        u.u.file_data = utilities.GetByteData(f);
+                        _utilities.setImageData(u.u.id, u.u.file_data, database._sqlConnection);
+                        //_utilities.setFile_Link(util_id, frm._utility.file_link, database._sqlConnection);
+
+                    }
+                }
+            }
+            dataGridView1.Refresh();
+        }
+
     }
 }

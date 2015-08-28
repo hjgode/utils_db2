@@ -55,7 +55,7 @@ namespace utils_db2
         private void btnSave_Click(object sender, EventArgs e)
         {
             //INSERT NEW ROW in utils_cats_link TABLE?
-            System.Diagnostics.Debugger.Break();
+            //System.Diagnostics.Debugger.Break();
             
             Utils_Cats utils_cats = new Utils_Cats();            
             foreach (Category C in _utility._category_list)

@@ -355,7 +355,7 @@ namespace utils_data
                                     // Read the bytes into outbyte[] and retain the number of bytes returned.
                                     retval = rdr.GetBytes(columnNr, startIndex, outbyte, 0, bufferSize);
                                     // Continue reading and writing while there are bytes beyond the size of the buffer.
-                                    while (retval == bufferSize)
+                                    while (retval >0) //== bufferSize)
                                     {
                                         bw.Write(outbyte);
                                         bw.Flush();

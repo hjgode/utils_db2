@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>PowerMsgLog</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+    <meta content="Heinz-Josef Gode" name="author">
+  </head>
+  <body><h1>PowerMsgLog.exe</h1>
+<h2>Purpose</h2>
+<p>Log power transitions over time. Useful for knowing when the battery is used the most or how long it will last. The tool will also log suspend and resume states to know when a device goes to sleep or has been waked up.</p>
+<h2>Installation</h2>
+<p>Copy the file PowerMsgLog.exe to the Windows Mobile device. Then start it manually or place a link to the exe inside the device's \Windows\StartUp folder and reboot the device.</p>
+<h2>Log file</h2>
+<p>The log file is created within the dir where the exe is located. It logs date and time and the power transition messages in contrast to logging tools that log periodically.</p>
+<h2>Sample log</h2>
+<pre><code>0x9b3d4f92: 21.08.2015 08:25:23 
+### PowerMsg logging started
+0x9b3d4f92: 21.08.2015 08:25:23     Created new mutex
+0x9b3d4f92: 21.08.2015 08:25:23 Starting MessageThread with id=0xb8ea3842...
+0x9b3d4f92: 21.08.2015 08:25:23 ReadMsgQueue: 
+0x9b3d4f92: 21.08.2015 08:25:23 Power Notification Message: PBT_POWERSTATUSCHANGE
+0x9b3d4f92: 21.08.2015 08:25:23 change: no flags
+0x9b3d4f92: 21.08.2015 08:25:23 ReadMsgQueue: PBT_POWERINFOCHANGE
+0x9b3d4f92: 21.08.2015 08:25:23 Power Notification Message: PBT_POWERINFOCHANGE
+0x9b3d4f92: 21.08.2015 08:25:23     Length: 28
+0x9b3d4f92: 21.08.2015 08:25:23     BatteryLifeTime = unknown
+0x9b3d4f92: 21.08.2015 08:25:23     BatterFullLifeTime = unknown
+0x9b3d4f92: 21.08.2015 08:25:23     BackupBatteryLifeTime = 3iN
+0x9b3d4f92: 21.08.2015 08:25:23     BackupBatteryFullLifeTime = 3iN
+0x9b3d4f92: 21.08.2015 08:25:23     ACLineStatus = online
+0x9b3d4f92: 21.08.2015 08:25:23     BatteryFlag = BATTERY_FLAG_CHARGING
+0x9b3d4f92: 21.08.2015 08:25:23     BatteryLifePercent = 100
+0x9b3d4f92: 21.08.2015 08:25:23     BackupBatteryFlag = BATTERY_FLAG_CHARGING
+0x9b3d4f92: 21.08.2015 08:25:23     BackupBatteryLifePercent = 100
+0x9b3d4f92: 21.08.2015 08:25:23 info: no flags
+0x9b3d4f92: 21.08.2015 08:29:16 ReadMsgQueue: unattended
+0x9b3d4f92: 21.08.2015 08:29:16 Power Notification Message: PBT_TRANSITION
+0x9b3d4f92: 21.08.2015 08:29:16 Flags: 400000
+0x9b3d4f92: 21.08.2015 08:29:17 Length: 22
+0x9b3d4f92: 21.08.2015 08:29:17 trans.: no flags
+0x9b3d4f92: 21.08.2015 08:29:17 ReadMsgQueue: suspend
+0x9b3d4f92: 21.08.2015 08:29:17 Power Notification Message: PBT_TRANSITION
+0x9b3d4f92: 21.08.2015 08:29:17 Flags: 200000
+0x9b3d4f92: 21.08.2015 08:29:17 Length: 16
+0x9b3d4f92: 21.08.2015 08:29:17 trans.: SUSPEND|
+0x9b3d4f92: 21.08.2015 08:29:20 ReadMsgQueue: resuming
+0x9b3d4f92: 21.08.2015 08:29:20 Power Notification Message: PBT_TRANSITION
+0x9b3d4f92: 21.08.2015 08:29:20 Flags: 10000000
+0x9b3d4f92: 21.08.2015 08:29:21 Length: 18
+0x9b3d4f92: 21.08.2015 08:29:21 trans.: no flags
+0x9b3d4f92: 21.08.2015 08:29:22 ReadMsgQueue: 
+0x9b3d4f92: 21.08.2015 08:29:22 Power Notification Message: PBT_RESUME
+0x9b3d4f92: 21.08.2015 08:29:22 Power: PBT_RESUME
+0x9b3d4f92: 21.08.2015 08:29:22 resume: no flags
+0x9b3d4f92: 21.08.2015 08:29:22 ReadMsgQueue: on
+0x9b3d4f92: 21.08.2015 08:29:22 Power Notification Message: PBT_TRANSITION
+0x9b3d4f92: 21.08.2015 08:29:22 Flags: 12010000
+0x9b3d4f92: 21.08.2015 08:29:22 Length: 6
+0x9b3d4f92: 21.08.2015 08:29:22 PwrMsgQueue: got 'ON|PASSWORD|BACKLIGHTON'...
+0x9b3d4f92: 21.08.2015 08:29:22 trans.: ON|
+0x9b3d4f92: 21.08.2015 08:29:25 ReadMsgQueue: on
+0x9b3d4f92: 21.08.2015 08:29:25 Power Notification Message: PBT_TRANSITION
+0x9b3d4f92: 21.08.2015 08:29:25 Flags: 12010000
+0x9b3d4f92: 21.08.2015 08:29:25 Length: 6
+0x9b3d4f92: 21.08.2015 08:29:25 PwrMsgQueue: got 'ON|PASSWORD|BACKLIGHTON'...
+0x9b3d4f92: 21.08.2015 08:29:25 trans.: ON|
+</code></pre>
+
+</body></html>

@@ -36,6 +36,8 @@
             this.mnuFileExit = new System.Windows.Forms.ToolStripMenuItem();
             this.btnNewUtility = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuUpdateAllFiles = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -60,7 +62,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuFile});
+            this.mnuFile,
+            this.adminToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(847, 24);
@@ -80,21 +83,21 @@
             // mnuSaveXML
             // 
             this.mnuSaveXML.Name = "mnuSaveXML";
-            this.mnuSaveXML.Size = new System.Drawing.Size(127, 22);
+            this.mnuSaveXML.Size = new System.Drawing.Size(152, 22);
             this.mnuSaveXML.Text = "Save XML";
             this.mnuSaveXML.Click += new System.EventHandler(this.mnuSaveXML_Click);
             // 
             // mnuLoadXML
             // 
             this.mnuLoadXML.Name = "mnuLoadXML";
-            this.mnuLoadXML.Size = new System.Drawing.Size(127, 22);
+            this.mnuLoadXML.Size = new System.Drawing.Size(152, 22);
             this.mnuLoadXML.Text = "Load XML";
             this.mnuLoadXML.Click += new System.EventHandler(this.mnuLoadXML_Click);
             // 
             // mnuFileExit
             // 
             this.mnuFileExit.Name = "mnuFileExit";
-            this.mnuFileExit.Size = new System.Drawing.Size(127, 22);
+            this.mnuFileExit.Size = new System.Drawing.Size(152, 22);
             this.mnuFileExit.Text = "Exit";
             this.mnuFileExit.Click += new System.EventHandler(this.mnuFileExit_Click);
             // 
@@ -116,6 +119,21 @@
             this.pictureBox1.Size = new System.Drawing.Size(252, 276);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
+            // 
+            // adminToolStripMenuItem
+            // 
+            this.adminToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuUpdateAllFiles});
+            this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
+            this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.adminToolStripMenuItem.Text = "Admin";
+            // 
+            // mnuUpdateAllFiles
+            // 
+            this.mnuUpdateAllFiles.Name = "mnuUpdateAllFiles";
+            this.mnuUpdateAllFiles.Size = new System.Drawing.Size(152, 22);
+            this.mnuUpdateAllFiles.Text = "Update all files";
+            this.mnuUpdateAllFiles.Click += new System.EventHandler(this.mnuUpdateAllFiles_Click);
             // 
             // mainForm
             // 
@@ -148,5 +166,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuLoadXML;
         private System.Windows.Forms.ToolStripMenuItem mnuFileExit;
         private System.Windows.Forms.Button btnNewUtility;
+        private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuUpdateAllFiles;
     }
 }
