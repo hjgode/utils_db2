@@ -3,6 +3,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="content-type">
 
+
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>Connectivity</title>
@@ -17,13 +18,27 @@ window.external.callMe(s);
   </head>
   <body>
     <h1>Connectivity</h1>
-<h2>Application uses communication</h2>
+<h2>Possible issues with application using communication</h2>
 <h2>Wireless</h2>
 <ul>
 <li>WLAN</li>
 <li>WWAN</li>
 <li>Bluetooth</li></ul>
 <h3 style=" margin-left: 40px;">Possible causes:</h3>
+<ul>
+<li>Non-tethered connections are prone to connection loss. Applications must aware of this and have a good connection recovery process.</li>
+<li>For WLAN the wireless network setup might have an issue. Needs to be analyzed with a network trace.</li>
+<li>Incorrect DNS or WINS setup.</li>
+<li>WWAN connections may always change from connected to disconnected. Needs recovery process inside application code.</li>
+<li>Bluetooth devices may get outside wireless range. Applications must have a recovery process.</li>
+<li>Bluetooth devices may go to sleep and disconnect.</li></ul>
+<h3 style="margin-left: 40px;">Possible helper tools for analysis</h3>
+<ul>
+<li>General network trace and analyzer tool like WireShark</li>
+<li>MS Network Analyzer (MS Powertoys for Windows Mobile)</li>
+<li>Bluetooth Analyzer</li>
+<li>see <a href="cat-bluetooth.html">Category Bluetooth</a></li>
+<li>see <a href="cat-wwan.html">Category WWAN</a></li></ul>
 <h2>Wired</h2>
 <ul>
 <li>Ethernet</li>
@@ -31,4 +46,10 @@ window.external.callMe(s);
 <li>ActiveSync</li>
 <li>USB</li></ul>
 <h3 style=" margin-left: 40px;">Possible causes:
-</h3></body></html>
+</h3>
+<ul>
+<li>Ethernet setup incorrect. For example duplicate IP addresses, wrong subnet setup.</li>
+<li>Incorrect DNS or WINS setup.</li>
+<li>For RS232 the connected devices must use the same setup for baudrate, stop bits, data size etc.</li>
+<li>ActiveSync or the new Windows Mobile Device Center (WMDC) is used via RS232, USB or Bluetooth. WMDC can operate in PPP or RFNDIS mode. Possibly switching mode on device helps with USB setup.</li>
+<li>For USB issues test always without any hub directly connected to PC mainboard. Use known good cables (some may be for charge only).</li></ul></body></html>
