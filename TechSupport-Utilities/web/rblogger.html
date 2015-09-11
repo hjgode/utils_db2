@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>rblogger</title>
     <script language="javascript">
@@ -17,6 +18,7 @@ window.external.callMe(s);
 <h1>RBLogger</h1>
 <h2>Purpose</h2>
 <p>Log DEBUG and RETAIL messages of all kind of applications and processes running on a device. Very extensive and useful for finding issues for finding device software issues.</p>
+<p>If <a href="https://msdn.microsoft.com/en-us/library/aa451081.aspx">NKDbgPrintfW </a>or <a href="https://msdn.microsoft.com/en-us/library/aa451065.aspx">DEBUGMSG </a>are used in custom code, these message lines will appear in RBLogger to. This is good to have only one log file with debug output in sync.</p>
 <h2>Technical</h2>
 <p>RBLOGGER is a tool to capture data from the RAM BUFFER retail message transport on AndromedaII/3/4 (Intermec Cx7x, CN5x) devices.</p>
 <p>The RAM BUFFER transport stores messages in the internal SRAM of the processor starting from when the kernel first boots (future support could be added to EBOOT).  RBLOGGER can pull all data from that point, assuming the SRAM buffer (16k) isn't full.  Like all other retail message transports, this will work on ship builds, although some OS messages are compiled out at build time.</p>

@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+
+
+
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Looking at Log Files</title>
+    <script language="javascript">
+function NotifyWin(s) {
+//alert(s);
+window.external.callMe(s);
+}
+</script> 
+<link rel="stylesheet" href="styles.css" type="text/css">
+    <meta content="Heinz-Josef Gode" name="author">
+  </head>
+  <body>
+    <h1>Looking at log files</h1>
+<p>Log files are useful if an issue is not directly visible on screen or occurs after some time of usage.</p>
+<ul>
+<li>Note the time of when an issue was 'seen' for intermittent issues. Without that information looking at a 25MB large file may take hours and days.</li>
+<li>The log file will possibly not show the cause for an issue but the result.</li>
+<li>Most log files are plain ASCII files and can be opened in any text viewer.</li>
+<li>There are one-line log files and detailed log files with several rows for each entry.</li>
+<li>Some log files must be 'prepared' before they become useful. The goal is to find the relevant information and filter out useless data.</li>
+<li>For log files documenting the amount of an value over time, a graphical representation may help.</li></ul>
+<h2>Examples</h2>
+<h3>Typical RBLogger file</h3>
+<p>*** FIRST THING TO GET IS THE TIME OF OCCURANCE ***</p>
+<pre>PWR: POWERFAIL: 266497094, suspend started already.</pre>
+<p>This will only occur if the battery is drained so low that the battery driver generates an interrupt to get the system to emergency suspend. This interrupt should not have occurred if the unit was in the dock and the battery was charging or charged.</p>
+<pre>PWR: BUTTON CHANGED: 262358434<br>&nbsp;&nbsp;&nbsp; DOWN<br>PWRBUTTON: HUX notify wait for event result: 1<br>HUX - I/O key</pre>
+<p>This occurs when someone pressed Hibernate after pressing the I/O button.</p>
+<pre>PWR: BUTTON CHANGED: 262104121
+&nbsp;&nbsp;&nbsp; DOWN
+PWRBUTTON: HUX notify wait for event result: 1</pre>
+<p>Another hibernate just to show a possible use pattern.</p>
+<pre>CertVerify: \Program Files\Airclic\Perform\Perform.exe trust = 2</pre>
+<p>This indicates the executable was launched with associated, good, return code.</p>
+<pre>CertVerify: \Program Files\Airclic\Perform\Perform.exe trust = 0</pre>
+<p>This indicates the executable was launched with associated, bad, return code.</p>
+<pre>CertVerify: skysys.dll trust = 2<br>Data Abort: Thread=9db53a28 Proc=8039d5a0 'device.exe'<br>AKY=00000025 PC=029d1ddc(tapi.dll+0x00008ddc) RA=029cf82c(tapi.dll+0x0000682c) BVA=06000000 FSR=00000007</pre>
+<p>(PC is Program Counter, RA is Return Address) It looks like Tapi.dll is throwing an unhandled exception.&nbsp; So right before the exception Skysys.dll is loaded.&nbsp; Indicates that it is making the call with bad parameters causing the problem.</p>
+<pre>FFXcache max page requested == 1345</pre>
+<p>the above indicates read disturb fix is on device</p>
+<pre>DCEDriver IOCTL_POWER_SET state D4 <br>&gt;SNS: IOCTL_POWER_SET D4<br>&lt;SNS: IOCTL_POWER_SET<br>&gt;PWRBUTTON: IOCTL_POWER_SET D4<br>PWR: Set power state 4 reboot 800000<br>&lt;PWRBUTTON: IOCTL_POWER_SET</pre>The above indicate that a warm boot occured.<br>
+<pre>PWR: AC:1&nbsp; Bat:1<br>PWR: SOURCE: 14 - Power button or AC
+PWR: SOURCE: 1A - WWAN Radio
+PWR: SOURCE: 0D - RTC Wakup</pre>indicates the device is on AC (external) power.<br>
+<h3>A simple memory log</h3>
+<pre><code>17.05.2015 01:36:01     0x1d6db002  'NK.EXE'    0   0x7d6caf9a  'filesys.exe'   0   0x9d68f2ea  'device.exe'    8564736 0xd965e6e6  'uptimesqm.exe' 40960   0xf9e8ae02  'cprog.exe' 1499136 0xfaae8de2  'gwes.exe'  1597440 0xfa32e4a6  'shell32.exe'   1937408 0x9a32e96e  'services.exe'  1069056 0xf9647b02  'connmgr.exe'   352256  0x9a3d80f2  'poutlook.exe'  86016   0xf8ef92c6  'memuse.exe'    102400  0x975e6fbe  'SSClient.exe'  778240  0x3973478e  'repllog.exe'   638976  0x5830104a  'CAStartup.exe' 94208   0x78fa55c6  'DataServer.exe'    1404928 0x18305f2e  'IQueue.exe'    536576  0x36dae736  'calupd.exe'    94208   0x78b53c42  'SSTransferAgent.exe'   102400      (18898944)
+17.05.2015 01:36:11     0x1d6db002  'NK.EXE'    0   0x7d6caf9a  'filesys.exe'   0   0x9d68f2ea  'device.exe'    8642560 0x36e0c422  'rapiclnt'  798720  0xf9e8ae02  'cprog.exe' 1585152 0xfaae8de2  'gwes.exe'  2379776 0xfa32e4a6  'shell32.exe'   1933312 0x9a32e96e  'services.exe'  1073152 0xf9647b02  'connmgr.exe'   352256  0x9a3d80f2  'poutlook.exe'  86016   0xf8ef92c6  'memuse.exe'    106496  0x975e6fbe  'SSClient.exe'  1597440 0x3973478e  'repllog.exe'   647168  0x5830104a  'CAStartup.exe' 94208   0x78fa55c6  'DataServer.exe'    1658880 0x18305f2e  'IQueue.exe'    937984  0x96ccea6a  'tmail.exe' 307200      (22200320)
+</code></pre>
+
+What are the columns and values for? Know your log file.<br>We see a timestamp, then a trio of a hex value, a string (the application) and a number.<br>The hex number is the process ID. This ID will change if an application is restarted. The last number of a trio is the memory used by the process. Some processes are locked and always show with 0 memory use.<br>The last value in parentheses is the total memory in use at the time.<br>One challenge with this file may be that the number of triples may change or re-ordered.<br>As this a table like file, ensure that every column has its own space. That makes it easier to look for changes:<br>
+<pre>...'shell32.exe'&nbsp;&nbsp;&nbsp; 1937408&nbsp;&nbsp;&nbsp; 0x9a32e96e&nbsp;&nbsp;&nbsp; 'services.exe'&nbsp;&nbsp;&nbsp; 1069056&nbsp;&nbsp;&nbsp; 0xf9647b02&nbsp;&nbsp;&nbsp; 'connmgr.exe'&nbsp;&nbsp;&nbsp; 352256&nbsp;&nbsp;&nbsp; 0x9a3d80f2&nbsp;&nbsp;&nbsp; 'poutlook.exe'&nbsp;&nbsp;&nbsp; 86016...<br>...'shell32.exe'&nbsp;&nbsp;&nbsp; 1933312&nbsp;&nbsp;&nbsp; 0x9a32e96e&nbsp;&nbsp;&nbsp; 'services.exe'&nbsp;&nbsp;&nbsp; 1073152&nbsp;&nbsp;&nbsp; 0xf9647b02&nbsp;&nbsp;&nbsp; 'connmgr.exe'&nbsp;&nbsp;&nbsp; 352256&nbsp;&nbsp;&nbsp; 0x9a3d80f2&nbsp;&nbsp;&nbsp; 'poutlook.exe'&nbsp;&nbsp;&nbsp; 86016... </pre>Parantheses make Excel look at the value as a negative value, so possibly remove the parantheses if you plane to look at the file in Excel. Another tip: Excel may not convert this ASCII file with tab-delimitted fields to a nice table. Help Excel by inserting a new line at the beginning with 'sep=' followed by the separation character or a real tab.<br><br>Scroll thru the file up and down and you may recognize changes in the structure or in values.<br>Look for changes in memory usage of one process. Processes may use more and less memory over time but the memory usage should not increase all the time.<br><br>
+<h3>A simple battery log</h3>The following has already be prepared for excel import (added sep=, as first line):<br>
+<pre>sep=,
+Time,AC_Line,PowerBatteryState,BatteryLifePercent,BatteryVoltage,BatteryCurrent,BatteryTemperature,PowerBatteryStrength,WiFiStatePowerOn,WiFiStateConnected,BluetoothStatePowerOn,PhoneRadioOn,PhoneSignalStrength,PowerBatteryBackupState,PowerBatteryBackupStrength,BackupBatteryLifePercent,
+2015-03-12 14:46:09Z,AC_LINE_ONLINE,Charging,100,4132,0,32,VeryHigh,False,False,False,False,0,Charging,VeryHigh,99,
+2015-03-12 14:46:09Z,AC_LINE_ONLINE,Charging,100,4134,0,32,VeryHigh,False,False,False,False,0,Charging,VeryHigh,99,
+2015-03-12 14:47:10Z,AC_LINE_ONLINE,Charging,100,4134,0,32,VeryHigh,False,False,False,False,0,Charging,VeryHigh,99,
+2015-03-12 14:48:10Z,AC_LINE_ONLINE,Charging,100,4132,0,32,VeryHigh,False,False,False,False,0,Charging,VeryHigh,99,
+2015-03-12 14:49:10Z,AC_LINE_ONLINE,Charging,100,4134,0,32,VeryHigh,False,False,False,False,0,Charging,VeryHigh,99,
+2015-03-12 14:50:11Z,AC_LINE_ONLINE,Charging,100,4134,0,32,VeryHigh,False,False,False,False,0,Charging,VeryHigh,99,</pre>This will show up fine in Excel:<br><br><img alt="" src="batterylog1_excel.gif"><br><br>You can then watch the battery level over time in a nice graph by inserting a new line chart on the battery level.<br>
+<h3>Splitting large files</h3>Some times ago I got a 250MB file with RBLogger data captured over two weeks. There are not much applications within Windows that handle such files in a fast manner. I installed a portable version of GVIM. VIM and GVIM are very fast implementations for Windows of the good old VIM. VIM has two modes: a Command and an Insert mode. To change from Command mode (standard) to Insert mode press 'i' (for Insert). To leave Insert mode press the ESC key.<br>Here are some useful shortcuts for VIM in Command mode:<br>
+<pre style="margin-left: 40px;">:edit&lt;filename&gt; &nbsp;&nbsp; open file</pre>
+<pre style="margin-left: 40px;">:w &lt;filename&gt;&nbsp;&nbsp;&nbsp;   write current content to file &lt;filename&gt;</pre>
+<pre style="margin-left: 40px;">g&nbsp;&nbsp;&nbsp;               go to top of file</pre>
+<pre style="margin-left: 40px;">G&nbsp;&nbsp;&nbsp;               go to end of file</pre>
+<pre style="margin-left: 40px;">/&lt;text&gt;&lt;ENTER&gt; &nbsp;&nbsp;  find next occurrence of &lt;text&gt;</pre>
+<pre style="margin-left: 40px;">n&nbsp;&nbsp;&nbsp;               jump to next find location</pre>
+<pre style="margin-left: 40px;">dG&nbsp;&nbsp;&nbsp;              delete from current line to end of file</pre>
+<pre style="margin-left: 40px;">dgg&nbsp;&nbsp;&nbsp;             delete to top of file</pre>
+<pre style="margin-left: 40px;">:g/^$//d&nbsp;&nbsp;&nbsp;        delete empty lines</pre>
+<pre style="margin-left: 40px;">:%s/\r/\r/g&nbsp;&nbsp;&nbsp;     delete ^M (line feed chars)</pre><br>I split the large file into single files for each day by searching the timestamp of the day to save, delete to top, searching the first occurrence of the next day timestamp and deleting to end of file. Always saving the current file with a new name in between.<br>
+<h3>Searching for patterns</h3>When looking at extensive log files as produced by RBLogger you get a lot of data you do not need spread over many lines. There are some nice tools that help in identifying patterns faster. For example LogExpert. LogExpert can colorize lines matching a pattern.<br>
+<div style="margin-left: 40px;"><img alt="" src="logexpert1.gif"><br></div>That makes it easier to scroll and identify possible issues.<br>It can also filter lines to a new view.<br>
+<div style="margin-left: 40px;"><img alt="" src="logexpert2.gif"><br></div>The above shows only the lines with "LOCATIONUPDATE - Location Area Code" within. If browsing thru this you can see the location codes changing over time.<br>
+<h3>Finding the bad lines</h3>Lines showing an error message or, more worse, a Data Abort need to be watched in more details. What is logged within some time before the error/data abort?<br>If the Data Abort is noted for a process, is the process a custom application or library? If so the programmer will get some work to fix the code.<br><br>As said, knowing the time stamp of when an issue was 'seen' is a good choice. Then look around in the file within the time noted. Are there any anomalies?<br><br>A log showing steadily increasing memory or cpu usage shows a bad behavior of a process on the device.<br>
+<h3>Experience and Knowledge</h3>Most logs described here are 'speaking' ones with more or less descriptive names and messages. There are other logs (for example Network Traces) that must be loaded by a specialized application or decrypted first. And there are logs that can only be interpreted by the one that implemented the logging.<br><br>There may be log files you can not 'read' or understand. Either try to learn the information or escalate to a more experienced colleague.<br><br>Some logs seem to be readable ones, but do you really know what all these numbers mean? Same is valid for graphical display of logged data, it may or may not show what we think.<br><br>Network Traces may be a challenge with all the different protocols and flags. Sometimes it is also good to compare the log of a working communication with the log of a non-working one.<br><br>
+<hr><a class="button-link" href="./index.html">Back to Start</a><br>
+</body></html>
